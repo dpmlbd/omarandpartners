@@ -1,141 +1,179 @@
 "use client";
 
-import Image from "next/image";
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { RiArrowRightLine, RiArrowDownLine } from "@remixicon/react";
+import { RiArrowLeftLine, RiMailLine } from "@remixicon/react";
 
-const categories = [
-  { title: "Natural Stone", image: "/images/materials.png", count: "40+" },
-  { title: "Structural Metals", image: "/images/architecture.png", count: "35+" },
-  { title: "Glass Systems", image: "/images/materials.png", count: "25+" },
-  { title: "Timber & Veneers", image: "/images/architecture.png", count: "50+" },
-  { title: "Composites", image: "/images/materials.png", count: "30+" },
-  { title: "Bespoke Finishes", image: "/images/architecture.png", count: "60+" },
-];
+export default function InexComingSoonPage() {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
-export default function InexPage() {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email.trim()) setSubmitted(true);
+  };
+
+  const letters = "INEX".split("");
+
   return (
-    <div className="flex flex-col w-full overflow-hidden">
+    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#0C0A09] -mt-24 pt-24">
 
-      {/* ── HERO ────────────────────────────────────────── */}
-      <section className="relative h-[85vh] min-h-[650px] max-h-[850px] flex flex-col md:flex-row overflow-hidden">
-        <div className="w-full md:w-1/2 flex flex-col justify-between bg-foreground text-background px-8 md:px-14 pt-28 pb-8 md:pb-10 z-10 shrink-0">
-          <ScrollReveal delay={0.1}>
-            <div className="flex items-center gap-3">
-              <span className="w-6 h-[1px] bg-primary" />
-              <span className="text-[10px] uppercase tracking-[0.3em] text-background/40">Building Materials Division</span>
-            </div>
-          </ScrollReveal>
-          <div className="flex flex-col my-auto">
-            <motion.h1 initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="font-heading font-semibold leading-[0.88] tracking-tighter uppercase text-background"
-              style={{ fontSize: "clamp(2.5rem, 6vw, 5.5rem)" }}>
-              INEX<br />Materials
-            </motion.h1>
-            <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
-              transition={{ duration: 0.7, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              style={{ originX: 0 }} className="h-[1px] bg-primary my-6 w-full" />
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.9 }}
-              className="text-background/50 text-sm font-light leading-relaxed max-w-xs">
-              Global sourcing and engineering of premium building materials for uncompromising construction quality.
-            </motion.p>
-          </div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}>
-            <Link href="/inex/products"
-              className="inline-flex items-center gap-3 border border-background/20 text-background px-5 py-3 text-[11px] uppercase tracking-widest hover:bg-primary hover:border-primary transition-all duration-300">
-              Explore Products <RiArrowRightLine size={12} />
-            </Link>
-          </motion.div>
+      {/* ── Grain / noise texture overlay ────────────────────────────── */}
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none z-0"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          backgroundSize: "128px 128px",
+        }}
+      />
+
+      {/* ── Decorative radial glow ───────────────────────────────────── */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#059669]/5 blur-[120px] pointer-events-none z-0" />
+
+      {/* ── Animated vertical line ───────────────────────────────────── */}
+      <motion.div
+        initial={{ scaleY: 0 }}
+        animate={{ scaleY: 1 }}
+        transition={{ duration: 1.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        style={{ originY: 0 }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-32 bg-gradient-to-b from-[#059669]/50 to-transparent z-10"
+      />
+
+      {/* ── Main content ─────────────────────────────────────────────── */}
+      <div className="relative z-10 flex flex-col items-center text-center px-6">
+
+        {/* Company descriptor */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="flex items-center gap-3 mb-12"
+        >
+          <span className="w-8 h-[1px] bg-[#059669]/40" />
+          <span className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-medium">
+            Building Materials & Sourcing
+          </span>
+          <span className="w-8 h-[1px] bg-[#059669]/40" />
+        </motion.div>
+
+        {/* Giant staggered letter reveal */}
+        <div className="flex items-baseline gap-2 md:gap-4 mb-8">
+          {letters.map((letter, i) => (
+            <motion.span
+              key={i}
+              initial={{ opacity: 0, y: 80, rotateX: 45 }}
+              animate={{ opacity: 1, y: 0, rotateX: 0 }}
+              transition={{
+                duration: 1,
+                delay: 0.8 + i * 0.12,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="font-heading font-bold text-white/90 tracking-tighter"
+              style={{ fontSize: "clamp(5rem, 15vw, 14rem)", lineHeight: 0.85 }}
+            >
+              {letter}
+            </motion.span>
+          ))}
         </div>
 
-        <motion.div initial={{ scaleY: 0 }} animate={{ scaleY: 1 }}
-          transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          style={{ originY: 0 }}
-          className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-primary/40 z-20" />
+        {/* Horizontal line */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 1, delay: 1.4, ease: [0.22, 1, 0.36, 1] }}
+          style={{ originX: 0.5 }}
+          className="w-48 h-[1px] bg-gradient-to-r from-transparent via-[#059669]/50 to-transparent mb-10"
+        />
 
-        <div className="w-full md:w-1/2 relative flex-1 overflow-hidden">
-          <Image src="/images/materials.png" alt="INEX Materials" fill className="object-cover grayscale" priority />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 text-white/40">
-            <span className="text-[9px] uppercase tracking-[0.3em]">Explore</span>
-            <motion.div animate={{ y: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.8 }}>
-              <RiArrowDownLine size={12} />
+        {/* "Coming Soon" with pulsing dot */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 1.6 }}
+          className="flex items-center gap-3 mb-6"
+        >
+          <motion.span
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+            className="w-2 h-2 rounded-full bg-[#059669]"
+          />
+          <span className="text-sm uppercase tracking-[0.35em] text-white/60 font-medium">
+            Coming Soon
+          </span>
+        </motion.div>
+
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 1.8 }}
+          className="text-white/30 text-sm font-light leading-relaxed max-w-md mb-14"
+        >
+          We&apos;re crafting something exceptional. INEX will redefine how premium
+          materials are sourced, curated, and delivered across the globe.
+        </motion.p>
+
+        {/* Notify Me form */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 2 }}
+          className="w-full max-w-sm"
+        >
+          {!submitted ? (
+            <form onSubmit={handleSubmit} className="flex gap-0">
+              <div className="relative flex-1">
+                <RiMailLine
+                  size={15}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-white/25"
+                />
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full bg-white/5 border border-white/10 text-white text-sm pl-10 pr-4 py-3.5 placeholder:text-white/20 focus:outline-none focus:border-[#059669]/50 transition-colors"
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-[#059669] text-white px-6 py-3.5 text-[11px] uppercase tracking-[0.2em] font-medium hover:bg-[#059669]/80 transition-colors shrink-0"
+              >
+                Notify Me
+              </button>
+            </form>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="border border-[#059669]/30 bg-[#059669]/5 py-4 px-6 text-sm text-[#059669] tracking-wide"
+            >
+              We&apos;ll keep you updated.
             </motion.div>
-          </motion.div>
-        </div>
-      </section>
+          )}
+        </motion.div>
+      </div>
 
-      {/* ── INTRO ────────────────────────────────────────── */}
-      <section className="py-24 md:py-32 border-b border-border">
-        <div className="container mx-auto px-6 md:px-14">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-2 flex flex-col gap-3 pt-1">
-              <span className="font-mono text-[10px] text-muted-foreground tracking-widest">01</span>
-              <span className="w-[1px] h-12 bg-border" />
-            </div>
-            <div className="md:col-span-5">
-              <ScrollReveal>
-                <h2 className="font-heading text-2xl md:text-4xl font-light leading-snug tracking-tight">
-                  The material <span className="text-foreground font-medium">foundation</span> of every great space.
-                </h2>
-              </ScrollReveal>
-            </div>
-            <div className="md:col-span-5 border-l border-border pl-8 text-muted-foreground text-sm font-light leading-relaxed flex flex-col gap-4">
-              <ScrollReveal delay={0.2}>
-                <p>INEX is the materials sourcing and supply arm of the ONP ecosystem. We provide the entire group — and select external partners — with access to the world's finest building and finishing materials.</p>
-              </ScrollReveal>
-              <ScrollReveal delay={0.3}>
-                <p>From natural stone and structural steel to bespoke glass systems and rare timber veneers, INEX ensures that our buildings are built with the same uncompromising standard that defines our design philosophy.</p>
-              </ScrollReveal>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── CATEGORIES GRID ───────────────────────────────── */}
-      <section className="py-24 md:py-32 border-b border-border">
-        <div className="container mx-auto px-6 md:px-14">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end mb-12">
-            <div className="md:col-span-2 flex flex-col gap-3">
-              <span className="font-mono text-[10px] text-muted-foreground tracking-widest">02</span>
-              <span className="w-[1px] h-12 bg-border" />
-            </div>
-            <div className="md:col-span-8">
-              <ScrollReveal>
-                <h2 className="font-heading text-3xl md:text-5xl font-semibold tracking-tighter uppercase">Material Categories</h2>
-                <p className="mt-3 text-muted-foreground text-sm max-w-lg">Explore our curated collections of premium building materials.</p>
-              </ScrollReveal>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {categories.map((cat, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
-                <Link href="/inex/categories" className="group block">
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-secondary">
-                    <Image
-                      src={cat.image}
-                      alt={cat.title}
-                      fill
-                      className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                    <div className="absolute inset-0 flex flex-col justify-between p-6">
-                      <span className="text-[10px] uppercase tracking-[0.3em] text-primary font-medium">{cat.count} Items</span>
-                      <h3 className="font-heading text-xl font-medium tracking-tight text-white uppercase">{cat.title}</h3>
-                    </div>
-                  </div>
-                </Link>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── Bottom bar ───────────────────────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 2.4 }}
+        className="absolute bottom-8 left-0 right-0 z-10 flex items-center justify-between px-8 md:px-14"
+      >
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-white/25 hover:text-white/60 transition-colors text-[11px] uppercase tracking-widest"
+        >
+          <RiArrowLeftLine size={13} />
+          Back to Home
+        </Link>
+        <span className="text-white/15 text-[10px] uppercase tracking-[0.3em] font-mono">
+          Part of Omar & Partners
+        </span>
+      </motion.div>
     </div>
   );
 }

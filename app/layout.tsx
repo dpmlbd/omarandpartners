@@ -4,7 +4,6 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageTransition } from "@/components/layout/page-transition";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ThemeInitializer } from "@/components/layout/theme-initializer";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -35,7 +34,6 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans selection:bg-primary selection:text-white">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <ThemeInitializer />
           <Header />
           <main className="flex flex-col flex-1 pt-24">
             <PageTransition>{children}</PageTransition>

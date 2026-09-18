@@ -42,6 +42,7 @@ export function Footer() {
               {[
                 { label: "Home", href: "/" },
                 { label: "About", href: "/about" },
+                { label: "Teams", href: "/teams" },
                 { label: "Careers", href: "/careers" },
                 { label: "Contact", href: "/contact" },
                 { label: "Brand Assets", href: "/brands" },
@@ -54,36 +55,35 @@ export function Footer() {
             </nav>
           </div>
 
-          {/* Holding & Architecture Address */}
+          {/* Contact — Emails & Phones */}
           <div className="md:col-span-3 flex flex-col gap-5">
-            <h4 className="text-xs font-semibold uppercase tracking-[0.25em] text-background/40">Holding &amp; Architecture</h4>
+            <h4 className="text-xs font-semibold uppercase tracking-[0.25em] text-background/40">Contact</h4>
             <div className="flex flex-col gap-4 text-sm text-background/70 font-normal leading-relaxed">
               <div>
-                <p className="font-medium text-background/80 uppercase tracking-widest text-xs mb-1">ONP Holding Group</p>
-                <p>123 Architecture Ave, New York, NY 10001</p>
-                <a href="mailto:info@omarandpartners.com" className="text-background/70 hover:text-background transition-colors">info@omarandpartners.com</a>
+                <p className="font-medium text-background/80 uppercase tracking-widest text-xs mb-1.5">ONP Holding Group</p>
+                <a href="mailto:info@omarandpartners.com" className="block text-background/70 hover:text-background transition-colors">info@omarandpartners.com</a>
+                <a href="tel:+12125551000" className="block text-background/70 hover:text-background transition-colors mt-0.5">+1 (212) 555-1000</a>
               </div>
               <div className="border-t border-background/10 pt-4">
-                <p className="font-medium text-background/80 uppercase tracking-widest text-xs mb-1">Kolpoporisor (Architecture)</p>
-                <p>88 Skyline Boulevard, New York, NY 10002</p>
-                <a href="mailto:arch@kolpoporisor.com" className="text-background/70 hover:text-background transition-colors">arch@kolpoporisor.com</a>
+                <p className="font-medium text-background/80 uppercase tracking-widest text-xs mb-1.5">Kolpoporisor (Architecture)</p>
+                <a href="mailto:arch@kolpoporisor.com" className="block text-background/70 hover:text-background transition-colors">arch@kolpoporisor.com</a>
+                <a href="tel:+12125551001" className="block text-background/70 hover:text-background transition-colors mt-0.5">+1 (212) 555-1001</a>
               </div>
             </div>
           </div>
 
-          {/* Interiors & Materials Address */}
           <div className="md:col-span-4 flex flex-col gap-5">
-            <h4 className="text-xs font-semibold uppercase tracking-[0.25em] text-background/40">Interiors &amp; Materials</h4>
+            <h4 className="text-xs font-semibold uppercase tracking-[0.25em] text-background/40">&nbsp;</h4>
             <div className="flex flex-col gap-4 text-sm text-background/70 font-normal leading-relaxed">
               <div>
-                <p className="font-medium text-background/80 uppercase tracking-widest text-xs mb-1">Kolpokowsol (Interior Design)</p>
-                <p>45 Studio Way, Suite B, Brooklyn, NY 11201</p>
-                <a href="mailto:studio@kolpokowsol.com" className="text-background/70 hover:text-background transition-colors">studio@kolpokowsol.com</a>
+                <p className="font-medium text-background/80 uppercase tracking-widest text-xs mb-1.5">Kolpokowsol (Interior Design)</p>
+                <a href="mailto:studio@kolpokowsol.com" className="block text-background/70 hover:text-background transition-colors">studio@kolpokowsol.com</a>
+                <a href="tel:+12125551002" className="block text-background/70 hover:text-background transition-colors mt-0.5">+1 (212) 555-1002</a>
               </div>
               <div className="border-t border-background/10 pt-4">
-                <p className="font-medium text-background/80 uppercase tracking-widest text-xs mb-1">INEX (Building Materials)</p>
-                <p>12 Warehouse District, NJ 07001</p>
-                <a href="mailto:supply@inexmaterials.com" className="text-background/70 hover:text-background transition-colors">supply@inexmaterials.com</a>
+                <p className="font-medium text-background/80 uppercase tracking-widest text-xs mb-1.5">INEX (Building Materials)</p>
+                <a href="mailto:supply@inexmaterials.com" className="block text-background/70 hover:text-background transition-colors">supply@inexmaterials.com</a>
+                <a href="tel:+12015551003" className="block text-background/70 hover:text-background transition-colors mt-0.5">+1 (201) 555-1003</a>
               </div>
             </div>
           </div>

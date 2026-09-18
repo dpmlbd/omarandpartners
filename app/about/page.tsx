@@ -49,6 +49,7 @@ export default function AboutPage() {
   const navItems = [
     { label: "Overview", href: "#overview" },
     { label: "Leadership", href: "#leadership" },
+    { label: "CEO Voices", href: "#ceo-voices" },
     { label: "Mission & Vision", href: "#mission" },
     { label: "Values", href: "#values" },
     { label: "Timeline", href: "#timeline" },
@@ -135,9 +136,99 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── VOICES FROM CEO ─────────────────────────────────────────── */}
+      <section id="ceo-voices" className="relative py-32 md:py-44 border-b border-border scroll-mt-24 overflow-hidden bg-foreground text-background">
+        {/* Decorative oversized quote mark */}
+        <div className="absolute top-12 left-6 md:left-14 pointer-events-none select-none z-0">
+          <span
+            className="font-heading font-bold text-background/[0.03] leading-none block"
+            style={{ fontSize: "clamp(15rem, 30vw, 40rem)" }}
+            aria-hidden="true"
+          >
+            &ldquo;
+          </span>
+        </div>
+
+        <div className="relative z-10 container mx-auto px-6 md:px-14">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-center">
+
+            {/* Left — Quote */}
+            <div className="md:col-span-7 flex flex-col">
+              <ScrollReveal>
+                <div className="flex items-center gap-3 mb-8">
+                  <span className="w-8 h-[1px] bg-accent" />
+                  <span className="text-[10px] uppercase tracking-[0.35em] text-background/40 font-medium">
+                    Voices from the CEO
+                  </span>
+                </div>
+              </ScrollReveal>
+
+              <ScrollReveal delay={0.15}>
+                <blockquote className="relative">
+                  <p
+                    className="font-heading font-light leading-[1.3] tracking-tight text-background/90"
+                    style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)" }}
+                  >
+                    <span className="text-accent text-4xl leading-none align-top mr-1">&ldquo;</span>
+                    We don&apos;t build structures — we compose environments. Every material, every angle, every shadow is a deliberate choice in service of a larger narrative. Architecture at its best is a conversation between human ambition and the earth beneath our feet.
+                    <span className="text-accent text-4xl leading-none align-bottom ml-1">&rdquo;</span>
+                  </p>
+                </blockquote>
+              </ScrollReveal>
+
+              <ScrollReveal delay={0.3}>
+                <div className="mt-10 pt-8 border-t border-background/10 flex items-end justify-between">
+                  <div className="flex flex-col gap-1">
+                    {/* Signature-style name */}
+                    <span
+                      className="font-heading text-2xl md:text-3xl italic font-light text-background/70 tracking-tight"
+                    >
+                      Omar Al-Rashid
+                    </span>
+                    <span className="text-[10px] uppercase tracking-[0.3em] text-background/35 mt-1">
+                      Founder &amp; CEO — Omar &amp; Partners
+                    </span>
+                  </div>
+                  <span className="hidden md:block w-20 h-[1px] bg-accent/40" />
+                </div>
+              </ScrollReveal>
+            </div>
+
+            {/* Right — CEO Portrait */}
+            <div className="md:col-span-5 md:col-start-8">
+              <ScrollReveal delay={0.2} direction="right">
+                <div className="relative aspect-[3/4] overflow-hidden">
+                  <Image
+                    src="/images/architecture.png"
+                    alt="Omar Al-Rashid — Founder & CEO"
+                    fill
+                    className="object-cover"
+                  />
+                  {/* Warm tinted overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0C0A09]/80 via-[#0C0A09]/20 to-transparent mix-blend-multiply" />
+                  <div className="absolute inset-0 bg-primary/10 mix-blend-overlay" />
+
+                  {/* Bottom label on image */}
+                  <div className="absolute bottom-6 left-6 right-6 z-10">
+                    <div className="flex items-center gap-3">
+                      <span className="w-4 h-[1px] bg-white/30" />
+                      <span className="text-[9px] uppercase tracking-[0.3em] text-white/40">Since 2010</span>
+                    </div>
+                  </div>
+
+                  {/* Corner accent */}
+                  <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-accent/30" />
+                  <div className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-accent/30" />
+                </div>
+              </ScrollReveal>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="mission" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="03" title="Mission &amp; Vision" />
+          <SectionHeader index="04" title="Mission &amp; Vision" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border">
             <ScrollReveal>
@@ -147,7 +238,7 @@ export default function AboutPage() {
                   <span className="text-[10px] uppercase tracking-[0.3em] text-background/40">Mission</span>
                 </div>
                 <p className="font-heading text-2xl md:text-3xl font-light leading-snug tracking-tight">
-                   To deliver world-class architectural and design solutions that <span className="text-foreground font-medium">elevate human experience</span> while honoring context, culture, and the planet.
+                  To deliver world-class architectural and design solutions that <span className="text-foreground font-medium">elevate human experience</span> while honoring context, culture, and the planet.
                 </p>
                 <div className="border-t border-background/10 pt-8 text-background/50 text-sm font-light leading-relaxed">
                   We accomplish this by uniting three specialized disciplines under a shared philosophy — ensuring that every project we touch reflects integrity, beauty, and purpose from the ground up.
@@ -162,7 +253,7 @@ export default function AboutPage() {
                   <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Vision</span>
                 </div>
                 <p className="font-heading text-2xl md:text-3xl font-light leading-snug tracking-tight">
-                   To be the most trusted name in <span className="text-foreground font-medium">integrated spatial design</span> — recognized globally for transforming visions into enduring realities.
+                  To be the most trusted name in <span className="text-foreground font-medium">integrated spatial design</span> — recognized globally for transforming visions into enduring realities.
                 </p>
                 <div className="border-t border-border pt-8 text-muted-foreground text-sm font-light leading-relaxed">
                   We envision a future where every built environment is a testament to the harmony between human creativity and natural systems — designed to last generations.
@@ -175,7 +266,7 @@ export default function AboutPage() {
 
       <section id="values" className="py-24 md:py-36 border-b border-border scroll-mt-24 bg-secondary/10">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="04" title="Core Values" subtitle="The principles that guide every decision, every design, every relationship." />
+          <SectionHeader index="05" title="Core Values" subtitle="The principles that guide every decision, every design, every relationship." />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {coreValues.map((v, i) => (
@@ -194,7 +285,7 @@ export default function AboutPage() {
 
       <section id="timeline" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="05" title="Timeline" subtitle="A journey spanning fifteen years of building, growing, and transforming." />
+          <SectionHeader index="06" title="Timeline" subtitle="A journey spanning fifteen years of building, growing, and transforming." />
 
           <div className="relative ml-2 md:ml-[calc(16.66%+2rem)]">
             <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-border" />
@@ -204,7 +295,7 @@ export default function AboutPage() {
                   <div className="relative flex gap-8 md:gap-16 pb-12 group">
                     <div className="absolute -left-[5px] top-1 w-[10px] h-[10px] border-2 border-border bg-background group-hover:border-primary group-hover:bg-primary transition-all duration-300 z-10" />
                     <div className="w-20 md:w-28 pl-6 shrink-0">
-                       <span className="font-mono text-xs text-foreground font-medium">{item.year}</span>
+                      <span className="font-mono text-xs text-foreground font-medium">{item.year}</span>
                     </div>
                     <div className="flex-1 pb-12 border-b border-border/30 last:border-0">
                       <h4 className="font-heading text-xl font-medium tracking-tight uppercase mb-2">{item.title}</h4>
@@ -220,7 +311,7 @@ export default function AboutPage() {
 
       <section id="awards" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="06" title="Awards &amp;<br />Certifications" subtitle="Recognition from the industry's most respected institutions." />
+          <SectionHeader index="07" title="Awards &amp;<br />Certifications" subtitle="Recognition from the industry's most respected institutions." />
 
           <AwardsShowcase
             featuredAward={{
@@ -237,7 +328,7 @@ export default function AboutPage() {
 
       <section id="partners" className="py-24 md:py-36 scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="07" title="Partners" subtitle="Global collaborators and strategic partners who share our commitment to excellence." />
+          <SectionHeader index="08" title="Partners" subtitle="Global collaborators and strategic partners who share our commitment to excellence." />
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px border border-border">
             {partners.map((partner, i) => (

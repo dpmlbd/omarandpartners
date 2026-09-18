@@ -36,7 +36,7 @@ export default function CareersPage() {
 
       {/* Hero */}
       <section className="bg-foreground text-background px-8 md:px-14 pt-32 pb-16 border-b border-border">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-6 md:px-12">
           <div className="flex items-center gap-3 mb-6">
             <span className="w-6 h-[1px] bg-primary" />
             <span className="text-[10px] uppercase tracking-[0.3em] text-background/40">Careers</span>
@@ -65,26 +65,26 @@ export default function CareersPage() {
 
           <AnimatePresence mode="wait">
             <motion.div key={activeTab} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }} className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-6">
-              <div className="lg:col-span-2 relative h-[300px] md:h-[420px] rounded-2xl overflow-hidden border border-border bg-secondary/20">
+              <div className="lg:col-span-2 relative h-[300px] md:h-[420px] overflow-hidden border border-border bg-secondary/20">
                 <Image src={tabs[activeTab].image} alt={tabs[activeTab].name} fill className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10">
-                   <span className="text-[10px] uppercase tracking-[0.3em] text-foreground font-medium block mb-2">{tabs[activeTab].tag}</span>
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-foreground font-medium block mb-2">{tabs[activeTab].tag}</span>
                   <h3 className="font-heading text-3xl md:text-4xl font-medium tracking-tight uppercase">{tabs[activeTab].name}</h3>
                 </div>
               </div>
 
-              <div className="flex flex-col p-8 md:p-10 rounded-2xl border border-border bg-background">
+              <div className="flex flex-col p-8 md:p-10 border border-border bg-background">
                 <h4 className="font-heading text-lg font-medium uppercase tracking-tight mb-4">Culture</h4>
                 <p className="text-muted-foreground text-sm leading-relaxed flex-1">{tabs[activeTab].culture}</p>
               </div>
 
-              <div className="flex flex-col p-8 md:p-10 rounded-2xl border border-border bg-background">
+              <div className="flex flex-col p-8 md:p-10 border border-border bg-background">
                 <h4 className="font-heading text-lg font-medium uppercase tracking-tight mb-4">Benefits</h4>
                 <p className="text-muted-foreground text-sm leading-relaxed flex-1">{tabs[activeTab].benefits}</p>
               </div>
 
-              <div className="lg:col-span-2 flex flex-col justify-between p-8 md:p-10 rounded-2xl border border-border bg-secondary/20">
+              <div className="lg:col-span-2 flex flex-col justify-between p-8 md:p-10 border border-border bg-secondary/20">
                 <div>
                   <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-medium block mb-4">Philosophy</span>
                   <p className="font-heading text-xl md:text-2xl font-medium tracking-tight leading-snug">"{tabs[activeTab].quote}"</p>
@@ -105,7 +105,7 @@ export default function CareersPage() {
               <ScrollReveal key={job.id}>
                 <div onClick={() => setSelectedJob(job)} className="group flex flex-col sm:flex-row justify-between items-start sm:items-center p-8 bg-background hover:bg-secondary/20 transition-all duration-300 cursor-pointer">
                   <div className="flex flex-col gap-2">
-                     <span className="text-[10px] uppercase tracking-widest text-foreground font-medium">{job.division}</span>
+                    <span className="text-[10px] uppercase tracking-widest text-foreground font-medium">{job.division}</span>
                     <h3 className="font-heading text-xl md:text-2xl font-medium tracking-tight uppercase group-hover:text-primary transition-colors">{job.title}</h3>
                     <div className="flex flex-wrap gap-4 text-xs text-muted-foreground font-light mt-1">
                       <span className="flex items-center gap-1.5"><RiMapPinLine size={14} />{job.location}</span>

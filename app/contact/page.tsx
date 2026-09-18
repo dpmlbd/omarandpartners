@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FeatureCard } from "@/components/ui/feature-card";
-import { CTASection } from "@/components/ui/cta-section";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import {
   RiMailLine,
@@ -48,18 +47,10 @@ export default function ContactPage() {
     });
   };
 
-  const locations = [
-    { city: "New York", country: "United States", addr: "123 Architecture Ave.", tel: "+1 (555) 123-4567" },
-    { city: "London", country: "United Kingdom", addr: "14 Belgrave Square", tel: "+44 20 7123 4567" },
-    { city: "Dhaka", country: "Bangladesh", addr: "House 12, Road 5, Banani", tel: "+880 2 9876543" },
-    { city: "Dubai", country: "United Arab Emirates", addr: "Marina Plaza, Level 28", tel: "+971 4 123 4567" }
-  ];
-
   const divisions = [
     {
       tag: "Architecture",
       title: "Kolpoporisor",
-      addr: "88 Skyline Boulevard, New York, NY 10002",
       email: "arch@kolpoporisor.com",
       tel: "+1 (555) 123-4568",
       footer: "01_ARCH",
@@ -67,7 +58,6 @@ export default function ContactPage() {
     {
       tag: "Interior Design",
       title: "Kolpokowsol",
-      addr: "45 Studio Way, Suite B, Brooklyn, NY 11201",
       email: "studio@kolpokowsol.com",
       tel: "+1 (555) 123-4569",
       footer: "02_INT",
@@ -75,7 +65,6 @@ export default function ContactPage() {
     {
       tag: "Building Materials",
       title: "INEX",
-      addr: "12 Warehouse District, Logistics City, NJ 07001",
       email: "supply@inexmaterials.com",
       tel: "+1 (555) 123-4570",
       footer: "03_MAT",
@@ -87,7 +76,7 @@ export default function ContactPage() {
 
       {/* Hero */}
       <section className="bg-foreground text-background px-8 md:px-14 pt-32 pb-16 border-b border-border">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-6 md:px-12">
           <div className="flex items-center gap-3 mb-6">
             <span className="w-6 h-[1px] bg-primary" />
             <span className="text-[10px] uppercase tracking-[0.3em] text-background/40">Connect With Us</span>
@@ -156,19 +145,19 @@ export default function ContactPage() {
                 <h3 className="font-heading text-xl font-medium uppercase tracking-tight mb-4">ONP Holding Head Office</h3>
                 <div className="flex flex-col gap-6 text-sm font-light text-muted-foreground">
                   <div className="flex items-start gap-4">
-                     <RiMapPinLine size={18} className="text-foreground shrink-0 mt-0.5" />
+                    <RiMapPinLine size={18} className="text-foreground shrink-0 mt-0.5" />
                     <p>123 Architecture Ave.<br />Suite 500<br />New York, NY 10001</p>
                   </div>
                   <div className="flex items-center gap-4">
-                     <RiMailLine size={18} className="text-foreground shrink-0" />
+                    <RiMailLine size={18} className="text-foreground shrink-0" />
                     <a href="mailto:info@omarandpartners.com" className="hover:text-primary transition-colors">info@omarandpartners.com</a>
                   </div>
                   <div className="flex items-center gap-4">
-                     <RiPhoneLine size={18} className="text-foreground shrink-0" />
+                    <RiPhoneLine size={18} className="text-foreground shrink-0" />
                     <a href="tel:+15551234567" className="hover:text-primary transition-colors">+1 (555) 123-4567</a>
                   </div>
                   <div className="flex items-start gap-4">
-                     <RiTimeLine size={18} className="text-foreground shrink-0 mt-0.5" />
+                    <RiTimeLine size={18} className="text-foreground shrink-0 mt-0.5" />
                     <div>
                       <p className="font-medium text-foreground uppercase tracking-widest text-[10px] mb-1">Business Hours</p>
                       <p>Monday – Friday: 9:00 AM – 6:00 PM EST</p>
@@ -187,7 +176,7 @@ export default function ContactPage() {
 
       <section id="division-contacts" className="py-24 md:py-36 border-b border-border bg-secondary/10">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="04" title="Division Contacts" subtitle="Direct channels for our architecture, interior design, and materials supply companies." />
+          <SectionHeader index="02" title="Division Contacts" subtitle="Direct channels for our architecture, interior design, and materials supply companies." />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {divisions.map((div, i) => (
@@ -197,30 +186,26 @@ export default function ContactPage() {
                 title={div.title}
                 className="border border-border"
                 footer={
-                  <div className="flex flex-col gap-4 text-sm font-light text-muted-foreground mt-4">
-                    <div className="flex items-start gap-3">
-                       <RiMapPinLine size={16} className="text-foreground shrink-0 mt-0.5" />
-                      <p>{div.addr}</p>
-                    </div>
+                  <div className="flex flex-col gap-3 text-sm font-light text-muted-foreground mt-4">
                     <div className="flex items-center gap-3">
-                       <RiMailLine size={16} className="text-foreground shrink-0" />
+                      <RiMailLine size={16} className="text-foreground shrink-0" />
                       <a href={`mailto:${div.email}`} className="hover:text-primary transition-colors">{div.email}</a>
                     </div>
                     <div className="flex items-center gap-3">
-                       <RiPhoneLine size={16} className="text-foreground shrink-0" />
+                      <RiPhoneLine size={16} className="text-foreground shrink-0" />
                       <a href={`tel:${div.tel.replace(/[^0-9+]/g, '')}`} className="hover:text-primary transition-colors">{div.tel}</a>
                     </div>
                   </div>
                 }
               >
-                 <span className="text-[10px] uppercase tracking-widest text-foreground font-medium block mb-1">{div.tag}</span>
+                <span className="text-[10px] uppercase tracking-widest text-foreground font-medium block mb-1">{div.tag}</span>
               </FeatureCard>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-24 md:py-36 border-b border-border bg-secondary/10">
+      <section className="py-24 md:py-36 bg-secondary/10">
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="03" title="Frequently Asked Questions" subtitle="Quick answers to common questions about working with us." />
 
@@ -241,25 +226,6 @@ export default function ContactPage() {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="locations" className="py-24 md:py-36 scroll-mt-24">
-        <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="03" title="Office Locations" subtitle="Our global operations hubs across strategic business centers." />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px border border-border">
-            {locations.map((loc, i) => (
-              <ScrollReveal key={i} delay={i * 0.08}>
-                <div className="group flex flex-col p-8 bg-background border-r border-border last:border-r-0 hover:bg-secondary/30 transition-colors duration-300 min-h-[160px]">
-                   <span className="text-[10px] uppercase tracking-widest text-foreground font-semibold mb-1">{loc.country}</span>
-                  <h4 className="font-heading text-lg font-medium uppercase tracking-tight mb-3">{loc.city}</h4>
-                  <p className="text-xs text-muted-foreground font-light mb-2">{loc.addr}</p>
-                  <a href={`tel:${loc.tel.replace(/[^0-9+]/g, '')}`} className="text-xs text-muted-foreground hover:text-primary transition-colors font-light mt-auto pt-4">{loc.tel}</a>
-                </div>
-              </ScrollReveal>
-            ))}
           </div>
         </div>
       </section>

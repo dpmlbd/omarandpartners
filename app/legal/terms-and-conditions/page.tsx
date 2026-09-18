@@ -55,7 +55,7 @@ Any disputes arising under these terms shall be subject to the exclusive jurisdi
 
 export default function TermsAndConditionsPage() {
   return (
-    <div className="flex flex-col w-full overflow-hidden">
+    <div className="flex flex-col w-full">
       {/* Hero */}
       <section className="bg-foreground text-background px-8 md:px-14 pt-32 pb-16 border-b border-border">
         <div className="container mx-auto">

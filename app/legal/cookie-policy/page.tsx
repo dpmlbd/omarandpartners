@@ -65,7 +65,7 @@ Please note that disabling certain cookies may affect the functionality of our w
 
 export default function CookiePolicyPage() {
   return (
-    <div className="flex flex-col w-full overflow-hidden">
+    <div className="flex flex-col w-full">
       {/* Hero */}
       <section className="bg-foreground text-background px-8 md:px-14 pt-32 pb-16 border-b border-border">
         <div className="container mx-auto">

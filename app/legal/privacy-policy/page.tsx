@@ -54,7 +54,7 @@ To exercise any of these rights, please contact us at privacy@omarandpartners.co
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="flex flex-col w-full overflow-hidden">
+    <div className="flex flex-col w-full">
       {/* Hero */}
       <section className="bg-foreground text-background px-8 md:px-14 pt-32 pb-16 border-b border-border">
         <div className="container mx-auto">

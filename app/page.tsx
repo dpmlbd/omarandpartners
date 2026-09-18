@@ -1,15 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SectionHeader } from "@/components/ui/section-header";
 import { ImageCard } from "@/components/ui/image-card";
 import { CTASection } from "@/components/ui/cta-section";
 import { EcosystemDiagram } from "@/components/features/landing/ecosystem-diagram";
-import { HeroSliderPanel } from "@/components/features/landing/hero-slider-panel";
+import { HeroCinematic } from "@/components/features/landing/hero-cinematic";
 import { TestimonialsSection } from "@/components/features/landing/testimonials-section";
 import {
   RiGlobalLine,
@@ -67,85 +66,11 @@ const testimonials = [
 ];
 
 export default function HomePage() {
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-
-  const next = useCallback(() => {
-    setActiveSlide((p) => (p + 1) % heroSlides.length);
-  }, []);
-
-  useEffect(() => {
-    if (!isAutoPlaying) return;
-    const interval = setInterval(next, 4500);
-    return () => clearInterval(interval);
-  }, [next, isAutoPlaying]);
-
   return (
     <div className="flex flex-col w-full overflow-hidden">
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="relative h-[85vh] min-h-[650px] max-h-[850px] flex flex-col md:flex-row overflow-hidden">
-        {/* Left panel */}
-        <div className="w-full md:w-1/2 flex flex-col justify-between bg-foreground text-background px-8 md:px-14 pt-28 pb-8 md:pb-10 z-10 shrink-0">
-          <ScrollReveal delay={0.1}>
-            <div className="flex items-center gap-3">
-              <span className="w-6 h-[1px] bg-primary" />
-              <span className="text-[10px] uppercase tracking-[0.3em] text-background/40">Our Ecosystem</span>
-            </div>
-          </ScrollReveal>
-
-          <div className="flex flex-col my-auto">
-            <motion.h1
-              initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="font-heading font-semibold leading-[0.88] tracking-tighter uppercase text-background"
-              style={{ fontSize: "clamp(3rem, 7vw, 6.5rem)" }}
-            >
-              Omar<br />&amp;<br />Partners
-            </motion.h1>
-            <motion.div
-              initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
-              transition={{ duration: 0.7, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              style={{ originX: 0 }}
-              className="h-[1px] bg-primary my-6 w-full"
-            />
-            <motion.p
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.9 }}
-              className="text-background/50 text-sm font-light leading-relaxed max-w-xs"
-            >
-              Three independent companies. One unified vision. Architecture, interiors, and materials working in complete synergy.
-            </motion.p>
-          </div>
-
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}
-            className="flex items-end justify-between">
-            <a href="#ecosystem"
-              className="inline-flex items-center gap-3 border border-background/20 text-background px-5 py-3 text-[11px] uppercase tracking-widest hover:bg-primary hover:border-primary transition-all duration-300">
-              Explore Ecosystem <RiArrowRightLine size={12} />
-            </a>
-            <span className="text-background/30 text-[10px] uppercase tracking-widest">Est. 2010</span>
-          </motion.div>
-        </div>
-
-        {/* Divider */}
-        <motion.div
-          initial={{ scaleY: 0 }} animate={{ scaleY: 1 }}
-          transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          style={{ originY: 0 }}
-          className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-primary/40 z-20"
-        />
-
-        {/* Right panel */}
-        <div className="w-full md:w-1/2 relative flex-1 overflow-hidden">
-          <HeroSliderPanel
-            slides={heroSlides}
-            activeSlide={activeSlide}
-            onDotClick={(i) => { setIsAutoPlaying(false); setActiveSlide(i); }}
-            activeDot={activeSlide}
-          />
-        </div>
-      </section>
+      <HeroCinematic slides={heroSlides} />
 
       <section className="py-24 md:py-36 border-b border-border">
         <div className="container mx-auto px-6 md:px-14">

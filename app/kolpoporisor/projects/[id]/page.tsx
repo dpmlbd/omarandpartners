@@ -1,11 +1,11 @@
 "use client";
 
+import { use } from "react";
 import { notFound } from "next/navigation";
-import { motion } from "motion/react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import Image from "next/image";
 import Link from "next/link";
-import { RiArrowRightLine, RiArrowLeftLine } from "@remixicon/react";
+import { RiArrowLeftLine } from "@remixicon/react";
 
 const projects: Record<string, any> = {
   "zenith-tower": {
@@ -76,8 +76,9 @@ const projects: Record<string, any> = {
   },
 };
 
-export default function ProjectDetailsPage({ params }: { params: { id: string } }) {
-  const project = projects[params.id];
+export default function ProjectDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const project = projects[id];
 
   if (!project) {
     notFound();
@@ -88,7 +89,7 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
       {/* ── BACK LINK ────────────────────────────────────────────────────── */}
       <div className="container mx-auto px-6 md:px-14 pt-8">
         <Link
-          href="/kolpoporisor/projects"
+          href="/kolpoporisor#projects"
           className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
         >
           <RiArrowLeftLine size={14} /> Back to Projects
@@ -184,25 +185,6 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
               </ScrollReveal>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ── CTA ─────────────────────────────────────────────────────────── */}
-      <section className="py-24 md:py-32 bg-foreground text-background">
-        <div className="container mx-auto px-6 md:px-14 flex flex-col md:flex-row justify-between items-center gap-10">
-          <ScrollReveal>
-            <h2 className="font-heading text-3xl md:text-5xl font-semibold tracking-tighter uppercase max-w-2xl">
-              Interested in a similar project?
-            </h2>
-          </ScrollReveal>
-          <ScrollReveal delay={0.2}>
-            <Link
-              href="/kolpoporisor/request-consultation"
-              className="inline-flex items-center gap-3 border border-background/20 text-background px-6 py-4 text-xs uppercase tracking-widest hover:bg-primary hover:border-primary transition-all duration-300 group shrink-0"
-            >
-              Request Consultation <RiArrowRightLine size={13} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </ScrollReveal>
         </div>
       </section>
     </div>

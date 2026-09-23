@@ -1,11 +1,11 @@
 "use client";
 
+import { use } from "react";
 import { notFound } from "next/navigation";
-import { motion } from "motion/react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import Image from "next/image";
 import Link from "next/link";
-import { RiArrowRightLine, RiArrowLeftLine } from "@remixicon/react";
+import { RiArrowLeftLine } from "@remixicon/react";
 
 const projects: Record<string, any> = {
   "lumina-residences": {
@@ -76,8 +76,9 @@ const projects: Record<string, any> = {
   },
 };
 
-export default function ProjectDetailsPage({ params }: { params: { id: string } }) {
-  const project = projects[params.id];
+export default function ProjectDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const project = projects[id];
 
   if (!project) {
     notFound();
@@ -88,7 +89,7 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
       {/* ── BACK LINK ────────────────────────────────────────────────────── */}
       <div className="container mx-auto px-6 md:px-14 pt-8">
         <Link
-          href="/kolpokowsol/projects"
+          href="/kolpokowsol#projects"
           className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
         >
           <RiArrowLeftLine size={14} /> Back to Projects

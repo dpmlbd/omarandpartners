@@ -4,7 +4,6 @@ import { motion, useInView } from "motion/react";
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { HeroSection } from "@/components/ui/hero-section";
 import { SectionHeader } from "@/components/ui/section-header";
 import { GalleryGrid } from "@/components/ui/gallery-grid";
 import { CTASection } from "@/components/ui/cta-section";
@@ -13,7 +12,6 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import {
   RiArrowRightLine,
   RiArrowRightUpLine,
-  RiArrowDownLine,
   RiBuilding4Line,
   RiBrushLine,
   RiStackLine,
@@ -263,100 +261,94 @@ function BusinessEcosystem() {
 }
 
 export default function CompaniesPage() {
-  const ecosystemOverlay = (
-    <div className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-8 grid grid-cols-3 gap-3 z-10">
-      {triadEntities.map((entity, i) => (
-        <motion.div
-          key={entity.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2 + i * 0.1, duration: 0.5 }}
-          className="bg-black/50 backdrop-blur-md border border-white/10 p-3.5 sm:p-4 flex flex-col justify-between"
-        >
-          <div>
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[9px] uppercase tracking-widest text-primary">
-                {entity.code}
-              </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-            </div>
-            <span className="font-heading text-base sm:text-lg font-semibold uppercase tracking-tight text-white block mt-1.5">
-              {entity.name}
-            </span>
-            <span className="text-[10px] text-white/60 font-light block truncate">
-              {entity.discipline}
-            </span>
-          </div>
-          <div className="pt-2 mt-2 border-t border-white/10 flex items-center justify-between">
-            <span className="font-mono text-[9px] text-white/80 uppercase tracking-wider block">
-              {entity.stat}
-            </span>
-            <span className="font-mono text-[8px] text-white/40 uppercase hidden sm:inline">
-              {entity.context}
-            </span>
-          </div>
-        </motion.div>
-      ))}
-    </div>
-  );
-
-  const scrollCue = (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 1.8 }}
-      className="absolute top-8 right-8 z-10 flex flex-col items-center gap-1 text-white/40"
-    >
-      <span className="text-[9px] uppercase tracking-[0.3em]">Scroll</span>
-      <motion.div animate={{ y: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.8 }}>
-        <RiArrowDownLine size={12} />
-      </motion.div>
-    </motion.div>
-  );
-
-  const leftTelemetry = (
-    <div className="flex flex-col gap-3 pt-6 border-t border-white/10 w-full">
-      <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-background/40">
-        <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-        <span>Holding Governance</span>
-        <span className="text-white/20">|</span>
-        <span>Est. 2010</span>
-        <span className="text-white/20">|</span>
-        <span>18 Countries</span>
-      </div>
-      <div className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-widest text-background/60">
-        <span>01 Architecture</span>
-        <span className="text-primary">&rarr;</span>
-        <span>02 Interiors</span>
-        <span className="text-primary">&rarr;</span>
-        <span>03 Materials</span>
-      </div>
-    </div>
-  );
-
   return (
     <div className="flex flex-col w-full overflow-hidden">
 
-      {/* ── SIGNATURE ARCHITECTURAL HERO (NO BUTTONS) ── */}
-      <HeroSection
-        tagline="Holding Ecosystem"
-        title={["Our", "Ecosystem"]}
-        subtitle="Three independent companies. One unified vision. Architecture, interiors, and materials working in complete closed-loop synergy."
-        rightPanelImage={{
-          src: "/images/hero_architecture.png",
-          alt: "ONP Architecture",
-          priority: true,
-          overlay: true,
-        }}
-        rightPanelOverlay={
-          <>
-            {ecosystemOverlay}
-            {scrollCue}
-          </>
-        }
-      >
-        {leftTelemetry}
-      </HeroSection>
+      {/* ── SIGNATURE ARCHITECTURAL HERO SECTION (CENTERED & SIZED TO 100VH - HEADER) ── */}
+      <section className="relative w-full min-h-[calc(100dvh-5rem)] h-[calc(100dvh-5rem)] max-h-[950px] flex items-center justify-center bg-black dark:bg-white text-white dark:text-black border-b border-border overflow-hidden px-6 md:px-14">
+
+        <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center text-center py-8 sm:py-12">
+
+          {/* Company Logo / Brand Image Placeholder (Centered in the Middle) */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-6 sm:mb-8"
+          >
+            <div className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 overflow-hidden border border-white/20 dark:border-black/20 bg-black/60 dark:bg-white/60 group shadow-2xl">
+              {/* Precision Corner Accents */}
+              <div className="absolute top-0 right-0 w-4 h-4 sm:w-6 sm:h-6 border-t-2 border-r-2 border-primary pointer-events-none z-10" />
+              <div className="absolute bottom-0 left-0 w-4 h-4 sm:w-6 sm:h-6 border-b-2 border-l-2 border-primary pointer-events-none z-10" />
+
+
+              {/*
+                COMPANY LOGO PLACEHOLDER:
+                Currently displaying a random architectural visual.
+                When replacing with your company logo:
+                  - Update `src` with your logo path (e.g., "/onp.svg" or "/images/logo.png")
+                  - If your logo is a transparent SVG/PNG, use `className="object-contain p-4"`
+              */}
+              <Image
+                src="/images/hero_architecture.png"
+                alt="Omar & Partners Company Logo / Brand Visual"
+                fill
+                priority
+                sizes="160px"
+                className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 dark:from-black/40 via-transparent to-transparent pointer-events-none" />
+            </div>
+          </motion.div>
+
+          {/* Metadata Eyebrow Badge (Centered) */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="flex items-center justify-center gap-3 mb-4 sm:mb-5"
+          >
+            <span className="w-6 sm:w-8 h-[1px] bg-primary" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.35em] text-primary font-medium">
+              Holding Ecosystem // Operating Entities
+            </span>
+            <span className="w-6 sm:w-8 h-[1px] bg-primary" />
+          </motion.div>
+
+          {/* Dramatic Centered Title */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <h1
+              className="font-heading font-semibold leading-[0.92] tracking-tighter uppercase text-white dark:text-black text-center"
+              style={{ fontSize: "clamp(2.6rem, 5.8vw, 5.5rem)" }}
+            >
+              Our <span className="text-primary">Companies</span>
+            </h1>
+          </motion.div>
+
+          {/* Accent Divider */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className="w-16 h-[1px] bg-primary/80 my-4 sm:my-5"
+          />
+
+          {/* Centered Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="text-white/70 dark:text-black/70 text-sm sm:text-base md:text-lg font-light leading-relaxed max-w-2xl text-center px-4"
+          >
+            Three autonomous yet deeply synchronized operating entities unified under one holding vision — bridging master architecture, bespoke interiors, and material intelligence into a seamless closed-loop execution model.
+          </motion.p>
+
+        </div>
+      </section>
 
       <section id="ecosystem" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
@@ -371,14 +363,14 @@ export default function CompaniesPage() {
         </div>
       </section>
 
-      <section className="py-24 md:py-36 border-b border-border bg-secondary/10">
+      <section id="services" className="py-24 md:py-36 border-b border-border bg-secondary/10 scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="02" title="Services Overview" subtitle="A comprehensive range of services across architecture, interiors, and materials — all under one roof." />
           <ServicesBentoGrid services={services} />
         </div>
       </section>
 
-      <section className="py-24 md:py-36 border-b border-border">
+      <section id="works" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="03" title="Selected Works" subtitle="A curated showcase across architecture, interiors, and material excellence." />
           <GalleryGrid items={gallery} />

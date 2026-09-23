@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { motion } from "motion/react";
-import { RiArrowLeftLine, RiMailLine } from "@remixicon/react";
+import { RiMailLine } from "@remixicon/react";
 
 export default function InexComingSoonPage() {
   const [email, setEmail] = useState("");
@@ -17,7 +16,7 @@ export default function InexComingSoonPage() {
   const letters = "INEX".split("");
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#0C0A09] -mt-24 pt-24">
+    <div className="relative min-h-[calc(100vh-6rem)] flex flex-col items-center justify-center overflow-hidden bg-[#0C0A09] py-16 md:py-24">
 
       {/* ── Grain / noise texture overlay ────────────────────────────── */}
       <div
@@ -155,25 +154,6 @@ export default function InexComingSoonPage() {
           )}
         </motion.div>
       </div>
-
-      {/* ── Bottom bar ───────────────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 2.4 }}
-        className="absolute bottom-8 left-0 right-0 z-10 flex items-center justify-between px-8 md:px-14"
-      >
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-white/25 hover:text-white/60 transition-colors text-[11px] uppercase tracking-widest"
-        >
-          <RiArrowLeftLine size={13} />
-          Back to Home
-        </Link>
-        <span className="text-white/15 text-[10px] uppercase tracking-[0.3em] font-mono">
-          Part of Omar & Partners
-        </span>
-      </motion.div>
     </div>
   );
 }

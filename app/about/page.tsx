@@ -1,77 +1,91 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { motion } from "motion/react";
-import { HeroSection } from "@/components/ui/hero-section";
 import { SectionHeader } from "@/components/ui/section-header";
-import { StatsGrid } from "@/components/ui/stats-grid";
 import { FeatureCard } from "@/components/ui/feature-card";
 import { CTASection } from "@/components/ui/cta-section";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { AwardsShowcase } from "@/components/ui/awards-showcase";
-import {
-  RiArrowRightLine,
-  RiArrowDownLine,
-} from "@remixicon/react";
-import { stats, leadership, coreValues, timeline, awards, partners, awardStats } from "./data";
+import { RiArrowRightLine } from "@remixicon/react";
+import { leadership, coreValues, timeline, awards, partners, awardStats } from "./data";
 
 export default function AboutPage() {
-  const heroStatsOverlay = (
-    <div className="absolute bottom-8 left-8 right-8 grid grid-cols-2 gap-4 z-10">
-      {stats.map((s, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.3 + i * 0.1, duration: 0.5 }}
-          className="bg-black/40 backdrop-blur-md border border-white/10 p-4"
-        >
-          <span className="font-heading text-2xl md:text-3xl font-semibold text-white block leading-none">{s.value}</span>
-          <span className="text-[10px] uppercase tracking-widest text-white/50 mt-1 block">{s.label}</span>
-        </motion.div>
-      ))}
-    </div>
-  );
-
-  const scrollCue = (
-    <motion.div
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2 }}
-      className="absolute top-8 right-8 z-10 flex flex-col items-center gap-1 text-white/40"
-    >
-      <span className="text-[9px] uppercase tracking-[0.3em]">Scroll</span>
-      <motion.div animate={{ y: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.8 }}>
-        <RiArrowDownLine size={12} />
-      </motion.div>
-    </motion.div>
-  );
-
-  const navItems = [
-    { label: "Overview", href: "#overview" },
-    { label: "Leadership", href: "#leadership" },
-    { label: "CEO Voices", href: "#ceo-voices" },
-    { label: "Mission & Vision", href: "#mission" },
-    { label: "Values", href: "#values" },
-    { label: "Timeline", href: "#timeline" },
-    { label: "Awards", href: "#awards" },
-    { label: "Partners", href: "#partners" },
-  ];
 
   return (
     <div className="flex flex-col w-full overflow-hidden">
 
-      <HeroSection
-        tagline="Company Profile"
-        title={["About", "ONP"]}
-        subtitle="Fifteen years of shaping built environments with vision, craft, and an uncompromising commitment to excellence."
-        rightPanelImage={{ src: "/images/about_hero.png", alt: "ONP Studio", priority: true, overlay: true }}
-        rightPanelOverlay={
-          <>
-            {heroStatsOverlay}
-            {scrollCue}
-          </>
-        }
-      />
+      {/* ── ABOUT HERO — Fade-into-background image ──────────────── */}
+      <section className="relative w-full h-[calc(100dvh-5rem)] max-h-[1000px] bg-background overflow-hidden">
+
+        {/* Full-bleed hero image */}
+        <motion.div
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-0 z-0"
+        >
+          <Image
+            src="/images/architecture.png"
+            alt="ONP Studio — Architecture & Design"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+        </motion.div>
+
+        {/* Dark overlay for text contrast — same approach as landing page */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-transparent z-[1]" />
+
+        {/* Bottom fade — dissolves into page background for seamless section blend */}
+        <div
+          className="absolute inset-0 z-[2] pointer-events-none"
+          style={{ background: "linear-gradient(to bottom, transparent 0%, transparent 40%, var(--background) 100%)" }}
+        />
+
+        {/* Centered text content */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
+          {/* Small label */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="flex items-center gap-3 mb-6"
+          >
+            <span className="w-8 h-[1px] bg-primary" />
+            <span className="text-[10px] uppercase tracking-[0.35em] text-primary font-bold">
+              Est. 2010
+            </span>
+            <span className="w-8 h-[1px] bg-primary" />
+          </motion.div>
+
+          {/* Main heading */}
+          <div className="overflow-hidden">
+            <motion.h1
+              initial={{ y: 60, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="font-heading font-bold leading-[1.05] tracking-tight text-white"
+              style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)" }}
+            >
+              Shaping Spaces,<br />
+              Inspiring Lives
+            </motion.h1>
+          </div>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.6 }}
+            className="text-black dark:text-white text-sm md:text-[15px] font-light leading-relaxed max-w-lg mt-5"
+          >
+            Fifteen years of crafting built environments with vision, precision, and an uncompromising commitment to excellence.
+          </motion.p>
+        </div>
+
+      </section>
 
       <section id="overview" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">

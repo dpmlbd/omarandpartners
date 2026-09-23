@@ -76,9 +76,6 @@ export function Header() {
             </div>
           </div>
 
-          <Link href="/careers" className="relative text-sm font-medium tracking-wide uppercase group">
-            <span className={cn("transition-colors duration-300", pathname.startsWith("/careers") ? "text-primary" : "text-foreground group-hover:text-primary")}>Careers</span>
-          </Link>
           <Link href="/contact" className="relative text-sm font-medium tracking-wide uppercase group">
             <span className={cn("transition-colors duration-300", pathname.startsWith("/contact") ? "text-primary" : "text-foreground group-hover:text-primary")}>Contact</span>
           </Link>
@@ -147,13 +144,6 @@ export function Header() {
               </Link>
             </div>
 
-            <Link
-              href="/careers"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={cn("text-2xl font-heading font-medium tracking-tight uppercase", pathname.startsWith("/careers") ? "text-primary" : "text-foreground")}
-            >
-              Careers
-            </Link>
             <Link
               href="/contact"
               onClick={() => setIsMobileMenuOpen(false)}

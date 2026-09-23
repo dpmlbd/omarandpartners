@@ -93,7 +93,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-10">
           <p className="text-xs text-background/40 uppercase tracking-widest font-medium">
-            &copy; {new Date().getFullYear()} Omar &amp; Partners. All rights reserved.
+            &copy; {new Date().getFullYear()} {" "} | Omar &amp; Partners | All rights reserved.
           </p>
           <div className="flex gap-8 text-xs text-background/40 uppercase tracking-widest font-medium">
             <Link href="/legal/privacy-policy" className="hover:text-background transition-colors">Privacy</Link>
@@ -101,7 +101,7 @@ export function Footer() {
             <Link href="/legal/cookie-policy" className="hover:text-background transition-colors">Cookies</Link>
           </div>
           <p className="text-xs text-background/40 uppercase tracking-widest font-medium">
-            Made by <span className="text-primary font-semibold">X</span>
+            Made by <span className="text-primary font-semibold">MOHAMMED IFTEKHAR</span>
           </p>
         </div>
       </div>

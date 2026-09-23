@@ -5,8 +5,9 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SectionHeader } from "@/components/ui/section-header";
-import { ServicesBentoGrid } from "@/components/ui/services-bento-grid";
-import { RiArrowRightLine, RiArrowDownLine } from "@remixicon/react";
+import { BentoGallery } from "@/components/ui/bento-gallery";
+import { kolpokowsolGalleryItems } from "@/lib/gallery-data";
+import { RiArrowRightLine } from "@remixicon/react";
 
 const stats = [
   { value: "80+", label: "Interiors Delivered" },
@@ -72,206 +73,85 @@ const services = [
   },
 ];
 
-const bentoServices = [
-  { type: "stat" as const, title: "Interiors Completed", stat: "80+", statLabel: "Spanning residential, hospitality, and corporate.", colSpan: 1 as const },
-  { type: "image" as const, title: "Luxury Residences", image: "/images/interior.png", colSpan: 1 as const, rowSpan: 2 as const },
-  { type: "stat" as const, title: "Client Satisfaction", stat: "5★", statLabel: "Average project rating across all delivered work.", dark: true, colSpan: 1 as const },
-  { type: "feature" as const, title: "Material Curation", description: "We source rare and premium materials from global suppliers — natural stone, bespoke joinery, and custom textiles — working closely with INEX.", colSpan: 2 as const },
-  { type: "list" as const, title: "Design Benchmarks", items: [{ label: "Avg. Lead Time", value: "6 mo." }, { label: "Bespoke Pieces", value: "40%" }, { label: "Repeat Clients", value: "68%" }], colSpan: 1 as const, rowSpan: 2 as const },
-  { type: "image" as const, title: "Hospitality Design", image: "/images/materials.png", colSpan: 1 as const },
-  { type: "stat" as const, title: "Design Awards", stat: "05", statLabel: "Regional and international recognition.", dark: true, colSpan: 1 as const },
-  { type: "feature" as const, title: "Full-Service Studio", description: "From concept mood boards to furniture specification and on-site supervision, Kolpokowsol delivers total interior experiences.", colSpan: 1 as const },
-];
 
-const pageSections = [
-  { label: "Overview", href: "#overview" },
-  { label: "Disciplines", href: "#disciplines" },
-  { label: "Selected Works", href: "#projects" },
-  { label: "Services", href: "#services" },
-];
+
+
 
 export default function KolpokowsolPage() {
   return (
     <div className="flex flex-col w-full overflow-hidden">
 
-      {/* ── REDESIGNED HERO SECTION ──────────────────────────────── */}
-      <section className="relative w-full bg-foreground text-background border-b border-border overflow-hidden">
-        {/* Subtle architectural atmosphere */}
-        <div className="absolute inset-0 bg-grid opacity-5 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/70 pointer-events-none" />
+      {/* ── HERO SECTION ──────────────────────────────────────── */}
+      <section className="relative w-full overflow-hidden" style={{ height: "100vh", minHeight: "700px" }}>
 
-        <div className="relative container mx-auto px-6 md:px-14 pt-32 md:pt-36 pb-16 md:pb-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+        {/* Full-bleed background image */}
+        <motion.div
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-0"
+        >
+          <Image
+            src="/images/interior.png"
+            alt="Kolpokowsol — Interior Architecture & Spatial Design"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        </motion.div>
 
-            {/* Left: Atmospheric & Editorial Story */}
-            <div className="lg:col-span-7 flex flex-col justify-center">
-              {/* Metadata badge */}
+        {/* Dark overlays for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70 z-[1]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent z-[1]" />
+
+        {/* Text content overlaid on image — same grid alignment */}
+        <div className="relative z-10 h-full flex items-center pt-20 container mx-auto px-6 md:px-14">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-end w-full">
+
+            {/* Left: heading */}
+            <div className="flex flex-col">
+              {/* Metadata label */}
               <motion.div
-                initial={{ opacity: 0, y: -15 }}
+                initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                className="flex items-center gap-4 mb-6"
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="flex items-center gap-3 mb-6"
               >
-                <div className="flex items-center gap-3">
-                  <span className="w-8 h-[1px] bg-primary" />
-                  <span className="font-mono text-[10px] uppercase tracking-[0.35em] text-primary">
-                    Interior Design Division
-                  </span>
-                </div>
-                <span className="w-1 h-1 rounded-full bg-background/30" />
-                <span className="font-mono text-[10px] uppercase tracking-widest text-background/40">
-                  02 / ONP Group
+                <span className="w-8 h-[1px] bg-primary" />
+                <span className="font-mono text-[10px] uppercase tracking-[0.35em] text-primary font-medium">
+                  Interior Design Division
                 </span>
               </motion.div>
 
-              {/* Dramatic Title */}
+              {/* Giant stacked heading */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
               >
                 <h1
-                  className="font-heading font-semibold leading-[0.88] tracking-tighter uppercase text-background"
-                  style={{ fontSize: "clamp(2.8rem, 6.2vw, 5.75rem)" }}
+                  className="font-heading font-bold leading-[0.92] tracking-tighter uppercase text-white"
+                  style={{ fontSize: "clamp(2.8rem, 6.5vw, 6rem)" }}
                 >
                   Kolpo<br />
-                  <span className="inline-flex items-baseline gap-3">
-                    <span className="text-primary">kowsol</span>
-                  </span>
+                  <span className="text-primary">kowsol</span>
                 </h1>
               </motion.div>
-
-              {/* Subtitle with accent bar */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-6 max-w-xl"
-              >
-                <div className="w-20 h-[1px] bg-primary/80 mb-5" />
-                <p className="text-background/70 text-sm md:text-base font-light leading-relaxed">
-                  Refined interior design that transforms built shells into extraordinary human environments through material intelligence, calibrated light, and spatial narrative.
-                </p>
-              </motion.div>
-
-              {/* CTAs */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.55 }}
-                className="mt-8 flex flex-wrap items-center gap-4"
-              >
-                <a
-                  href="#projects"
-                  className="group inline-flex items-center gap-3 bg-background text-foreground px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] font-medium hover:bg-background/90 transition-all duration-300"
-                >
-                  Selected Works
-                  <RiArrowDownLine size={13} className="group-hover:translate-y-0.5 transition-transform duration-300" />
-                </a>
-                <a
-                  href="#services"
-                  className="inline-flex items-center gap-3 border border-background/20 text-background px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] font-medium hover:border-background/60 hover:bg-background/5 transition-all duration-300"
-                >
-                  Design Services
-                  <RiArrowRightLine size={13} />
-                </a>
-              </motion.div>
-
-              {/* Interior Benchmarks Ribbon */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.7 }}
-                className="mt-12 pt-8 border-t border-background/10 grid grid-cols-2 sm:grid-cols-4 gap-6"
-              >
-                {stats.map((s, i) => (
-                  <div key={i} className="flex flex-col gap-1">
-                    <span className="font-mono text-[9px] text-primary uppercase tracking-widest">
-                      0{i + 1}
-                    </span>
-                    <span className="font-heading text-2xl md:text-3xl font-semibold text-background tracking-tight">
-                      {s.value}
-                    </span>
-                    <span className="text-[10px] uppercase tracking-wider text-background/50">
-                      {s.label}
-                    </span>
-                  </div>
-                ))}
-              </motion.div>
             </div>
 
-            {/* Right: Architectural Interior Showcase */}
-            <div className="lg:col-span-5">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                className="relative"
-              >
-                <div className="relative aspect-[4/5] sm:aspect-[1/1] lg:aspect-[4/5] overflow-hidden border border-background/15 bg-black">
-                  <Image
-                    src="/images/interior.png"
-                    alt="Kolpokowsol Interior Atelier"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 42vw"
-                    className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+            {/* Right: description */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="lg:pb-2"
+            >
+              <p className="text-white/60 text-sm md:text-[15px] font-light leading-relaxed max-w-md">
+                Kolpokowsol is the interior architecture and spatial design practice of Omar &amp; Partners — transforming built shells into extraordinary human environments through material intelligence, calibrated light, and bespoke craftsmanship.
+              </p>
+            </motion.div>
 
-                  {/* Corner styling */}
-                  <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-primary/60 pointer-events-none" />
-                  <div className="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-primary/60 pointer-events-none" />
-
-                  {/* Top Badge */}
-                  <div className="absolute top-4 left-4 z-10">
-                    <div className="bg-black/60 backdrop-blur-md border border-white/10 px-3.5 py-1.5 flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                      <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-white/80">
-                        Interior Atelier · Spatial Lab
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Bottom Specimen Card */}
-                  <div className="absolute bottom-4 left-4 right-4 z-10 bg-black/65 backdrop-blur-md border border-white/10 p-4">
-                    <div className="flex items-center justify-between gap-4 mb-2">
-                      <span className="font-mono text-[9px] text-primary uppercase tracking-widest">
-                        Design Principle
-                      </span>
-                      <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">
-                        Atmospheric
-                      </span>
-                    </div>
-                    <p className="text-white/80 text-xs font-light leading-relaxed">
-                      &ldquo;Atmosphere is the invisible architecture of a room. We design what you feel before what you see.&rdquo;
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Anchor Strip */}
-        <div className="border-t border-background/10 bg-black/25 backdrop-blur-sm">
-          <div className="container mx-auto px-6 md:px-14 py-3.5 flex items-center justify-between gap-6 overflow-x-auto">
-            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-primary shrink-0 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-              Kolpokowsol Index
-            </span>
-            <nav className="flex items-center gap-6 md:gap-8 shrink-0">
-              {pageSections.map((item, i) => (
-                <a
-                  key={i}
-                  href={item.href}
-                  className="text-[10px] uppercase tracking-[0.2em] text-background/60 hover:text-primary transition-colors duration-200 whitespace-nowrap"
-                >
-                  {item.label}
-                </a>
-              ))}
-            </nav>
           </div>
         </div>
       </section>
@@ -382,7 +262,7 @@ export default function KolpokowsolPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
             {services.map((svc, i) => (
               <ScrollReveal key={svc.id} delay={i * 0.08}>
-                <div className="group relative h-[320px] overflow-hidden rounded-[20px] border border-border bg-background shadow-sm hover:shadow-xl transition-all duration-500">
+                <div className="group relative h-[320px] overflow-hidden border border-border bg-background hover:border-primary transition-all duration-500">
                   <Image
                     src={svc.image}
                     alt={svc.title}
@@ -408,17 +288,17 @@ export default function KolpokowsolPage() {
               </ScrollReveal>
             ))}
           </div>
-
-          {/* Bento Grid Metrics */}
-          <div className="mt-20 pt-16 border-t border-border">
-            <div className="mb-10">
-              <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest block mb-2">Capabilities Matrix</span>
-              <h3 className="font-heading text-2xl md:text-3xl font-semibold uppercase tracking-tight">Ecosystem Delivery &amp; Curation</h3>
-            </div>
-            <ServicesBentoGrid services={bentoServices} />
-          </div>
         </div>
       </section>
+
+      {/* ── BENTO GALLERY WITH PAGINATION ────────────────────────── */}
+      <BentoGallery
+        badge="Interiors Gallery"
+        title="Spatial & Material Archive"
+        description="A curated bento archive of bespoke residences, hospitality atmospheres, and artisanal joinery."
+        items={kolpokowsolGalleryItems}
+        itemsPerPage={8}
+      />
 
     </div>
   );

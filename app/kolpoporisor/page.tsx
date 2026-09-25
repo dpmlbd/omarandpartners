@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SectionHeader } from "@/components/ui/section-header";
 import { BentoGallery } from "@/components/ui/bento-gallery";
+import { SocialChannelsSection } from "@/components/ui/social-channels-section";
 import { kolpoporisorGalleryItems } from "@/lib/gallery-data";
 import { RiArrowRightLine } from "@remixicon/react";
 
@@ -296,6 +297,13 @@ export default function KolpoporisorPage() {
         description="A curated bento archive of structural developments, civic pavilions, and experimental geometries."
         items={kolpoporisorGalleryItems}
         itemsPerPage={8}
+      />
+
+      {/* ── 05. SOCIAL MEDIA SECTION ──────────────────────────────── */}
+      <SocialChannelsSection
+        index="05"
+        title="Social Media"
+        subtitle="Follow Kolpoporisor for architectural monographs, structural breakthroughs, and ongoing construction milestones."
       />
 
     </div>

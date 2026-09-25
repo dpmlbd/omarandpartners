@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { RiMailLine } from "@remixicon/react";
+import { defaultSocialChannels } from "@/components/ui/social-channels-section";
 
 export default function InexComingSoonPage() {
   const [email, setEmail] = useState("");
@@ -152,6 +153,39 @@ export default function InexComingSoonPage() {
               We&apos;ll keep you updated.
             </motion.div>
           )}
+        </motion.div>
+
+        {/* Social Media Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 2.2 }}
+          className="mt-14 w-full max-w-xs sm:max-w-sm flex flex-col items-center"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <span className="w-6 h-[1px] bg-white/10" />
+            <span className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-medium">
+              Social Media
+            </span>
+            <span className="w-6 h-[1px] bg-white/10" />
+          </div>
+          <div className="grid grid-cols-3 gap-3 sm:gap-4 w-full">
+            {defaultSocialChannels.map((social) => {
+              const Icon = social.icon;
+              return (
+                <a
+                  key={social.name}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.name}
+                  className={`aspect-square w-full border border-white/10 bg-white/5 flex items-center justify-center text-white/70 transition-all duration-500 group ${social.hoverClass}`}
+                >
+                  <Icon className="w-6 h-6 sm:w-8 sm:h-8 transition-transform duration-500 group-hover:scale-110" />
+                </a>
+              );
+            })}
+          </div>
         </motion.div>
       </div>
     </div>

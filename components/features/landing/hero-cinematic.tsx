@@ -224,7 +224,7 @@ export function HeroCinematic({ slides }: HeroCinematicProps) {
       </div>
 
       {/* ── Progress Timeline (bottom-right) ─────────────────────────── */}
-      <div className="absolute bottom-10 right-6 md:right-14 z-20 flex items-center gap-3">
+      <div className="absolute bottom-10 right-6 md:right-14 z-20 flex items-center gap-2.5 sm:gap-3">
         {slides.map((slide, i) => (
           <button
             key={i}
@@ -239,7 +239,7 @@ export function HeroCinematic({ slides }: HeroCinematicProps) {
             >
               0{i + 1}
             </span>
-            <div className="relative w-14 md:w-20 h-[2px] bg-white/15 overflow-hidden rounded-full">
+            <div className="relative w-11 sm:w-14 md:w-16 lg:w-20 h-[2px] bg-white/15 overflow-hidden rounded-full">
               {i === activeSlide && (
                 <motion.div
                   className="absolute inset-y-0 left-0 bg-primary rounded-full"
@@ -259,7 +259,7 @@ export function HeroCinematic({ slides }: HeroCinematicProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 pointer-events-none"
+        className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex-col items-center gap-1.5 pointer-events-none"
       >
         <span className="text-[9px] uppercase tracking-[0.3em] text-white/35">
           Scroll

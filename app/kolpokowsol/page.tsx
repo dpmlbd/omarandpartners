@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SectionHeader } from "@/components/ui/section-header";
 import { BentoGallery } from "@/components/ui/bento-gallery";
+import { SocialChannelsSection } from "@/components/ui/social-channels-section";
 import { kolpokowsolGalleryItems } from "@/lib/gallery-data";
 import { RiArrowRightLine } from "@remixicon/react";
 
@@ -298,6 +299,13 @@ export default function KolpokowsolPage() {
         description="A curated bento archive of bespoke residences, hospitality atmospheres, and artisanal joinery."
         items={kolpokowsolGalleryItems}
         itemsPerPage={8}
+      />
+
+      {/* ── 05. SOCIAL MEDIA SECTION ──────────────────────────────── */}
+      <SocialChannelsSection
+        index="05"
+        title="Social Media"
+        subtitle="Follow Kolpokowsol for behind-the-scenes glimpses, material studies, and newly completed spatial works."
       />
 
     </div>

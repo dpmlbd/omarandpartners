@@ -76,7 +76,7 @@ export default function TermsAndConditionsPage() {
         <div className="container mx-auto px-6 md:px-14">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
             {/* Index col */}
-            <div className="md:col-span-2">
+            <div className="hidden md:block md:col-span-2">
               <div className="sticky top-28 flex flex-col gap-3">
                 <span className="font-mono text-[10px] text-muted-foreground tracking-widest">Legal</span>
                 <span className="w-[1px] h-12 bg-border" />
@@ -104,7 +104,7 @@ export default function TermsAndConditionsPage() {
             </div>
 
             {/* Sidebar */}
-            <div className="md:col-span-2">
+            <div className="hidden md:block md:col-span-2">
               <div className="sticky top-28 flex flex-col gap-4 border border-border p-5">
                 <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Related</span>
                 <Link href="/legal/privacy-policy" className="text-xs text-foreground hover:text-primary transition-colors uppercase tracking-wider">Privacy Policy</Link>

@@ -6,7 +6,7 @@ export function Footer() {
   return (
     <footer className="bg-foreground text-background relative overflow-hidden">
 
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+      <div className="hidden md:flex absolute inset-0 items-center justify-center pointer-events-none select-none overflow-hidden">
         <span
           className="font-heading font-bold uppercase tracking-tighter text-background/[0.02] whitespace-nowrap"
           style={{ fontSize: "clamp(4rem, 12vw, 10rem)", lineHeight: 1 }}

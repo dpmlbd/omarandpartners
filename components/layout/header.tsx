@@ -85,14 +85,17 @@ export function Header() {
           </div>
         </nav>
 
-        {/* Mobile Nav Toggle */}
-        <button
-          className="md:hidden z-[60] p-2 -mr-2 text-foreground"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle Menu"
-        >
-          {isMobileMenuOpen ? <RiCloseLine size={24} /> : <RiMenuLine size={24} />}
-        </button>
+        {/* Mobile Actions */}
+        <div className="flex md:hidden items-center gap-1 z-[60]">
+          <ThemeToggle />
+          <button
+            className="p-2 -mr-2 text-foreground"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle Menu"
+          >
+            {isMobileMenuOpen ? <RiCloseLine size={24} /> : <RiMenuLine size={24} />}
+          </button>
+        </div>
 
         {/* Mobile Menu */}
         <Sheet open={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} side="left" topOffset="4rem">
@@ -151,6 +154,11 @@ export function Header() {
             >
               Contact
             </Link>
+
+            <div className="pt-6 mt-2 border-t border-border/50 flex items-center justify-between">
+              <span className="text-xs uppercase tracking-widest text-muted-foreground font-mono">Theme</span>
+              <ThemeToggle />
+            </div>
           </nav>
         </Sheet>
       </div>

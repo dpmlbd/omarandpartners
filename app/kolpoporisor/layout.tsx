@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { RiArrowRightLine } from "@remixicon/react";
 import Link from "next/link";
+import { siteConfig } from "@/config/site";
+
+const comp = siteConfig.companies.find((c) => c.name === "Kolpoporisor");
 
 export const metadata: Metadata = {
-  title: "ONP | Kolpoporisor",
-  description: "Architecture and urban design by Kolpoporisor.",
+  title: `ONP | ${comp?.name || "Kolpoporisor"}`,
+  description: `${comp?.description || "Consultancy"} by ${comp?.name || "Kolpoporisor"}.`,
 };
 
 export default function KolpoporisorLayout({
@@ -23,7 +26,7 @@ export default function KolpoporisorLayout({
           <div className="container mx-auto px-6 md:px-14 flex flex-col md:flex-row justify-between items-center gap-10">
             <ScrollReveal>
               <h2 className="font-heading text-3xl md:text-5xl font-semibold tracking-tighter uppercase max-w-2xl">
-                Start a project with Kolpoporisor
+                Start a project with {comp?.name || "Kolpoporisor"}
               </h2>
             </ScrollReveal>
             <ScrollReveal delay={0.2}>

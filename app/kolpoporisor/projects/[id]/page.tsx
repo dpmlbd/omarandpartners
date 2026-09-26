@@ -1,11 +1,9 @@
-"use client";
-
-import { use } from "react";
 import { notFound } from "next/navigation";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import Image from "next/image";
 import Link from "next/link";
 import { RiArrowLeftLine } from "@remixicon/react";
+import { fetchProjectDetail } from "@/lib/public/projects";
 
 const projects: Record<string, any> = {
   "zenith-tower": {
@@ -76,9 +74,9 @@ const projects: Record<string, any> = {
   },
 };
 
-export default function ProjectDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
-  const project = projects[id];
+export default async function ProjectDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const project = await fetchProjectDetail(id, projects);
 
   if (!project) {
     notFound();

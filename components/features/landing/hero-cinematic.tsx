@@ -4,6 +4,11 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { RiArrowDownLine, RiArrowRightLine } from "@remixicon/react";
+import { siteConfig } from "@/config/site";
+
+const comp1 = siteConfig.companies[1];
+const comp2 = siteConfig.companies[2];
+const comp3 = siteConfig.companies[3];
 
 interface HeroSlide {
   src: string;
@@ -132,7 +137,7 @@ export function HeroCinematic({ slides }: HeroCinematicProps) {
         >
           <span className="w-10 h-[1px] bg-primary" />
           <span className="text-[10px] uppercase tracking-[0.35em] text-white/50 font-medium">
-            Architecture · Interiors · Materials
+            {comp1?.description} · {comp2?.description} · {comp3?.description}
           </span>
         </motion.div>
 
@@ -172,7 +177,7 @@ export function HeroCinematic({ slides }: HeroCinematicProps) {
           <p className="text-white/55 text-sm md:text-base font-light leading-relaxed">
             Three independent companies. One unified vision.
             <br className="hidden md:block" />{" "}
-            Architecture, interiors, and materials in complete synergy.
+            {comp1?.description}, {comp2?.description}, and {comp3?.description} in complete synergy.
           </p>
         </motion.div>
 

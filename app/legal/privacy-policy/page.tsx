@@ -40,7 +40,7 @@ We may also disclose your information where required by law, or when we believe 
 • The right to restrict or object to processing
 • The right to data portability
 
-To exercise any of these rights, please contact us at privacy@omarandpartners.com.`
+To exercise any of these rights, please contact us at info@onp-bd.com.`
   },
   {
     title: "Security",

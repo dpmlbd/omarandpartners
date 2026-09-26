@@ -9,6 +9,12 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { AwardsShowcase } from "@/components/ui/awards-showcase";
 import { RiArrowRightLine } from "@remixicon/react";
 import { leadership, coreValues, timeline, awards, partners, awardStats } from "./data";
+import { siteConfig } from "@/config/site";
+
+const compHolding = siteConfig.companies[0];
+const comp1 = siteConfig.companies[1];
+const comp2 = siteConfig.companies[2];
+const comp3 = siteConfig.companies[3];
 
 export default function AboutPage() {
 
@@ -55,7 +61,7 @@ export default function AboutPage() {
           >
             <span className="w-8 h-[1px] bg-primary" />
             <span className="text-[10px] uppercase tracking-[0.35em] text-primary font-bold">
-              Est. 2010
+              Est. 2015
             </span>
             <span className="w-8 h-[1px] bg-primary" />
           </motion.div>
@@ -81,7 +87,7 @@ export default function AboutPage() {
             transition={{ duration: 0.7, delay: 0.6 }}
             className="text-black dark:text-white text-sm md:text-[15px] font-light leading-relaxed max-w-lg mt-5"
           >
-            Fifteen years of crafting built environments with vision, precision, and an uncompromising commitment to excellence.
+            Over a decade of crafting built environments with vision, precision, and an uncompromising commitment to excellence.
           </motion.p>
         </div>
 
@@ -101,14 +107,14 @@ export default function AboutPage() {
                   Company<br />Overview
                 </h2>
                 <p className="text-muted-foreground text-sm leading-relaxed">
-                  Omar &amp; Partners (ONP) is a multi-disciplinary architecture and design holding group. Founded in 2010, we have grown from a boutique consultancy into a powerhouse ecosystem of three specialized companies.
+                  {compHolding?.name || "Omar & Partners"} (ONP) is a multi-disciplinary {compHolding?.description?.toLowerCase() || "holding company"}. Founded in 2015, we have grown into a powerhouse ecosystem of specialized subsidiaries.
                 </p>
               </ScrollReveal>
             </div>
             <div className="md:col-span-6 border-l border-border pl-8 md:pl-12 flex flex-col gap-8">
               <ScrollReveal delay={0.2}>
                 <p className="text-muted-foreground text-sm leading-relaxed">
-                  Our model is unique: by keeping architecture (Kolpoporisor), interior design (Kolpokowsol), and material sourcing (INEX) under a single parent, we offer clients an integrated service that eliminates fragmentation and maintains absolute quality control from concept to completion.
+                  Our model is unique: by keeping {comp1?.name} ({comp1?.description}), {comp2?.name} ({comp2?.description}), and {comp3?.name} ({comp3?.description}) under a single parent, we offer clients an integrated service that eliminates fragmentation and maintains absolute quality control from concept to completion.
                 </p>
               </ScrollReveal>
               <ScrollReveal delay={0.3}>
@@ -151,12 +157,12 @@ export default function AboutPage() {
       </section>
 
       {/* ── VOICES FROM CEO ─────────────────────────────────────────── */}
-      <section id="ceo-voices" className="relative py-32 md:py-44 border-b border-border scroll-mt-24 overflow-hidden bg-foreground text-background">
+      <section id="ceo-voices" className="relative py-24 md:py-36 border-b border-border scroll-mt-24 overflow-hidden bg-foreground text-background">
         {/* Decorative oversized quote mark */}
-        <div className="absolute top-12 left-6 md:left-14 pointer-events-none select-none z-0">
+        <div className="absolute top-8 left-6 md:left-14 pointer-events-none select-none z-0">
           <span
             className="font-heading font-bold text-background/[0.03] leading-none block"
-            style={{ fontSize: "clamp(15rem, 30vw, 40rem)" }}
+            style={{ fontSize: "clamp(12rem, 25vw, 32rem)" }}
             aria-hidden="true"
           >
             &ldquo;
@@ -164,43 +170,53 @@ export default function AboutPage() {
         </div>
 
         <div className="relative z-10 container mx-auto px-6 md:px-14">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-start">
 
-            {/* Left — Quote */}
+            {/* Left — CEO Message Letter */}
             <div className="md:col-span-7 flex flex-col">
               <ScrollReveal>
-                <div className="flex items-center gap-3 mb-8">
+                <div className="flex items-center gap-3 mb-6">
                   <span className="w-8 h-[1px] bg-accent" />
                   <span className="text-[10px] uppercase tracking-[0.35em] text-background/40 font-medium">
-                    Voices from the CEO
+                    Message from our CEO
                   </span>
                 </div>
               </ScrollReveal>
 
               <ScrollReveal delay={0.15}>
-                <blockquote className="relative">
-                  <p
-                    className="font-heading font-light leading-[1.3] tracking-tight text-background/90"
-                    style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)" }}
-                  >
-                    <span className="text-accent text-4xl leading-none align-top mr-1">&ldquo;</span>
-                    We don&apos;t build structures — we compose environments. Every material, every angle, every shadow is a deliberate choice in service of a larger narrative. Architecture at its best is a conversation between human ambition and the earth beneath our feet.
-                    <span className="text-accent text-4xl leading-none align-bottom ml-1">&rdquo;</span>
-                  </p>
-                </blockquote>
+                <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl font-light leading-[1.25] tracking-tight text-background mb-8">
+                  Building with purpose, integrity, and responsibility.
+                </h2>
               </ScrollReveal>
 
-              <ScrollReveal delay={0.3}>
+              <ScrollReveal delay={0.25}>
+                <div className="flex flex-col gap-5 text-background/70 text-sm md:text-[15px] font-light leading-relaxed">
+                  <p>
+                    Since we started our journey back in 2015, we have been driven by a single, powerful goal: to become one of Bangladesh&apos;s most trusted partners in architectural and engineering solutions. What started as an ambitious venture with a handful of young architects and engineers has grown into a dynamo multi-disciplinary firm recognized for its dedication to excellence.
+                  </p>
+                  <p>
+                    For us, design is about more than just aesthetics and functional perfection; it is about responsibility. We believe architecture must actively respond to the environment and add meaningful value to society. This belief shapes everything we do, from our daily design choices to major initiatives like sustainable city promenade planning.
+                  </p>
+                  <p>
+                    As we look ahead and target a steady 10% organizational growth, our strategy is clear: we want to nurture our local creative talent, embrace advanced technologies, and eventually expand our unique services into the global market while staying true to our roots.
+                  </p>
+                  <p className="pt-2 text-background/90 font-normal">
+                    To our clients, partners, and amazing team: thank you for trusting us and building this future together.
+                  </p>
+                </div>
+              </ScrollReveal>
+
+              <ScrollReveal delay={0.35}>
                 <div className="mt-10 pt-8 border-t border-background/10 flex items-end justify-between">
                   <div className="flex flex-col gap-1">
-                    {/* Signature-style name */}
-                    <span
-                      className="font-heading text-2xl md:text-3xl italic font-light text-background/70 tracking-tight"
-                    >
-                      Omar Al-Rashid
+                    <span className="text-xs uppercase tracking-widest text-background/50 font-mono">
+                      Warmly,
                     </span>
-                    <span className="text-[10px] uppercase tracking-[0.3em] text-background/35 mt-1">
-                      Founder &amp; CEO — Omar &amp; Partners
+                    <span className="font-heading text-2xl md:text-3xl font-medium text-background tracking-tight mt-1">
+                      Ar. Abdullah Al Omar
+                    </span>
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-accent mt-0.5">
+                      Principal Architect &amp; CEO — Omar &amp; Partners
                     </span>
                   </div>
                   <span className="hidden md:block w-20 h-[1px] bg-accent/40" />
@@ -209,26 +225,18 @@ export default function AboutPage() {
             </div>
 
             {/* Right — CEO Portrait */}
-            <div className="md:col-span-5 md:col-start-8">
+            <div className="md:col-span-5 md:col-start-8 md:sticky md:top-28">
               <ScrollReveal delay={0.2} direction="right">
                 <div className="relative aspect-[3/4] overflow-hidden">
                   <Image
                     src="/images/architecture.png"
-                    alt="Omar Al-Rashid — Founder & CEO"
+                    alt="Ar. Abdullah Al Omar — Principal Architect & CEO"
                     fill
                     className="object-cover"
                   />
                   {/* Warm tinted overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0C0A09]/80 via-[#0C0A09]/20 to-transparent mix-blend-multiply" />
                   <div className="absolute inset-0 bg-primary/10 mix-blend-overlay" />
-
-                  {/* Bottom label on image */}
-                  <div className="absolute bottom-6 left-6 right-6 z-10">
-                    <div className="flex items-center gap-3">
-                      <span className="w-4 h-[1px] bg-white/30" />
-                      <span className="text-[9px] uppercase tracking-[0.3em] text-white/40">Since 2010</span>
-                    </div>
-                  </div>
 
                   {/* Corner accent */}
                   <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-accent/30" />
@@ -240,38 +248,110 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── WORDS FROM COO ─────────────────────────────────────────── */}
+      <section id="coo-words" className="relative py-24 md:py-36 border-b border-border scroll-mt-24 bg-secondary/15">
+        <div className="container mx-auto px-6 md:px-14">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-start">
+            
+            {/* Left — COO Portrait (Clean like CEO, no text, buttons or chips) */}
+            <div className="md:col-span-5 md:sticky md:top-28">
+              <ScrollReveal delay={0.2} direction="left">
+                <div className="relative aspect-[3/4] overflow-hidden">
+                  <Image
+                    src="/images/interior.png"
+                    alt="Engr. Mohammad Mohiuddin (Ovi) — Chief Operating Officer"
+                    fill
+                    className="object-cover"
+                  />
+                  {/* Subtle overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+
+                  {/* Corner accent */}
+                  <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-primary/30" />
+                  <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-primary/30" />
+                </div>
+              </ScrollReveal>
+            </div>
+
+            {/* Right — COO Letter Content */}
+            <div className="md:col-span-7 flex flex-col">
+              <ScrollReveal>
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="w-8 h-[1px] bg-primary" />
+                  <span className="text-[10px] uppercase tracking-[0.35em] text-primary font-bold">
+                    Words from our COO
+                  </span>
+                </div>
+              </ScrollReveal>
+
+              <ScrollReveal delay={0.15}>
+                <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl font-semibold leading-[1.25] tracking-tight uppercase text-foreground mb-8">
+                  Operational Excellence &amp; Full-Lifecycle Delivery
+                </h2>
+              </ScrollReveal>
+
+              <ScrollReveal delay={0.25}>
+                <div className="flex flex-col gap-6 text-foreground/80 text-sm md:text-[15px] font-light leading-relaxed">
+                  <p>
+                    While strategic vision defines our organization&apos;s direction, rigorous operational excellence determines our success. At KOLPOPORISHOR &amp; KOLPOKOWSOL, we have established a highly integrated ecosystem across the core departments—Architecture, Engineering, Construction, Management Consultancy and Supply Chain—to ensure that every project is executed with meticulous precision and compliance.
+                  </p>
+                  <p>
+                    We pride ourselves on providing a comprehensive, full-lifecycle solution for our clients. From the initial stages of complex seismic analysis and structural budgeting to advanced 3D modeling and final post-occupancy evaluations, our focus remains unyielding on reliability, safety, and technical accuracy.
+                  </p>
+                  <p>
+                    Managing complex architectural and engineering challenges drives us to continuously sharpen our technological edge and optimize our project delivery frameworks. Ultimately, our mandate is clear: to maintain environmental stewardship and safety at the forefront of our operations while consistently exceeding client expectations. We look forward to partnering with you to bring your next landmark development to fruition.
+                  </p>
+                </div>
+              </ScrollReveal>
+
+              <ScrollReveal delay={0.35}>
+                <div className="mt-10 pt-8 border-t border-border flex items-end justify-between">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
+                      Best regards,
+                    </span>
+                    <span className="font-heading text-2xl md:text-3xl font-semibold text-foreground tracking-tight mt-1">
+                      Engr. Mohammad Mohiuddin (Ovi)
+                    </span>
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-primary font-semibold mt-0.5">
+                      Chief Operating Officer (COO) — KOLPOPORISHOR &amp; KOLPOKOWSOL
+                    </span>
+                  </div>
+                  <span className="hidden md:block w-20 h-[1px] bg-primary/40" />
+                </div>
+              </ScrollReveal>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       <section id="mission" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="04" title="Mission &amp; Vision" />
+          <SectionHeader index="03" title="Mission &amp; Vision" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border">
             <ScrollReveal>
-              <div className="flex flex-col gap-8 p-10 md:p-16 bg-foreground text-background">
+              <div className="flex flex-col gap-6 p-10 md:p-14 bg-foreground text-background h-full">
                 <div className="flex items-center gap-3">
                   <span className="w-6 h-[1px] bg-primary" />
                   <span className="text-[10px] uppercase tracking-[0.3em] text-background/40">Mission</span>
                 </div>
-                <p className="font-heading text-2xl md:text-3xl font-light leading-snug tracking-tight">
-                  To deliver world-class architectural and design solutions that <span className="text-foreground font-medium">elevate human experience</span> while honoring context, culture, and the planet.
+                <p className="font-heading text-xl sm:text-2xl md:text-3xl font-light leading-snug tracking-tight text-background">
+                  To be Bangladesh&apos;s premier catalyst in architecture and engineering—maximizing value for clients, society, and the environment through innovative, sustainable design.
                 </p>
-                <div className="border-t border-background/10 pt-8 text-background/50 text-sm font-light leading-relaxed">
-                  We accomplish this by uniting three specialized disciplines under a shared philosophy — ensuring that every project we touch reflects integrity, beauty, and purpose from the ground up.
-                </div>
               </div>
             </ScrollReveal>
 
             <ScrollReveal delay={0.2}>
-              <div className="flex flex-col gap-8 p-10 md:p-16 bg-background border-l border-border">
+              <div className="flex flex-col gap-6 p-10 md:p-14 bg-background border-l border-border h-full">
                 <div className="flex items-center gap-3">
                   <span className="w-6 h-[1px] bg-primary" />
                   <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Vision</span>
                 </div>
-                <p className="font-heading text-2xl md:text-3xl font-light leading-snug tracking-tight">
-                  To be the most trusted name in <span className="text-foreground font-medium">integrated spatial design</span> — recognized globally for transforming visions into enduring realities.
+                <p className="font-heading text-xl sm:text-2xl md:text-3xl font-light leading-snug tracking-tight text-foreground">
+                  To lead the industry by fostering a highly trained, multi-disciplinary team driven by excellence. We commit to delivering superior quality, exceptional client care, and synchronized execution while keeping environmental safety at the core of everything we build.
                 </p>
-                <div className="border-t border-border pt-8 text-muted-foreground text-sm font-light leading-relaxed">
-                  We envision a future where every built environment is a testament to the harmony between human creativity and natural systems — designed to last generations.
-                </div>
               </div>
             </ScrollReveal>
           </div>
@@ -280,7 +360,7 @@ export default function AboutPage() {
 
       <section id="values" className="py-24 md:py-36 border-b border-border scroll-mt-24 bg-secondary/10">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="05" title="Core Values" subtitle="The principles that guide every decision, every design, every relationship." />
+          <SectionHeader index="04" title="Core Values" subtitle="The principles that guide every decision, every design, every relationship." />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {coreValues.map((v, i) => (
@@ -299,7 +379,7 @@ export default function AboutPage() {
 
       <section id="timeline" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="06" title="Timeline" subtitle="A journey spanning fifteen years of building, growing, and transforming." />
+          <SectionHeader index="05" title="Timeline" subtitle="A journey spanning over a decade of building, growing, and transforming." />
 
           <div className="relative ml-2 md:ml-[calc(16.66%+2rem)]">
             <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-border" />
@@ -325,7 +405,7 @@ export default function AboutPage() {
 
       <section id="awards" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="07" title="Awards &amp;<br />Certifications" subtitle="Recognition from the industry's most respected institutions." />
+          <SectionHeader index="06" title="Awards &amp;<br />Certifications" subtitle="Recognition from the industry's most respected institutions." />
 
           <AwardsShowcase
             featuredAward={{
@@ -342,7 +422,7 @@ export default function AboutPage() {
 
       <section id="partners" className="py-24 md:py-36 scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="08" title="Partners" subtitle="Global collaborators and strategic partners who share our commitment to excellence." />
+          <SectionHeader index="07" title="Partners" subtitle="Global collaborators and strategic partners who share our commitment to excellence." />
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px border border-border">
             {partners.map((partner, i) => (

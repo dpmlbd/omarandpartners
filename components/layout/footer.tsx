@@ -1,8 +1,37 @@
 import Link from "next/link";
 import Image from "next/image";
 import { siteConfig } from "@/config/site";
+import { CopyPhone } from "@/components/ui/copy-phone";
 
 export function Footer() {
+  const comp0 = siteConfig.companies[0];
+  const comp1 = siteConfig.companies[1];
+  const comp2 = siteConfig.companies[2];
+  const comp3 = siteConfig.companies[3];
+
+  const companiesList = [
+    {
+      name: comp0?.name || "Omar & Partners",
+      description: comp0?.description || "Holding Company",
+      email: "info@onp-bd.com",
+    },
+    {
+      name: comp1?.name || "Kolpoporisor",
+      description: comp1?.description || "Consultancy",
+      email: "kolpoporishor@gmail.com",
+    },
+    {
+      name: comp2?.name || "Kolpokowsol",
+      description: comp2?.description || "Consultancy & Construction",
+      email: "kolpokowsol@gmail.com",
+    },
+    {
+      name: comp3?.name || "INEX",
+      description: comp3?.description || "Building Materials — Coming Soon",
+      email: "inexmgt.bd@gmail.com",
+    },
+  ];
+
   return (
     <footer className="bg-foreground text-background relative overflow-hidden">
 
@@ -22,7 +51,7 @@ export function Footer() {
         {/* Top section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-12 md:gap-10 pb-24 border-b border-background/10">
 
-          {/* Brand column */}
+          {/* Column 1: Brand */}
           <div className="md:col-span-3 flex flex-col gap-6">
             <Link href="/" className="flex flex-col gap-5 items-start group">
               <Image src="/onp.svg" alt="ONP" width={80} height={80} className="shrink-0" />
@@ -31,11 +60,11 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm text-background/60 leading-relaxed max-w-xs font-normal">
-              Defining the future of living spaces through architecture, design, and premium materials.
+              {siteConfig.description}
             </p>
           </div>
 
-          {/* Nav columns */}
+          {/* Column 2: Navigate */}
           <div className="md:col-span-2 flex flex-col gap-5">
             <h4 className="text-xs font-semibold uppercase tracking-[0.25em] text-background/40">Navigate</h4>
             <nav className="flex flex-col gap-4">
@@ -55,36 +84,41 @@ export function Footer() {
             </nav>
           </div>
 
-          {/* Contact — Emails & Phones */}
-          <div className="md:col-span-3 flex flex-col gap-5">
-            <h4 className="text-xs font-semibold uppercase tracking-[0.25em] text-background/40">Contact</h4>
-            <div className="flex flex-col gap-4 text-sm text-background/70 font-normal leading-relaxed">
-              <div>
-                <p className="font-medium text-background/80 uppercase tracking-widest text-xs mb-1.5">ONP Holding Group</p>
-                <a href="mailto:info@omarandpartners.com" className="block text-background/70 hover:text-background transition-colors">info@omarandpartners.com</a>
-                <a href="tel:+12125551000" className="block text-background/70 hover:text-background transition-colors mt-0.5">+1 (212) 555-1000</a>
-              </div>
-              <div className="border-t border-background/10 pt-4">
-                <p className="font-medium text-background/80 uppercase tracking-widest text-xs mb-1.5">Kolpoporisor (Architecture)</p>
-                <a href="mailto:arch@kolpoporisor.com" className="block text-background/70 hover:text-background transition-colors">arch@kolpoporisor.com</a>
-                <a href="tel:+12125551001" className="block text-background/70 hover:text-background transition-colors mt-0.5">+1 (212) 555-1001</a>
-              </div>
+          {/* Column 3: Companies (Single Column) */}
+          <div className="md:col-span-4 flex flex-col gap-5">
+            <h4 className="text-xs font-semibold uppercase tracking-[0.25em] text-background/40">Companies</h4>
+            <div className="flex flex-col gap-4 text-sm font-normal leading-relaxed">
+              {companiesList.map((company, idx) => (
+                <div key={company.email} className={idx > 0 ? "pt-3" : ""}>
+                  <p className="font-medium text-background/80 uppercase tracking-widest text-xs mb-1">
+                    {company.name} {company.description ? `(${company.description})` : ""}
+                  </p>
+                  <a
+                    href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(company.email)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block text-xs font-mono text-background/60 hover:text-background transition-colors"
+                  >
+                    {company.email}
+                  </a>
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className="md:col-span-4 flex flex-col gap-5">
-            <h4 className="text-xs font-semibold uppercase tracking-[0.25em] text-background/40">&nbsp;</h4>
-            <div className="flex flex-col gap-4 text-sm text-background/70 font-normal leading-relaxed">
+          {/* Column 4: Address & Phone Number */}
+          <div className="md:col-span-3 flex flex-col gap-5">
+            <h4 className="text-xs font-semibold uppercase tracking-[0.25em] text-background/40">Office</h4>
+            <div className="flex flex-col gap-5 text-sm font-normal leading-relaxed">
               <div>
-                <p className="font-medium text-background/80 uppercase tracking-widest text-xs mb-1.5">Kolpokowsol (Interior Design)</p>
-                <a href="mailto:studio@kolpokowsol.com" className="block text-background/70 hover:text-background transition-colors">studio@kolpokowsol.com</a>
-                <a href="tel:+12125551002" className="block text-background/70 hover:text-background transition-colors mt-0.5">+1 (212) 555-1002</a>
+                <p className="font-medium text-background/80 uppercase tracking-widest text-[10px] mb-1.5">Office Address</p>
+                <p className="text-xs font-light text-background/65 leading-relaxed">
+                  13/A SS Khaled Road (1--4, B-1),<br />
+                  Kazir Dewri, Chattogram- 4000, Bangladesh
+                </p>
               </div>
-              <div className="border-t border-background/10 pt-4">
-                <p className="font-medium text-background/80 uppercase tracking-widest text-xs mb-1.5">INEX (Building Materials)</p>
-                <a href="mailto:supply@inexmaterials.com" className="block text-background/70 hover:text-background transition-colors">supply@inexmaterials.com</a>
-                <a href="tel:+12015551003" className="block text-background/70 hover:text-background transition-colors mt-0.5">+1 (201) 555-1003</a>
-              </div>
+
+              <CopyPhone phone="+8801711828646" />
             </div>
           </div>
 
@@ -99,6 +133,7 @@ export function Footer() {
             <Link href="/legal/privacy-policy" className="hover:text-background transition-colors">Privacy</Link>
             <Link href="/legal/terms-and-conditions" className="hover:text-background transition-colors">Terms</Link>
             <Link href="/legal/cookie-policy" className="hover:text-background transition-colors">Cookies</Link>
+            <Link href="/admin/login" className="hover:text-background transition-colors opacity-60 hover:opacity-100">Admin</Link>
           </div>
           <p className="text-xs text-background/40 uppercase tracking-widest font-medium">
             Made by <span className="text-primary font-semibold">MOHAMMED IFTEKHAR</span>

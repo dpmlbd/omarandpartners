@@ -8,7 +8,7 @@ import {
 } from "@remixicon/react";
 
 export const stats = [
-  { value: "15+", label: "Years of Excellence" },
+  { value: "10+", label: "Years of Excellence" },
   { value: "120+", label: "Projects Delivered" },
   { value: "3", label: "Specialized Companies" },
   { value: "18", label: "Countries Reached" },
@@ -24,31 +24,31 @@ export interface Leader {
 
 export const leadership: Leader[] = [
   {
-    name: "Omar Al-Rashid",
-    role: "Founder & CEO",
-    bio: "A visionary leader with over 25 years of experience across architecture, real estate development, and design. Omar's philosophy centers on creating built environments that endure.",
+    name: "Ar. Abdullah Al Omar MIAB",
+    role: "Principal Architect & CEO",
+    bio: "Principal Architect and visionary CEO steering design innovation and sustainable development across the entire ONP ecosystem. B.Arch (SUST), PM (EDCP)-Japan, MSGED (UIU).",
     image: "/images/architecture.png",
     tag: "01",
   },
   {
-    name: "Layla Mansour",
-    role: "Chief Design Officer",
-    bio: "Layla leads the design identity across all three companies, ensuring a coherent aesthetic language that bridges architecture, interiors, and material selection.",
+    name: "Engr. Md. Mohiuddin Ovi MIEB",
+    role: "Chief Operating Officer (COO)",
+    bio: "Driving rigorous engineering standards, operational excellence, and seamless project execution across multi-disciplinary ventures. B.Sc-Civil (CUET), PGD-PM (Edu Pro, UK).",
     image: "/images/interior.png",
     tag: "02",
   },
   {
-    name: "Nasser Hoque",
-    role: "Managing Director, INEX",
-    bio: "With a background in structural engineering and global supply chain management, Nasser has positioned INEX as the region's premier materials sourcing network.",
-    image: "/images/materials.png",
+    name: "Ar. Avijit Saha MIAB",
+    role: "Head of Design Studio",
+    bio: "Guiding the creative concept development and design methodology across architecture and interior projects. B.Arch (KU).",
+    image: "/images/hero_architecture.png",
     tag: "03",
   },
   {
-    name: "Sara Chowdhury",
-    role: "Head of Architecture, Kolpoporisor",
-    bio: "Sara brings a rigorous design methodology to every project. Her work has won international recognition for blending regional identity with modernist principles.",
-    image: "/images/hero_architecture.png",
+    name: "Ar. Sayed Aziz MIAB",
+    role: "Project Team Lead",
+    bio: "Spearheading complex spatial planning and sustainable urban initiatives with specialized international expertise. B.Arch (SUST), M.Urban Design (HKU).",
+    image: "/images/materials.png",
     tag: "04",
   },
 ];
@@ -62,13 +62,20 @@ export const coreValues = [
   { icon: <RiAwardLine size={20} />, title: "Legacy", desc: "We build not just for today, but to leave enduring marks on the communities we serve." },
 ];
 
+import { siteConfig } from "@/config/site";
+
+const compHolding = siteConfig.companies[0];
+const comp1 = siteConfig.companies[1];
+const comp2 = siteConfig.companies[2];
+const comp3 = siteConfig.companies[3];
+
 export const timeline = [
-  { year: "2010", title: "Foundation", desc: "Omar Al-Rashid establishes Omar & Partners as a boutique architecture consultancy." },
-  { year: "2013", title: "Kolpoporisor Launch", desc: "Kolpoporisor is incorporated as a dedicated architecture firm, winning its first major urban planning commission." },
-  { year: "2016", title: "Interior Division", desc: "Kolpokowsol is established to meet growing demand for integrated interior design services." },
-  { year: "2019", title: "INEX Materials", desc: "INEX is launched to provide end-to-end material sourcing, completing the ONP ecosystem." },
-  { year: "2022", title: "International Expansion", desc: "ONP expands operations across 12 countries, completing landmark projects on three continents." },
-  { year: "2026", title: "New Era", desc: "ONP unveils its new global headquarters and rebrands under a unified design philosophy." },
+  { year: "2015", title: "Foundation", desc: `${compHolding?.name || "Omar & Partners"} is established with an ambitious goal to become one of Bangladesh's most trusted partners in architectural and engineering solutions.` },
+  { year: "2017", title: `${comp1?.name || "Kolpoporisor"} Expansion`, desc: `${comp1?.name || "Kolpoporisor"} establishes itself as a premier ${comp1?.description?.toLowerCase() || "consultancy"} studio.` },
+  { year: "2019", title: `${comp2?.name || "Kolpokowsol"} Launch`, desc: `${comp2?.name || "Kolpokowsol"} is incorporated to deliver integrated ${comp2?.description?.toLowerCase() || "consultancy & construction"} services.` },
+  { year: "2021", title: `${comp3?.name || "INEX"} Operations`, desc: `${comp3?.name || "INEX"} begins operations for specialized interior management and supply chain sourcing.` },
+  { year: "2024", title: "Ecosystem Integration", desc: "Consolidation under a unified collaborative leadership team delivering cohesive turnkey solutions." },
+  { year: "2026", title: "New Era", desc: "Nurturing local creative talent, embracing advanced technologies, and expanding unique services into global markets." },
 ];
 
 export interface AwardItem {

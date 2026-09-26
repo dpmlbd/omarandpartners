@@ -9,6 +9,10 @@ import { BentoGallery } from "@/components/ui/bento-gallery";
 import { SocialChannelsSection } from "@/components/ui/social-channels-section";
 import { kolpoporisorGalleryItems } from "@/lib/gallery-data";
 import { RiArrowRightLine } from "@remixicon/react";
+import { CompanyProjectsFilter } from "@/components/features/companies/company-projects-filter";
+import { siteConfig } from "@/config/site";
+
+const companyInfo = siteConfig.companies.find((c) => c.name === "Kolpoporisor");
 
 const stats = [
   { value: "50+", label: "Projects Delivered" },
@@ -92,7 +96,7 @@ export default function KolpoporisorPage() {
         >
           <Image
             src="/images/architecture.png"
-            alt="Kolpoporisor — Monumental Architecture"
+            alt={`${companyInfo?.name || "Kolpoporisor"} — ${companyInfo?.description || "Consultancy"}`}
             fill
             priority
             sizes="100vw"
@@ -119,7 +123,7 @@ export default function KolpoporisorPage() {
               >
                 <span className="w-8 h-[1px] bg-primary" />
                 <span className="font-mono text-[10px] uppercase tracking-[0.35em] text-primary font-medium">
-                  Architecture Division
+                  {companyInfo?.description || "Consultancy"} Division
                 </span>
               </motion.div>
 
@@ -147,7 +151,7 @@ export default function KolpoporisorPage() {
               className="lg:pb-2"
             >
               <p className="text-white/60 text-sm md:text-[15px] font-light leading-relaxed max-w-md">
-                Kolpoporisor is the architectural arm of the Omar &amp; Partners ecosystem — designing monumental structures, sustainable urban environments, and enduring spatial experiences that elevate civic life.
+                {companyInfo?.name || "Kolpoporisor"} is the {companyInfo?.description?.toLowerCase() || "consultancy"} arm of the Omar &amp; Partners ecosystem — delivering monumental structures, sustainable urban environments, and enduring spatial experiences that elevate civic life.
               </p>
             </motion.div>
 
@@ -173,13 +177,13 @@ export default function KolpoporisorPage() {
             </div>
             <div className="md:col-span-5 border-l border-border pl-8 text-muted-foreground text-sm font-light leading-relaxed flex flex-col gap-5">
               <ScrollReveal delay={0.2}>
-                <p>Kolpoporisor is the architectural arm of the Omar &amp; Partners ecosystem. We design structures that harmonize with their environment while pushing the boundaries of spatial experience.</p>
+                <p>{companyInfo?.name || "Kolpoporisor"} is the {companyInfo?.description?.toLowerCase() || "consultancy"} arm of the Omar &amp; Partners ecosystem. We craft solutions that harmonize with their environment while pushing the boundaries of spatial experience.</p>
               </ScrollReveal>
               <ScrollReveal delay={0.3}>
                 <p>From large-scale urban master plans to intimate private commissions, every project is executed with the same exacting standards of structural integrity and aesthetic purpose.</p>
               </ScrollReveal>
               <ScrollReveal delay={0.4}>
-                <p>We believe architecture should not merely house activity — it should elevate it. Every line, material, and proportion is considered in service of that ambition.</p>
+                <p>We believe {companyInfo?.description?.toLowerCase() || "consultancy"} should not merely house activity — it should elevate it. Every line, material, and proportion is considered in service of that ambition.</p>
               </ScrollReveal>
             </div>
           </div>
@@ -221,41 +225,14 @@ export default function KolpoporisorPage() {
       <section id="projects" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="03" title="Selected Works" subtitle="A curated selection of projects spanning commercial, cultural, residential, and public sectors across 12 countries." />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border mt-12">
-            {projects.map((project, i) => (
-              <ScrollReveal key={project.id} delay={i * 0.1}>
-                <Link
-                  href={`/kolpoporisor/projects/${project.id}`}
-                  className="group relative block aspect-[4/3] overflow-hidden bg-secondary"
-                >
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-                  <div className="absolute inset-0 border border-transparent group-hover:border-primary/30 transition-colors duration-500" />
-                  <div className="absolute bottom-8 left-8 right-8">
-                    <span className="text-[10px] uppercase tracking-widest text-primary mb-2 font-semibold block">{project.category}</span>
-                    <h3 className="font-heading text-2xl md:text-3xl font-medium tracking-tight text-white">{project.title}</h3>
-                    <p className="text-white/50 text-xs mt-2 uppercase tracking-widest">{project.location}</p>
-                  </div>
-                  <div className="absolute top-6 right-6 w-8 h-8 border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <RiArrowRightLine size={14} className="text-white -rotate-45" />
-                  </div>
-                </Link>
-              </ScrollReveal>
-            ))}
-          </div>
+          <CompanyProjectsFilter companySlug="kolpoporisor" initialProjects={projects} />
         </div>
       </section>
 
       {/* ── 03. SERVICES SECTION ─────────────────────────────────── */}
       <section id="services" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="04" title="Architectural Services" subtitle="Full-spectrum architectural delivery handled by specialized teams adhering to highest international codes." />
+          <SectionHeader index="04" title={`${companyInfo?.description || "Consultancy"} Services`} subtitle="Full-spectrum delivery handled by specialized teams adhering to highest international codes." />
 
           {/* Service Feature Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">

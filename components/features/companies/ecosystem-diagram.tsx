@@ -8,26 +8,32 @@ import {
   RiBrushLine,
   RiStackLine,
 } from "@remixicon/react";
+import { siteConfig } from "@/config/site";
+
+const compHolding = siteConfig.companies[0];
+const comp1 = siteConfig.companies[1];
+const comp2 = siteConfig.companies[2];
+const comp3 = siteConfig.companies[3];
 
 const companies = [
   {
     id: "01",
-    name: "Kolpoporisor",
-    tagline: "Architecture",
+    name: comp1?.name || "Kolpoporisor",
+    tagline: comp1?.description || "Consultancy",
     icon: <RiBuilding4Line size={24} />,
     color: "#5A6B31",
   },
   {
     id: "02",
-    name: "Kolpokowsol",
-    tagline: "Interior Design",
+    name: comp2?.name || "Kolpokowsol",
+    tagline: comp2?.description || "Consultancy & Construction",
     icon: <RiBrushLine size={24} />,
     color: "#788C45",
   },
   {
     id: "03",
-    name: "INEX",
-    tagline: "Materials",
+    name: comp3?.name || "INEX",
+    tagline: comp3?.description || "Building Materials — Coming Soon",
     icon: <RiStackLine size={24} />,
     color: "#A8A39D",
   },
@@ -167,7 +173,7 @@ export function EcosystemDiagram() {
             textAnchor="middle"
             className="text-[10px] uppercase tracking-[0.2em] fill-muted-foreground"
           >
-            Holding Group
+            {compHolding?.description || "Holding Company"}
           </motion.text>
         </svg>
       </div>

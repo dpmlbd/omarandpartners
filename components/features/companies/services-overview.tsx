@@ -10,6 +10,12 @@ import {
   RiStackLine,
   RiBriefcaseLine,
 } from "@remixicon/react";
+import { siteConfig } from "@/config/site";
+
+const compHolding = siteConfig.companies[0];
+const comp1 = siteConfig.companies[1];
+const comp2 = siteConfig.companies[2];
+const comp3 = siteConfig.companies[3];
 
 const services = [
   {
@@ -23,15 +29,15 @@ const services = [
     id: "02",
     type: "image",
     image: "/images/architecture.png",
-    label: "Architecture",
+    label: comp1?.description || "Consultancy",
     span: "md:col-span-1 md:row-span-2",
   },
   {
     id: "03",
     type: "service",
     icon: <RiBrushLine size={22} />,
-    title: "Interior Design",
-    company: "Kolpokowsol",
+    title: comp2?.description || "Consultancy & Construction",
+    company: comp2?.name || "Kolpokowsol",
     desc: "Transforming built shells into extraordinary human environments through material, light, and spatial narrative.",
     span: "md:col-span-1",
   },
@@ -46,8 +52,8 @@ const services = [
     id: "05",
     type: "service",
     icon: <RiStackLine size={22} />,
-    title: "Materials",
-    company: "INEX",
+    title: comp3?.description || "Building Materials",
+    company: comp3?.name || "INEX",
     desc: "A global sourcing and engineering network delivering the finest building materials for uncompromising quality.",
     span: "md:col-span-1",
   },
@@ -55,7 +61,7 @@ const services = [
     id: "06",
     type: "image",
     image: "/images/interior.png",
-    label: "Interiors",
+    label: comp2?.description || "Interiors",
     span: "md:col-span-1",
   },
   {
@@ -63,7 +69,7 @@ const services = [
     type: "service",
     icon: <RiBriefcaseLine size={22} />,
     title: "Consultation",
-    company: "ONP Holding",
+    company: compHolding?.name || "Omar & Partners",
     desc: "Strategic advisory for complex developments spanning feasibility, design governance, and procurement strategy.",
     span: "md:col-span-1",
   },
@@ -71,7 +77,7 @@ const services = [
     id: "08",
     type: "image",
     image: "/images/materials.png",
-    label: "Materials",
+    label: comp3?.description || "Materials",
     span: "md:col-span-1 md:row-span-2",
   },
   {
@@ -81,7 +87,7 @@ const services = [
     label: "Countries",
     span: "md:col-span-1",
   },
-] as const;
+];
 
 type ServiceItem = (typeof services)[number];
 

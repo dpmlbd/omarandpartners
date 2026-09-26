@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { RiArrowRightLine } from "@remixicon/react";
 import Link from "next/link";
+import { siteConfig } from "@/config/site";
+
+const comp = siteConfig.companies.find((c) => c.name === "Kolpokowsol");
 
 export const metadata: Metadata = {
-  title: "ONP | Kolpokowsol",
-  description: "Interior design and spatial aesthetics by Kolpokowsol.",
+  title: `ONP | ${comp?.name || "Kolpokowsol"}`,
+  description: `${comp?.description || "Consultancy & Construction"} by ${comp?.name || "Kolpokowsol"}.`,
 };
 
 export default function KolpokowsolLayout({

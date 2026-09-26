@@ -22,7 +22,7 @@ export default function CareersPage() {
   const [activeTab, setActiveTab] = useState(0);
 
   const openGmail = (jobTitle: string) => {
-    const to = "careers@omarandpartners.com";
+    const to = "info@onp-bd.com";
     const subject = encodeURIComponent(`Application for ${jobTitle} - [Your Name]`);
     const body = encodeURIComponent(
       `Dear Recruiting Team,\n\nI am writing to express my interest in the ${jobTitle} position at Omar & Partners.\n\nPlease find attached my Resume and Portfolio for your review.\n\nBest regards,\n[Your Name]\n[Your Contact Number]\n[Portfolio Link / LinkedIn Link]`

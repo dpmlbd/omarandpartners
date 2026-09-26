@@ -124,27 +124,17 @@ export function Header() {
               >
                 All Companies
               </Link>
-              <Link
-                href="/kolpoporisor"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-lg font-heading font-medium uppercase tracking-tight text-foreground hover:text-primary transition-colors"
-              >
-                Kolpoporisor
-              </Link>
-              <Link
-                href="/kolpokowsol"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-lg font-heading font-medium uppercase tracking-tight text-foreground hover:text-primary transition-colors"
-              >
-                Kolpokowsol
-              </Link>
-              <Link
-                href="/inex"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-lg font-heading font-medium uppercase tracking-tight text-foreground hover:text-primary transition-colors"
-              >
-                INEX
-              </Link>
+              {siteConfig.companies.slice(1).map((company) => (
+                <Link
+                  key={company.href}
+                  href={company.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex flex-col text-foreground hover:text-primary transition-colors"
+                >
+                  <span className="text-lg font-heading font-medium uppercase tracking-tight">{company.name}</span>
+                  <span className="text-[10px] text-muted-foreground tracking-normal">{company.description}</span>
+                </Link>
+              ))}
             </div>
 
             <Link

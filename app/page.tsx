@@ -1,8 +1,5 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "motion/react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SectionHeader } from "@/components/ui/section-header";
 import { ImageCard } from "@/components/ui/image-card";
@@ -10,18 +7,25 @@ import { CTASection } from "@/components/ui/cta-section";
 import { EcosystemDiagram } from "@/components/features/landing/ecosystem-diagram";
 import { HeroCinematic } from "@/components/features/landing/hero-cinematic";
 import { TestimonialsSection } from "@/components/features/landing/testimonials-section";
+import { fetchPublicTestimonials } from "@/lib/public/testimonials";
 import {
   RiGlobalLine,
   RiLeafLine,
   RiFocus3Line,
-  RiMapPinLine,
   RiArrowRightLine,
 } from "@remixicon/react";
+import { siteConfig } from "@/config/site";
+
+export const dynamic = "force-dynamic";
+
+const comp1 = siteConfig.companies[1];
+const comp2 = siteConfig.companies[2];
+const comp3 = siteConfig.companies[3];
 
 const heroSlides = [
-  { src: "/images/hero_architecture.png", label: "Architecture", tag: "01 / Kolpoporisor" },
-  { src: "/images/interior.png", label: "Interior Design", tag: "02 / Kolpokowsol" },
-  { src: "/images/materials.png", label: "Materials", tag: "03 / INEX" },
+  { src: "/images/hero_architecture.png", label: comp1?.description || "Consultancy", tag: `01 / ${comp1?.name || "Kolpoporisor"}` },
+  { src: "/images/interior.png", label: comp2?.description || "Consultancy & Construction", tag: `02 / ${comp2?.name || "Kolpokowsol"}` },
+  { src: "/images/materials.png", label: comp3?.description || "Building Materials — Coming Soon", tag: `03 / ${comp3?.name || "INEX"}` },
 ];
 
 const insights = [
@@ -31,17 +35,17 @@ const insights = [
 ];
 
 const projects = [
-  { src: "/images/architecture.png", category: "Architecture", title: "The Zenith Tower", href: "/kolpoporisor/projects" },
-  { src: "/images/interior.png", category: "Interior Design", title: "Lumina Residences", href: "/kolpokowsol/projects" },
+  { src: "/images/architecture.png", category: comp1?.description || "Consultancy", title: "The Zenith Tower", href: "/kolpoporisor#projects" },
+  { src: "/images/interior.png", category: comp2?.description || "Consultancy & Construction", title: "Lumina Residences", href: "/kolpokowsol#projects" },
 ];
 
 const whyItems = [
   { icon: <RiGlobalLine size={22} />, title: "Global Perspective", shortDesc: "International standards executed with local precision.", desc: "Drawing inspiration from international standards while executing with local precision and cultural intelligence. Our portfolio spans 18 countries, yet every project retains the specificity of its context. We believe global fluency and local sensitivity are not opposites — they are co-dependencies.", image: "/images/architecture.png" },
-  { icon: <RiFocus3Line size={22} />, title: "Holistic Control", shortDesc: "Uncompromising quality across every project.", desc: "Managing architecture, interiors, and materials under one roof ensures uncompromising quality across every project. This vertical integration eliminates the handoff gaps that plague multi-vector projects, ensuring design intent survives from schematic to specification.", image: "/images/interior.png" },
+  { icon: <RiFocus3Line size={22} />, title: "Holistic Control", shortDesc: "Uncompromising quality across every project.", desc: `Managing ${comp1?.description?.toLowerCase() || "consultancy"}, ${comp2?.description?.toLowerCase() || "consultancy & construction"}, and materials under one roof ensures uncompromising quality across every project. This vertical integration eliminates the handoff gaps that plague multi-vector projects, ensuring design intent survives from schematic to specification.`, image: "/images/interior.png" },
   { icon: <RiLeafLine size={22} />, title: "Sustainable Future", shortDesc: "Environmentally conscious, built for longevity.", desc: "Engineering solutions that are environmentally conscious, resource-efficient, and built for longevity. Sustainability is not an afterthought — it is embedded in our material selection, structural logic, and lifecycle planning from day one.", image: "/images/materials.png" },
 ];
 
-const testimonials = [
+const fallbackTestimonials = [
   {
     name: "Elena Vasquez",
     role: "CEO, Horizon Developments",
@@ -65,7 +69,8 @@ const testimonials = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const testimonials = await fetchPublicTestimonials(fallbackTestimonials);
   return (
     <div className="flex flex-col w-full overflow-hidden">
 
@@ -82,7 +87,7 @@ export default function HomePage() {
                 <p>Founded on the principles of structural integrity and aesthetic perfection, Omar &amp; Partners has grown into a multi-disciplinary powerhouse.</p>
               </ScrollReveal>
               <ScrollReveal delay={0.3}>
-                <p>By integrating architectural vision with material science and interior refinement, we maintain absolute control over quality.</p>
+                <p>By integrating {comp1?.description?.toLowerCase() || "consultancy"} with {comp2?.description?.toLowerCase() || "consultancy & construction"} and {comp3?.description?.toLowerCase() || "building materials"}, we maintain absolute control over quality.</p>
               </ScrollReveal>
               <ScrollReveal delay={0.4}>
                    <Link href="/about" className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-foreground hover:text-primary transition-colors mt-2 group">
@@ -92,7 +97,9 @@ export default function HomePage() {
             </div>
             <div className="md:col-span-6 md:col-start-7 flex flex-col gap-5 text-muted-foreground text-sm font-light leading-relaxed">
               <ScrollReveal delay={0.5}>
-                <p>Our model is unique: by keeping architecture (Kolpoporisor), interior design (Kolpokowsol), and material sourcing (INEX) under a single parent, we offer clients an integrated service that eliminates fragmentation and maintains absolute quality control from concept to completion.</p>
+                <p>
+                  Our model is unique: by keeping {comp1?.name} ({comp1?.description}), {comp2?.name} ({comp2?.description}), and {comp3?.name} ({comp3?.description}) under a single parent, we offer clients an integrated service that eliminates fragmentation and maintains absolute quality control from concept to completion.
+                </p>
               </ScrollReveal>
               <ScrollReveal delay={0.6}>
                 <p>Today, we operate across 18 countries, with a portfolio spanning monumental civic buildings, luxury residences, corporate headquarters, hospitality projects, and premium material supply chains.</p>
@@ -113,7 +120,7 @@ export default function HomePage() {
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="04" title="Selected Works">
             <ScrollReveal delay={0.2}>
-              <Link href="/kolpoporisor/projects" className="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-medium hover:text-primary transition-colors group">
+              <Link href="/kolpoporisor#projects" className="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-medium hover:text-primary transition-colors group">
                 All Projects <RiArrowRightLine size={13} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </ScrollReveal>

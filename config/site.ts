@@ -10,12 +10,12 @@ export const siteConfig = {
     {
       name: "Kolpoporisor",
       href: "/kolpoporisor",
-      description: "Architecture",
+      description: "Consultancy",
     },
     {
       name: "Kolpokowsol",
       href: "/kolpokowsol",
-      description: "Interior Design",
+      description: "Consultancy & Construction",
     },
     {
       name: "INEX",

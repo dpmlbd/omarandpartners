@@ -4,6 +4,9 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { RiMailLine } from "@remixicon/react";
 import { defaultSocialChannels } from "@/components/ui/social-channels-section";
+import { siteConfig } from "@/config/site";
+
+const compInex = siteConfig.companies.find((c) => c.name === "INEX");
 
 export default function InexComingSoonPage() {
   const [email, setEmail] = useState("");
@@ -52,7 +55,7 @@ export default function InexComingSoonPage() {
         >
           <span className="w-8 h-[1px] bg-[#059669]/40" />
           <span className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-medium">
-            Building Materials & Sourcing
+            {compInex?.description || "Building Materials — Coming Soon"}
           </span>
           <span className="w-8 h-[1px] bg-[#059669]/40" />
         </motion.div>

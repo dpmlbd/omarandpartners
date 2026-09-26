@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Outfit, Playfair_Display } from "next/font/google";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { PageTransition } from "@/components/layout/page-transition";
+import { SiteLayoutShell } from "@/components/layout/site-layout-shell";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
+import { siteConfig } from "@/config/site";
 
 const outfit = Outfit({
   variable: "--font-sans",
@@ -18,7 +17,7 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "ONP | Home",
-  description: "Omar & Partners — premium architecture, interior design, and building materials.",
+  description: `${siteConfig.name} — ${siteConfig.description}`,
 };
 
 export default function RootLayout({
@@ -34,11 +33,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans selection:bg-primary selection:text-white">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Header />
-          <main className="flex flex-col flex-1 pt-24">
-            <PageTransition>{children}</PageTransition>
-          </main>
-          <Footer />
+          <SiteLayoutShell>{children}</SiteLayoutShell>
         </ThemeProvider>
       </body>
     </html>

@@ -15,12 +15,13 @@ import {
   RiBuilding4Line,
 } from "@remixicon/react";
 import { faqs } from "./faqs";
+import { siteConfig } from "@/config/site";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    company: "general",
+    company: siteConfig.companies[0]?.name || "Omar & Partners",
     subject: "",
     message: ""
   });
@@ -36,7 +37,13 @@ export default function ContactPage() {
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
-      setFormData({ name: "", email: "", company: "general", subject: "", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        company: siteConfig.companies[0]?.name || "Omar & Partners",
+        subject: "",
+        message: ""
+      });
     }, 3000);
   };
 
@@ -47,29 +54,21 @@ export default function ContactPage() {
     });
   };
 
-  const divisions = [
-    {
-      tag: "Architecture",
-      title: "Kolpoporisor",
-      email: "arch@kolpoporisor.com",
-      tel: "+1 (555) 123-4568",
-      footer: "01_ARCH",
-    },
-    {
-      tag: "Interior Design",
-      title: "Kolpokowsol",
-      email: "studio@kolpokowsol.com",
-      tel: "+1 (555) 123-4569",
-      footer: "02_INT",
-    },
-    {
-      tag: "Building Materials",
-      title: "INEX",
-      email: "supply@inexmaterials.com",
-      tel: "+1 (555) 123-4570",
-      footer: "03_MAT",
-    },
-  ];
+  const DIVISION_EMAILS: Record<string, string> = {
+    "Kolpoporisor": "kolpoporishor@gmail.com",
+    "Kolpokowsol": "kolpokowsol@gmail.com",
+    "INEX": "inexmgt.bd@gmail.com",
+    "Omar & Partners": "info@onp-bd.com",
+  };
+
+  const divisions = siteConfig.companies
+    .filter((c) => c.href !== "/")
+    .map((c, i) => ({
+      tag: c.description,
+      title: c.name,
+      email: DIVISION_EMAILS[c.name] || "info@onp-bd.com",
+      footer: `0${i + 1}_${c.name.slice(0, 2).toUpperCase()}`,
+    }));
 
   return (
     <div className="flex flex-col w-full overflow-hidden">
@@ -115,10 +114,11 @@ export default function ContactPage() {
                   <div className="flex flex-col gap-2">
                     <label htmlFor="company" className="text-xs uppercase tracking-widest text-muted-foreground">Inquiry Destination</label>
                     <select id="company" name="company" value={formData.company} onChange={handleChange} className="bg-secondary/20 border border-border p-3 rounded-none focus:outline-none focus:border-primary text-sm transition-colors">
-                      <option value="general">Omar & Partners (Holding Group)</option>
-                      <option value="kolpoporisor">Kolpoporisor (Architecture)</option>
-                      <option value="kolpokowsol">Kolpokowsol (Interior Design)</option>
-                      <option value="inex">INEX (Building Materials)</option>
+                      {siteConfig.companies.map((c) => (
+                        <option key={c.name} value={c.name}>
+                          {c.name} ({c.description})
+                        </option>
+                      ))}
                     </select>
                   </div>
 
@@ -146,26 +146,52 @@ export default function ContactPage() {
                 <div className="flex flex-col gap-6 text-sm font-light text-muted-foreground">
                   <div className="flex items-start gap-4">
                     <RiMapPinLine size={18} className="text-foreground shrink-0 mt-0.5" />
-                    <p>123 Architecture Ave.<br />Suite 500<br />New York, NY 10001</p>
+                    <p>13/A SS Khaled Road (1--4, B-1),<br />Kazir Dewri, Chattogram- 4000, Bangladesh</p>
                   </div>
                   <div className="flex items-center gap-4">
                     <RiMailLine size={18} className="text-foreground shrink-0" />
-                    <a href="mailto:info@omarandpartners.com" className="hover:text-primary transition-colors">info@omarandpartners.com</a>
+                    <a
+                      href="https://mail.google.com/mail/?view=cm&fs=1&to=info@onp-bd.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-primary transition-colors"
+                    >
+                      info@onp-bd.com
+                    </a>
                   </div>
                   <div className="flex items-center gap-4">
                     <RiPhoneLine size={18} className="text-foreground shrink-0" />
-                    <a href="tel:+15551234567" className="hover:text-primary transition-colors">+1 (555) 123-4567</a>
+                    <a href="tel:+8801711828646" className="hover:text-primary transition-colors">+8801711828646</a>
                   </div>
                   <div className="flex items-start gap-4">
                     <RiTimeLine size={18} className="text-foreground shrink-0 mt-0.5" />
                     <div>
                       <p className="font-medium text-foreground uppercase tracking-widest text-[10px] mb-1">Business Hours</p>
-                      <p>Monday – Friday: 9:00 AM – 6:00 PM EST</p>
-                      <p>Saturday – Sunday: Closed</p>
+                      <p>Saturday – Thursday: 9:00 AM – 6:00 PM (BST)</p>
+                      <p>Friday: Closed</p>
                     </div>
                   </div>
-                  <div className="mt-8 relative w-full h-[220px] border border-border overflow-hidden grayscale contrast-[1.1] opacity-85">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.4284897092305!2d-73.98762742341774!3d40.75122177138767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" width="100%" height="100%" style={{ border: 0 }} allowFullScreen={false} loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Empire State Building" />
+                  <div className="mt-8 flex flex-col gap-2">
+                    <div className="relative w-full h-[220px] border border-border overflow-hidden grayscale contrast-[1.1] opacity-90">
+                      <iframe
+                        src="https://maps.google.com/maps?q=22.3482466,91.8278386&hl=en&z=17&output=embed"
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen={false}
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="13/A SS Khaled Road, Kazir Dewri, Chattogram"
+                      />
+                    </div>
+                    <a
+                      href="https://maps.google.com/?q=22.3482466,91.8278386"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[11px] text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 uppercase tracking-wider font-medium"
+                    >
+                      View Location in Google Maps &rarr;
+                    </a>
                   </div>
                 </div>
               </ScrollReveal>
@@ -176,7 +202,7 @@ export default function ContactPage() {
 
       <section id="division-contacts" className="py-24 md:py-36 border-b border-border bg-secondary/10">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="02" title="Division Contacts" subtitle="Direct channels for our architecture, interior design, and materials supply companies." />
+          <SectionHeader index="02" title="Division Contacts" subtitle={`Direct channels for ${siteConfig.companies.slice(1).map((c) => `${c.name} (${c.description})`).join(", ")}.`} />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {divisions.map((div, i) => (
@@ -189,11 +215,14 @@ export default function ContactPage() {
                   <div className="flex flex-col gap-3 text-sm font-light text-muted-foreground mt-4">
                     <div className="flex items-center gap-3">
                       <RiMailLine size={16} className="text-foreground shrink-0" />
-                      <a href={`mailto:${div.email}`} className="hover:text-primary transition-colors">{div.email}</a>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RiPhoneLine size={16} className="text-foreground shrink-0" />
-                      <a href={`tel:${div.tel.replace(/[^0-9+]/g, '')}`} className="hover:text-primary transition-colors">{div.tel}</a>
+                      <a
+                        href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(div.email)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-primary transition-colors"
+                      >
+                        {div.email}
+                      </a>
                     </div>
                   </div>
                 }

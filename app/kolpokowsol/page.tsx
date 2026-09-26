@@ -9,6 +9,10 @@ import { BentoGallery } from "@/components/ui/bento-gallery";
 import { SocialChannelsSection } from "@/components/ui/social-channels-section";
 import { kolpokowsolGalleryItems } from "@/lib/gallery-data";
 import { RiArrowRightLine } from "@remixicon/react";
+import { CompanyProjectsFilter } from "@/components/features/companies/company-projects-filter";
+import { siteConfig } from "@/config/site";
+
+const companyInfo = siteConfig.companies.find((c) => c.name === "Kolpokowsol");
 
 const stats = [
   { value: "80+", label: "Interiors Delivered" },
@@ -94,7 +98,7 @@ export default function KolpokowsolPage() {
         >
           <Image
             src="/images/interior.png"
-            alt="Kolpokowsol — Interior Architecture & Spatial Design"
+            alt={`${companyInfo?.name || "Kolpokowsol"} — ${companyInfo?.description || "Consultancy & Construction"}`}
             fill
             priority
             sizes="100vw"
@@ -121,7 +125,7 @@ export default function KolpokowsolPage() {
               >
                 <span className="w-8 h-[1px] bg-primary" />
                 <span className="font-mono text-[10px] uppercase tracking-[0.35em] text-primary font-medium">
-                  Interior Design Division
+                  {companyInfo?.description || "Consultancy & Construction"} Division
                 </span>
               </motion.div>
 
@@ -149,7 +153,7 @@ export default function KolpokowsolPage() {
               className="lg:pb-2"
             >
               <p className="text-white/60 text-sm md:text-[15px] font-light leading-relaxed max-w-md">
-                Kolpokowsol is the interior architecture and spatial design practice of Omar &amp; Partners — transforming built shells into extraordinary human environments through material intelligence, calibrated light, and bespoke craftsmanship.
+                {companyInfo?.name || "Kolpokowsol"} is the {companyInfo?.description?.toLowerCase() || "consultancy & construction"} practice of Omar &amp; Partners — transforming built shells into extraordinary human environments through material intelligence, calibrated light, and bespoke craftsmanship.
               </p>
             </motion.div>
 
@@ -175,10 +179,10 @@ export default function KolpokowsolPage() {
             </div>
             <div className="md:col-span-5 border-l border-border pl-8 text-muted-foreground text-sm font-light leading-relaxed flex flex-col gap-5">
               <ScrollReveal delay={0.2}>
-                <p>Kolpokowsol is the interior design studio of the Omar &amp; Partners ecosystem. We specialize in high-end residential, hospitality, and corporate interior projects where atmosphere is everything.</p>
+                <p>{companyInfo?.name || "Kolpokowsol"} is the {companyInfo?.description?.toLowerCase() || "consultancy & construction"} studio of the Omar &amp; Partners ecosystem. We specialize in high-end residential, hospitality, and corporate projects where atmosphere is everything.</p>
               </ScrollReveal>
               <ScrollReveal delay={0.3}>
-                <p>Our designers work at the intersection of aesthetics and function, creating interior worlds that feel entirely personal yet architecturally coherent.</p>
+                <p>Our designers work at the intersection of aesthetics and function, creating spaces that feel entirely personal yet architecturally coherent.</p>
               </ScrollReveal>
               <ScrollReveal delay={0.4}>
                 <p>Every material, light source, and furnishing is selected not just for beauty, but for the emotional resonance it creates within a space.</p>
@@ -203,7 +207,7 @@ export default function KolpokowsolPage() {
       {/* ── CORE DISCIPLINES ─────────────────────────────────────── */}
       <section id="disciplines" className="py-24 md:py-36 border-b border-border bg-secondary/10 scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="02" title="Core Disciplines" subtitle="Specialized interior design practices delivered across diverse sectors." />
+          <SectionHeader index="02" title="Core Disciplines" subtitle={`Specialized ${companyInfo?.description?.toLowerCase() || "consultancy & construction"} practices delivered across diverse sectors.`} />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px border border-border mt-12">
             {capabilities.map((cap, i) => (
@@ -223,41 +227,14 @@ export default function KolpokowsolPage() {
       <section id="projects" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="03" title="Selected Works" subtitle="A curated selection of interior projects spanning residential, hospitality, corporate, and wellness." />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border mt-12">
-            {projects.map((project, i) => (
-              <ScrollReveal key={project.id} delay={i * 0.1}>
-                <Link
-                  href={`/kolpokowsol/projects/${project.id}`}
-                  className="group relative block aspect-[4/3] overflow-hidden bg-secondary"
-                >
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-                  <div className="absolute inset-0 border border-transparent group-hover:border-primary/30 transition-colors duration-500" />
-                  <div className="absolute bottom-8 left-8 right-8">
-                    <span className="text-[10px] uppercase tracking-widest text-primary mb-2 font-semibold block">{project.category}</span>
-                    <h3 className="font-heading text-2xl md:text-3xl font-medium tracking-tight text-white">{project.title}</h3>
-                    <p className="text-white/50 text-xs mt-2 uppercase tracking-widest">{project.location}</p>
-                  </div>
-                  <div className="absolute top-6 right-6 w-8 h-8 border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <RiArrowRightLine size={14} className="text-white -rotate-45" />
-                  </div>
-                </Link>
-              </ScrollReveal>
-            ))}
-          </div>
+          <CompanyProjectsFilter companySlug="kolpokowsol" initialProjects={projects} />
         </div>
       </section>
 
       {/* ── 03. SERVICES SECTION ─────────────────────────────────── */}
       <section id="services" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="04" title="Interior Services" subtitle="From concept mood boards to custom joinery, material sourcing, and complete on-site supervision." />
+          <SectionHeader index="04" title={`${companyInfo?.description || "Consultancy & Construction"} Services`} subtitle="From concept mood boards to custom joinery, material sourcing, and complete on-site supervision." />
 
           {/* Service Feature Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">

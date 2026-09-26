@@ -4,47 +4,54 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SectionHeader } from "@/components/ui/section-header";
 import Link from "next/link";
 import { motion } from "motion/react";
+import { siteConfig } from "@/config/site";
+import { RiDownloadLine } from "@remixicon/react";
+
+const compHolding = siteConfig.companies[0];
+const comp1 = siteConfig.companies[1];
+const comp2 = siteConfig.companies[2];
+const comp3 = siteConfig.companies[3];
 
 const brands = [
   {
-    name: "ONP Holding Group",
-    slug: "onp",
-    description: "The holding group and parent brand for Omar & Partners.",
-    logo: "/images/logo_onp.png",
-    color: "#000000",
-    colorLight: "#ffffff",
+    name: compHolding?.name || "Omar & Partners",
+    slug: "",
+    description: compHolding?.description || "Architecture & Engineering Holding Group",
+    logo: "/onp.svg",
+    color: "#10B981",
+    colorLight: "#ECFDF5",
     typography: "Outfit (Sans-serif)",
-    tags: ["Corporate", "Holding", "Parent"],
+    tags: ["Holding Group", "Corporate Ecosystem", "Governance"],
   },
   {
-    name: "Kolpoporisor",
+    name: comp1?.name || "Kolpoporisor",
     slug: "kolpoporisor",
-    description: "Architecture and urban design division.",
-    logo: "/images/logo_kolpoporisor.png",
+    description: comp1?.description || "Consultancy",
+    logo: "/logos/kolpoporisor-logo.svg",
     color: "#059669",
     colorLight: "#ECFDF5",
     typography: "Outfit (Sans-serif)",
-    tags: ["Architecture", "Urban", "Structural"],
+    tags: [comp1?.description || "Consultancy", "Structural", "Urban Planning"],
   },
   {
-    name: "Kolpokowsol",
+    name: comp2?.name || "Kolpokowsol",
     slug: "kolpokowsol",
-    description: "Interior design and spatial aesthetics division.",
-    logo: "/images/logo_kolpokowsol.png",
+    description: comp2?.description || "Consultancy & Construction",
+    logo: "/logos/kolpokowsol-logo.svg",
     color: "#059669",
     colorLight: "#ECFDF5",
     typography: "Playfair Display (Serif)",
-    tags: ["Interior", "Aesthetic", "Design"],
+    tags: [comp2?.description || "Consultancy & Construction", "Turnkey", "Execution"],
   },
   {
-    name: "INEX",
+    name: comp3?.name || "INEX",
     slug: "inex",
-    description: "Building materials sourcing and supply division.",
-    logo: "/images/logo_inex.png",
+    description: comp3?.description || "Interior Design & Management Consultancy",
+    logo: "/logos/inex-logo.svg",
     color: "#059669",
     colorLight: "#ECFDF5",
     typography: "Outfit (Sans-serif)",
-    tags: ["Materials", "Logistics", "Supply"],
+    tags: ["Interior Design", "Management Consultancy", "Supply Chain"],
   },
 ];
 
@@ -89,25 +96,23 @@ export default function BrandsPage() {
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader
             index="01"
-            title="Brand Ecosystem"
-            subtitle="Our specialized architectural, interior, and material divisions operating under the Omar & Partners umbrella."
+            title="Brand Logos & Ecosystem"
+            subtitle="Official vector logos, color specifications, and usage assets for all entities within the Omar & Partners umbrella."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {brands.map((brand, i) => (
-              <ScrollReveal key={brand.slug} delay={i * 0.1}>
+              <ScrollReveal key={brand.slug || brand.name} delay={i * 0.1}>
                 <div className="group flex flex-col border border-border overflow-hidden hover:border-primary/40 transition-all duration-500 bg-background">
                   
-                  {/* Logo placeholder */}
-                  <div className="relative h-40 md:h-52 bg-secondary/20 border-b border-border flex items-center justify-center overflow-hidden">
-                    <div
-                      className="w-20 h-20 md:w-24 md:h-24 border border-border/30 flex items-center justify-center transition-all duration-500 group-hover:scale-110"
-                      style={{ backgroundColor: brand.colorLight, color: brand.color }}
-                    >
-                      <span className="font-heading text-2xl md:text-3xl font-bold tracking-tighter uppercase">
-                        {brand.name.charAt(0)}
-                      </span>
-                    </div>
+                  {/* Real Logo Showcase Area — Clean & Centered */}
+                  <div className="h-44 sm:h-48 md:h-52 bg-secondary/20 dark:bg-card/40 border-b border-border flex items-center justify-center p-6 sm:p-8 overflow-hidden group-hover:bg-secondary/35 transition-colors duration-500">
+                    <img
+                      src={brand.logo}
+                      alt={`${brand.name} Official Logo`}
+                      className="w-full h-24 sm:h-28 max-w-[240px] object-contain transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
                   </div>
 
                   <div className="flex flex-col gap-6 p-6 md:p-8">
@@ -135,23 +140,38 @@ export default function BrandsPage() {
                         style={{ backgroundColor: brand.color }}
                       />
                       <div>
-                        <span className="text-xs font-medium uppercase tracking-wider block">Primary</span>
+                        <span className="text-xs font-medium uppercase tracking-wider block">Primary Brand Color</span>
                         <span className="text-[10px] text-muted-foreground font-mono">{brand.color}</span>
                       </div>
                     </div>
 
-                    {/* Typography */}
-                    <div className="flex items-center justify-between pt-4 border-t border-border">
+                    {/* Typography & Actions */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-border">
                       <div>
                         <span className="text-xs font-medium uppercase tracking-wider block">Typeface</span>
                         <span className="text-[10px] text-muted-foreground">{brand.typography}</span>
                       </div>
-                      <Link
-                        href={`/${brand.slug}`}
-                        className="text-[10px] uppercase tracking-widest text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
-                      >
-                        Visit <span className="group-hover:translate-x-0.5 transition-transform">→</span>
-                      </Link>
+
+                      <div className="flex items-center gap-3">
+                        <a
+                          href={brand.logo}
+                          download
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-[10px] uppercase font-mono tracking-widest text-muted-foreground hover:text-foreground border border-border px-3 py-1.5 bg-secondary/30 hover:bg-secondary/60 transition-colors"
+                          title={`Download ${brand.name} SVG Logo`}
+                        >
+                          <RiDownloadLine size={13} />
+                          <span>SVG</span>
+                        </a>
+
+                        <Link
+                          href={brand.slug ? `/${brand.slug}` : "/"}
+                          className="text-[10px] uppercase tracking-widest text-primary hover:text-primary/80 transition-colors flex items-center gap-1 font-semibold"
+                        >
+                          Visit <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>

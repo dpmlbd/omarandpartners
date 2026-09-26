@@ -16,56 +16,61 @@ import {
   RiBrushLine,
   RiStackLine,
 } from "@remixicon/react";
+import { siteConfig } from "@/config/site";
+
+const comp1 = siteConfig.companies[1];
+const comp2 = siteConfig.companies[2];
+const comp3 = siteConfig.companies[3];
 
 const triadEntities = [
   {
     id: "01",
-    code: "01_ARCH",
-    name: "Kolpoporisor",
-    discipline: "Architecture",
+    code: "01_KP",
+    name: comp1?.name || "Kolpoporisor",
+    discipline: comp1?.description || "Consultancy",
     essence: "Structure & Form",
     watermark: "STRUCTURE",
     stat: "50+ Landmarks",
     context: "Urban & Civic",
     image: "/images/architecture.png",
     icon: RiBuilding4Line,
-    href: "/kolpoporisor",
+    href: comp1?.href || "/kolpoporisor",
   },
   {
     id: "02",
-    code: "02_INT",
-    name: "Kolpokowsol",
-    discipline: "Interior Design",
+    code: "02_KK",
+    name: comp2?.name || "Kolpokowsol",
+    discipline: comp2?.description || "Consultancy & Construction",
     essence: "Space & Volume",
     watermark: "SPACE",
     stat: "80+ Interiors",
     context: "Human Scale",
     image: "/images/interior.png",
     icon: RiBrushLine,
-    href: "/kolpokowsol",
+    href: comp2?.href || "/kolpokowsol",
   },
   {
     id: "03",
-    code: "03_MAT",
-    name: "INEX",
-    discipline: "Building Materials",
+    code: "03_IN",
+    name: comp3?.name || "INEX",
+    discipline: comp3?.description || "Building Materials — Coming Soon",
     essence: "Matter & Substance",
     watermark: "MATTER",
     stat: "200+ Materials",
     context: "Quarry Direct",
     image: "/images/materials.png",
     icon: RiStackLine,
-    href: "/inex",
+    href: comp3?.href || "/inex",
   },
 ];
 
 const services = [
   { type: "stat" as const, title: "Projects Delivered", stat: "150+", statLabel: "Across all three divisions combined.", colSpan: 1 as const },
-  { type: "image" as const, title: "Architecture", image: "/images/architecture.png", colSpan: 1 as const, rowSpan: 2 as const },
+  { type: "image" as const, title: comp1?.description || "Consultancy", image: "/images/architecture.png", colSpan: 1 as const, rowSpan: 2 as const },
   { type: "stat" as const, title: "Countries Active", stat: "18", statLabel: "Global footprint spanning 5 continents.", dark: true, colSpan: 1 as const },
-  { type: "feature" as const, title: "Integrated Delivery", description: "Architecture, interior design, and materials supply coordinated under one roof — ensuring zero fragmentation across any project lifecycle.", colSpan: 2 as const },
+  { type: "feature" as const, title: "Integrated Delivery", description: `${comp1?.name} (${comp1?.description}), ${comp2?.name} (${comp2?.description}), and ${comp3?.name} coordinated under one roof — ensuring zero fragmentation across any project lifecycle.`, colSpan: 2 as const },
   { type: "list" as const, title: "Group Benchmarks", items: [{ label: "Avg. Client Satisfaction", value: "97%" }, { label: "On-Budget Delivery", value: "92%" }, { label: "Awards Won", value: "13+" }], colSpan: 1 as const, rowSpan: 2 as const },
-  { type: "image" as const, title: "Interior Design", image: "/images/interior.png", colSpan: 1 as const },
+  { type: "image" as const, title: comp2?.description || "Consultancy & Construction", image: "/images/interior.png", colSpan: 1 as const },
   { type: "stat" as const, title: "Years of Excellence", stat: "15+", statLabel: "Defining spaces since 2010.", dark: true, colSpan: 1 as const },
   { type: "feature" as const, title: "Material Intelligence", description: "INEX provides direct material supply to both Kolpoporisor and Kolpokowsol, ensuring specifications are met from factory to site.", colSpan: 1 as const },
 ];
@@ -97,7 +102,7 @@ const engagementFramework = [
     tag: "MODE // 02 · UNIFIED TRIAD [RECOMMENDED]",
     scope: "Full Closed-Loop Triad",
     title: "Turnkey Group Delivery",
-    summary: "Complete tripartite execution synchronizing architecture, interior design, and material supply under one unified holding agreement.",
+    summary: `Complete tripartite execution synchronizing ${comp1?.description?.toLowerCase() || "consultancy"}, ${comp2?.description?.toLowerCase() || "consultancy & construction"}, and material supply under one unified holding agreement.`,
     parameters: [
       { label: "ENGAGEMENT", value: "Synchronized triad execution across Kolpoporisor + Kolpokowsol + INEX" },
       { label: "INTERFACE", value: "Unified project directorship with a single point of executive accountability" },
@@ -355,7 +360,7 @@ export default function CompaniesPage() {
           <SectionHeader
             index="01"
             title="Business Ecosystem"
-            subtitle="A multi-disciplinary holding structure where architecture, interior design, and materials operate independently yet execute in closed-loop synergy."
+            subtitle={`A multi-disciplinary holding structure where ${comp1?.description?.toLowerCase() || "consultancy"}, ${comp2?.description?.toLowerCase() || "consultancy & construction"}, and materials operate independently yet execute in closed-loop synergy.`}
           />
           <div className="mt-12">
             <BusinessEcosystem />
@@ -365,14 +370,14 @@ export default function CompaniesPage() {
 
       <section id="services" className="py-24 md:py-36 border-b border-border bg-secondary/10 scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="02" title="Services Overview" subtitle="A comprehensive range of services across architecture, interiors, and materials — all under one roof." />
+          <SectionHeader index="02" title="Services Overview" subtitle={`A comprehensive range of services across ${comp1?.description?.toLowerCase() || "consultancy"}, ${comp2?.description?.toLowerCase() || "consultancy & construction"}, and materials — all under one roof.`} />
           <ServicesBentoGrid services={services} />
         </div>
       </section>
 
       <section id="works" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="03" title="Selected Works" subtitle="A curated showcase across architecture, interiors, and material excellence." />
+          <SectionHeader index="03" title="Selected Works" subtitle={`A curated showcase across ${comp1?.description?.toLowerCase() || "consultancy"}, ${comp2?.description?.toLowerCase() || "consultancy & construction"}, and material excellence.`} />
           <GalleryGrid items={gallery} />
         </div>
       </section>

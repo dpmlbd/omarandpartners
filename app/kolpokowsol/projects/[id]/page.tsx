@@ -66,10 +66,19 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
       </section>
 
       {/* ── IMAGE ────────────────────────────────────────────────────────── */}
-      <section className="border-b border-border">
-        <div className="relative aspect-[16/9] w-full">
-          <Image src={project.image} alt={project.title} fill className="object-cover grayscale" priority />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+      <section className="py-10 md:py-14 border-b border-border">
+        <div className="container mx-auto px-6 md:px-14">
+          <div className="relative aspect-[16/9] md:aspect-[21/9] max-h-[540px] w-full overflow-hidden border border-border bg-secondary">
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              priority
+              sizes="(max-width: 1280px) 100vw, 1280px"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+          </div>
         </div>
       </section>
 
@@ -108,11 +117,17 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-px border border-border">
               {project.gallery.map((img: string, i: number) => (
-                <ScrollReveal key={i} delay={i * 0.1}>
+                <ScrollReveal key={i} delay={i * 0.05}>
                   <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
-                    <Image src={img} alt={`${project.title} gallery ${i + 1}`} fill className="object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+                    <Image
+                      src={img}
+                      alt={`${project.title} gallery ${i + 1}`}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                    />
                   </div>
                 </ScrollReveal>
               ))}

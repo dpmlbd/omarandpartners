@@ -1,4 +1,4 @@
-import sharp, { type ResizeOptions } from "sharp";
+import type { ResizeOptions } from "sharp";
 
 export interface ProcessedImageResult {
   buffer: Buffer;
@@ -21,6 +21,9 @@ const AVIF_QUALITY = 80;
 export async function processImageToAvif(
   fileOrBuffer: Buffer | ArrayBuffer | Uint8Array
 ): Promise<ProcessedImageResult> {
+  const sharpModule = await import("sharp");
+  const sharp = (sharpModule.default || sharpModule) as unknown as typeof import("sharp").default;
+
   let inputBuffer: Buffer;
   if (Buffer.isBuffer(fileOrBuffer)) {
     inputBuffer = fileOrBuffer;

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion } from "motion/react";
 import { SectionHeader } from "@/components/ui/section-header";
-import { FeatureCard } from "@/components/ui/feature-card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import {
   RiMailLine,
@@ -55,10 +55,19 @@ export default function ContactPage() {
   };
 
   const DIVISION_EMAILS: Record<string, string> = {
+    "Kolpoporishor": "kolpoporishor@gmail.com",
     "Kolpoporisor": "kolpoporishor@gmail.com",
     "Kolpokowsol": "kolpokowsol@gmail.com",
     "INEX": "inexmgt.bd@gmail.com",
     "Omar & Partners": "info@onp-bd.com",
+  };
+
+  const DIVISION_LOGOS: Record<string, string> = {
+    "Kolpoporishor": "/logos/kolpoporishor-logo.svg",
+    "Kolpoporisor": "/logos/kolpoporishor-logo.svg",
+    "Kolpokowsol": "/logos/kolpokowsol-logo.svg",
+    "INEX": "/logos/inex-logo.svg",
+    "Omar & Partners": "/onp.svg",
   };
 
   const divisions = siteConfig.companies
@@ -67,6 +76,8 @@ export default function ContactPage() {
       tag: c.description,
       title: c.name,
       email: DIVISION_EMAILS[c.name] || "info@onp-bd.com",
+      logo: DIVISION_LOGOS[c.name] || "/onp.svg",
+      href: c.href,
       footer: `0${i + 1}_${c.name.slice(0, 2).toUpperCase()}`,
     }));
 
@@ -146,7 +157,7 @@ export default function ContactPage() {
                 <div className="flex flex-col gap-6 text-sm font-light text-muted-foreground">
                   <div className="flex items-start gap-4">
                     <RiMapPinLine size={18} className="text-foreground shrink-0 mt-0.5" />
-                    <p>13/A SS Khaled Road (1--4, B-1),<br />Kazir Dewri, Chattogram- 4000, Bangladesh</p>
+                    <p>13/A SS Khaled Road (L-4, B-1),<br />Kazir Dewri, Chattogram- 4000, Bangladesh</p>
                   </div>
                   <div className="flex items-center gap-4">
                     <RiMailLine size={18} className="text-foreground shrink-0" />
@@ -204,31 +215,49 @@ export default function ContactPage() {
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="02" title="Division Contacts" subtitle={`Direct channels for ${siteConfig.companies.slice(1).map((c) => `${c.name} (${c.description})`).join(", ")}.`} />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {divisions.map((div, i) => (
-              <FeatureCard
-                key={i}
-                icon={<RiBuilding4Line size={16} />}
-                title={div.title}
-                className="border border-border"
-                footer={
-                  <div className="flex flex-col gap-3 text-sm font-light text-muted-foreground mt-4">
-                    <div className="flex items-center gap-3">
-                      <RiMailLine size={16} className="text-foreground shrink-0" />
-                      <a
-                        href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(div.email)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:text-primary transition-colors"
+              <ScrollReveal key={i} delay={i * 0.1}>
+                <div className="group flex flex-col border border-border overflow-hidden hover:border-primary/40 transition-all duration-500 bg-background h-full">
+                  {/* Divisional Logo Showcase */}
+                  <div className="h-36 sm:h-40 bg-secondary/20 dark:bg-card/40 border-b border-border flex items-center justify-center p-6 overflow-hidden group-hover:bg-secondary/35 transition-colors duration-500">
+                    <img
+                      src={div.logo}
+                      alt={`${div.title} Official Logo`}
+                      className="w-full h-16 sm:h-20 max-w-[170px] object-contain transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  {/* Card Content */}
+                  <div className="flex flex-col flex-1 p-6 md:p-8 justify-between gap-6">
+                    <div>
+                      <span className="text-[10px] uppercase tracking-widest text-primary font-medium block mb-1.5">{div.tag}</span>
+                      <h4 className="font-heading text-xl font-medium uppercase tracking-tight">{div.title}</h4>
+                    </div>
+
+                    <div className="pt-4 border-t border-border/50 flex flex-col gap-3">
+                      <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                        <RiMailLine size={16} className="text-foreground shrink-0" />
+                        <a
+                          href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(div.email)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-primary transition-colors text-xs font-mono tracking-wide truncate"
+                        >
+                          {div.email}
+                        </a>
+                      </div>
+                      <Link
+                        href={div.href}
+                        className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-widest font-medium text-foreground hover:text-primary transition-colors group/link mt-1"
                       >
-                        {div.email}
-                      </a>
+                        Explore Division <RiArrowRightLine size={13} className="group-hover/link:translate-x-1 transition-transform duration-200" />
+                      </Link>
                     </div>
                   </div>
-                }
-              >
-                <span className="text-[10px] uppercase tracking-widest text-foreground font-medium block mb-1">{div.tag}</span>
-              </FeatureCard>
+                </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>

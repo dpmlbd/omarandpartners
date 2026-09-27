@@ -8,26 +8,24 @@ import { RiArrowRightLine } from "@remixicon/react";
 import { siteConfig } from "@/config/site";
 
 const compHolding = siteConfig.companies[0];
-const compKolpoporisor = siteConfig.companies[1];
+const compKolpoporishor = siteConfig.companies[1];
 const compKolpokowsol = siteConfig.companies[2];
 const compInex = siteConfig.companies[3];
 
 const companies = [
   {
     id: "01",
-    name: compKolpoporisor?.name || "Kolpoporisor",
-    tagline: compKolpoporisor?.description || "Consultancy",
+    name: compKolpoporishor?.name || "Kolpoporishor",
+    tagline: compKolpoporishor?.description || "Consultancy",
     desc: "Monumental structures, urban master-planning, and sustainable design that reshapes skylines.",
-    stats: [{ value: "50+", label: "Projects" }, { value: "12", label: "Countries" }],
-    href: compKolpoporisor?.href || "/kolpoporisor",
-    logo: "/logos/kolpoporisor-logo.svg",
+    href: compKolpoporishor?.href || "/kolpoporishor",
+    logo: "/logos/kolpoporishor-logo.svg",
   },
   {
     id: "02",
     name: compKolpokowsol?.name || "Kolpokowsol",
     tagline: compKolpokowsol?.description || "Consultancy & Construction",
     desc: "Transforming built shells into extraordinary human environments through material, light, and spatial narrative.",
-    stats: [{ value: "80+", label: "Interiors" }, { value: "5★", label: "Rating" }],
     href: compKolpokowsol?.href || "/kolpokowsol",
     logo: "/logos/kolpokowsol-logo.svg",
   },
@@ -36,7 +34,6 @@ const companies = [
     name: compInex?.name || "INEX",
     tagline: compInex?.description || "Building Materials — Coming Soon",
     desc: "A global sourcing and engineering network delivering the finest building materials for uncompromising quality.",
-    stats: [{ value: "200+", label: "Materials" }, { value: "30+", label: "Brands" }],
     href: compInex?.href || "/inex",
     logo: "/logos/inex-logo.svg",
   },
@@ -133,23 +130,15 @@ export function EcosystemDiagram() {
               </div>
               <p className="text-muted-foreground text-sm leading-relaxed flex-1">{co.desc}</p>
 
-              {/* Stats */}
-              <div className="flex gap-6 border-t border-border/50 pt-4">
-                {co.stats.map((stat) => (
-                  <div key={stat.label} className="flex flex-col">
-                    <span className="font-heading text-2xl font-semibold text-foreground">{stat.value}</span>
-                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{stat.label}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* CTA */}
-              <Link
-                href={co.href}
-                className="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-medium text-foreground hover:text-primary transition-colors mt-2 group/link"
-              >
-                Explore <RiArrowRightLine size={13} className="group-hover/link:translate-x-1 transition-transform duration-200" />
-              </Link>
+                {/* CTA */}
+                <div className="pt-2 mt-auto">
+                  <Link
+                    href={co.href}
+                    className="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-medium text-foreground hover:text-primary transition-colors group/link"
+                  >
+                    Explore <RiArrowRightLine size={13} className="group-hover/link:translate-x-1 transition-transform duration-200" />
+                  </Link>
+                </div>
             </div>
           </motion.div>
         ))}

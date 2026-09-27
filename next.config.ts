@@ -25,14 +25,14 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: "/kolpoporishor",
-        destination: "/kolpoporisor",
-        permanent: false,
+        source: "/kolpoporisor",
+        destination: "/kolpoporishor",
+        permanent: true,
       },
       {
-        source: "/kolpoporishor/:path*",
-        destination: "/kolpoporisor/:path*",
-        permanent: false,
+        source: "/kolpoporisor/:path*",
+        destination: "/kolpoporishor/:path*",
+        permanent: true,
       },
     ];
   },

@@ -1,6 +1,6 @@
 import { BentoGalleryItem } from "@/components/ui/bento-gallery";
 
-export const kolpoporisorGalleryItems: BentoGalleryItem[] = [
+export const kolpoporishorGalleryItems: BentoGalleryItem[] = [
   // Page 1
   {
     id: "kp-01",
@@ -165,6 +165,8 @@ export const kolpoporisorGalleryItems: BentoGalleryItem[] = [
     rowSpan: 1,
   },
 ];
+
+export const kolpoporisorGalleryItems = kolpoporishorGalleryItems;
 
 export const kolpokowsolGalleryItems: BentoGalleryItem[] = [
   // Page 1

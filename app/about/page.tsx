@@ -1,14 +1,15 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { SectionHeader } from "@/components/ui/section-header";
-import { FeatureCard } from "@/components/ui/feature-card";
 import { CTASection } from "@/components/ui/cta-section";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { AwardsShowcase } from "@/components/ui/awards-showcase";
-import { RiArrowRightLine } from "@remixicon/react";
-import { leadership, coreValues, timeline, awards, partners, awardStats } from "./data";
+import { timeline, awards, partners, awardStats } from "./data";
+import type { Leader } from "@/lib/public/leadership";
+import { getLeadershipAction } from "@/lib/actions/leadership";
 import { siteConfig } from "@/config/site";
 
 const compHolding = siteConfig.companies[0];
@@ -17,6 +18,28 @@ const comp2 = siteConfig.companies[2];
 const comp3 = siteConfig.companies[3];
 
 export default function AboutPage() {
+  const [leadership, setLeadership] = useState<Leader[]>([]);
+  const [isLoadingLeadership, setIsLoadingLeadership] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadLeadership() {
+      try {
+        const data = await getLeadershipAction();
+        if (mounted && data) {
+          setLeadership(data);
+        }
+      } catch (err) {
+        console.error("Failed to load leadership from backend:", err);
+      } finally {
+        if (mounted) setIsLoadingLeadership(false);
+      }
+    }
+    loadLeadership();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <div className="flex flex-col w-full overflow-hidden">
@@ -131,28 +154,33 @@ export default function AboutPage() {
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="02" title="Leadership" subtitle="The minds and hands that shape the future of Omar &amp; Partners." />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border">
-            {leadership.map((person, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
-                <div className="group flex flex-col md:flex-row bg-background border-r border-border last:border-r-0 overflow-hidden hover:bg-secondary/20 transition-colors duration-300">
-                  <div className="relative w-full md:w-48 shrink-0 aspect-square md:aspect-auto overflow-hidden bg-secondary">
-                    <Image src={person.image} alt={person.name} fill className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700" />
-                    <div className="absolute top-3 left-3 font-mono text-[10px] text-white/60">{person.tag}</div>
-                  </div>
-                  <div className="flex flex-col justify-between p-6 md:p-8 flex-1 border-t md:border-t-0 md:border-l border-border">
-                    <div>
-                      <span className="text-[10px] uppercase tracking-widest text-foreground font-medium block mb-2">{person.role}</span>
-                      <h3 className="font-heading text-xl md:text-2xl font-medium tracking-tight mb-4">{person.name}</h3>
-                      <p className="text-muted-foreground text-sm leading-relaxed">{person.bio}</p>
+          {isLoadingLeadership ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border">
+              {[1, 2, 3, 4].map((n) => (
+                <div key={n} className="h-64 bg-background/50 animate-pulse border-r border-border last:border-r-0" />
+              ))}
+            </div>
+          ) : leadership.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border">
+              {leadership.map((person, i) => (
+                <ScrollReveal key={person.id || person.name || i} delay={i * 0.1}>
+                  <div className="group flex flex-col md:flex-row bg-background border-r border-border last:border-r-0 overflow-hidden hover:bg-secondary/20 transition-colors duration-300">
+                    <div className="relative w-full md:w-48 shrink-0 aspect-square md:aspect-auto overflow-hidden bg-secondary">
+                      <Image src={person.image} alt={person.name} fill className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700" />
+                      <div className="absolute top-3 left-3 font-mono text-[10px] text-white/60">{person.tag}</div>
                     </div>
-                    <div className="mt-6 pt-4 border-t border-border/50 flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground group-hover:text-primary transition-colors">
-                      <RiArrowRightLine size={13} /> Profile
+                    <div className="flex flex-col justify-center p-6 md:p-8 flex-1 border-t md:border-t-0 md:border-l border-border">
+                      <div>
+                        <span className="text-[10px] uppercase tracking-widest text-foreground font-medium block mb-2">{person.role}</span>
+                        <h3 className="font-heading text-xl md:text-2xl font-medium tracking-tight mb-4">{person.name}</h3>
+                        <p className="text-muted-foreground text-sm leading-relaxed">{person.bio}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -252,7 +280,7 @@ export default function AboutPage() {
       <section id="coo-words" className="relative py-24 md:py-36 border-b border-border scroll-mt-24 bg-secondary/15">
         <div className="container mx-auto px-6 md:px-14">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-start">
-            
+
             {/* Left — COO Portrait (Clean like CEO, no text, buttons or chips) */}
             <div className="md:col-span-5 md:sticky md:top-28">
               <ScrollReveal delay={0.2} direction="left">
@@ -358,21 +386,68 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section id="values" className="py-24 md:py-36 border-b border-border scroll-mt-24 bg-secondary/10">
+      <section id="values" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="04" title="Core Values" subtitle="The principles that guide every decision, every design, every relationship." />
+          <SectionHeader index="04" title="Core Values & Strategy" subtitle="The principles and strategic direction that guide every decision." />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {coreValues.map((v, i) => (
-              <FeatureCard
-                key={i}
-                icon={v.icon}
-                title={v.title}
-                description={v.desc}
-                className="border border-border"
-                footer={<span className="font-mono text-[10px] text-border mt-auto">0{i + 1}</span>}
-              />
-            ))}
+          <div className="flex flex-col gap-0">
+
+            {/* ── Core Values Banner ── */}
+            <ScrollReveal>
+              <div className="relative bg-foreground text-background p-10 md:p-16 overflow-hidden">
+                {/* Oversized decorative number */}
+                <span
+                  className="absolute -top-6 -right-4 md:right-6 font-heading font-bold text-background/[0.04] leading-none select-none pointer-events-none"
+                  style={{ fontSize: "clamp(10rem, 20vw, 22rem)" }}
+                  aria-hidden="true"
+                >
+                  01
+                </span>
+
+                <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start">
+                  <div className="md:col-span-4 flex flex-col gap-3">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="w-8 h-[1px] bg-primary" />
+                      <span className="text-[10px] uppercase tracking-[0.35em] text-background/40 font-medium">Core Values</span>
+                    </div>
+                  </div>
+                  <div className="md:col-span-8 flex items-center">
+                    <p className="text-background/70 text-sm md:text-[15px] font-light leading-[1.9] border-l border-background/10 pl-8">
+                      Our core values center on nurturing creativity and talent to deliver visionary, fresh architectural designs while maintaining absolute, client-centric excellence and reliability. By championing synergy and collaboration, we break down disciplinary walls to ensure seamless, flawless project execution. Above all, sustainability guides our practice, ensuring we design with deep environmental responsibility to thoughtfully develop our cities and country.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            {/* ── Strategy Banner ── */}
+            <ScrollReveal delay={0.15}>
+              <div className="relative bg-background border border-border border-t-0 p-10 md:p-16 overflow-hidden">
+                {/* Oversized decorative number */}
+                <span
+                  className="absolute -top-6 -right-4 md:right-6 font-heading font-bold text-foreground/[0.03] leading-none select-none pointer-events-none"
+                  style={{ fontSize: "clamp(10rem, 20vw, 22rem)" }}
+                  aria-hidden="true"
+                >
+                  02
+                </span>
+
+                <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start">
+                  <div className="md:col-span-4 flex flex-col gap-3">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="w-8 h-[1px] bg-primary" />
+                      <span className="text-[10px] uppercase tracking-[0.35em] text-muted-foreground font-medium">Strategy</span>
+                    </div>
+                  </div>
+                  <div className="md:col-span-8 flex items-center">
+                    <p className="text-muted-foreground text-sm md:text-[15px] font-light leading-[1.9] border-l border-border pl-8">
+                      Our strategy centers on driving steady organizational growth at a targeted rate of 10% annually. We achieve this by nurturing creative exercises and generating innovative ideas that expand our services into advanced global markets, while simultaneously upholding our unique identity and competitive edge in the local market to actively shape future developments.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </ScrollReveal>
+
           </div>
         </div>
       </section>

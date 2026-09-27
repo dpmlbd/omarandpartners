@@ -24,10 +24,10 @@ const brands = [
     tags: ["Holding Group", "Corporate Ecosystem", "Governance"],
   },
   {
-    name: comp1?.name || "Kolpoporisor",
-    slug: "kolpoporisor",
+    name: comp1?.name || "Kolpoporishor",
+    slug: "kolpoporishor",
     description: comp1?.description || "Consultancy",
-    logo: "/logos/kolpoporisor-logo.svg",
+    logo: "/logos/kolpoporishor-logo.svg",
     color: "#059669",
     colorLight: "#ECFDF5",
     typography: "Outfit (Sans-serif)",

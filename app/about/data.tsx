@@ -14,44 +14,7 @@ export const stats = [
   { value: "18", label: "Countries Reached" },
 ];
 
-export interface Leader {
-  name: string;
-  role: string;
-  bio: string;
-  image: string;
-  tag: string;
-}
-
-export const leadership: Leader[] = [
-  {
-    name: "Ar. Abdullah Al Omar MIAB",
-    role: "Principal Architect & CEO",
-    bio: "Principal Architect and visionary CEO steering design innovation and sustainable development across the entire ONP ecosystem. B.Arch (SUST), PM (EDCP)-Japan, MSGED (UIU).",
-    image: "/images/architecture.png",
-    tag: "01",
-  },
-  {
-    name: "Engr. Md. Mohiuddin Ovi MIEB",
-    role: "Chief Operating Officer (COO)",
-    bio: "Driving rigorous engineering standards, operational excellence, and seamless project execution across multi-disciplinary ventures. B.Sc-Civil (CUET), PGD-PM (Edu Pro, UK).",
-    image: "/images/interior.png",
-    tag: "02",
-  },
-  {
-    name: "Ar. Avijit Saha MIAB",
-    role: "Head of Design Studio",
-    bio: "Guiding the creative concept development and design methodology across architecture and interior projects. B.Arch (KU).",
-    image: "/images/hero_architecture.png",
-    tag: "03",
-  },
-  {
-    name: "Ar. Sayed Aziz MIAB",
-    role: "Project Team Lead",
-    bio: "Spearheading complex spatial planning and sustainable urban initiatives with specialized international expertise. B.Arch (SUST), M.Urban Design (HKU).",
-    image: "/images/materials.png",
-    tag: "04",
-  },
-];
+export type { Leader } from "@/lib/public/leadership";
 
 export const coreValues = [
   { icon: <RiLightbulbLine size={20} />, title: "Innovation", desc: "We challenge conventional thinking to create environments that redefine possibilities." },
@@ -71,7 +34,7 @@ const comp3 = siteConfig.companies[3];
 
 export const timeline = [
   { year: "2015", title: "Foundation", desc: `${compHolding?.name || "Omar & Partners"} is established with an ambitious goal to become one of Bangladesh's most trusted partners in architectural and engineering solutions.` },
-  { year: "2017", title: `${comp1?.name || "Kolpoporisor"} Expansion`, desc: `${comp1?.name || "Kolpoporisor"} establishes itself as a premier ${comp1?.description?.toLowerCase() || "consultancy"} studio.` },
+  { year: "2017", title: `${comp1?.name || "Kolpoporishor"} Expansion`, desc: `${comp1?.name || "Kolpoporishor"} establishes itself as a premier ${comp1?.description?.toLowerCase() || "consultancy"} studio.` },
   { year: "2019", title: `${comp2?.name || "Kolpokowsol"} Launch`, desc: `${comp2?.name || "Kolpokowsol"} is incorporated to deliver integrated ${comp2?.description?.toLowerCase() || "consultancy & construction"} services.` },
   { year: "2021", title: `${comp3?.name || "INEX"} Operations`, desc: `${comp3?.name || "INEX"} begins operations for specialized interior management and supply chain sourcing.` },
   { year: "2024", title: "Ecosystem Integration", desc: "Consolidation under a unified collaborative leadership team delivering cohesive turnkey solutions." },

@@ -16,10 +16,10 @@ CREATE TABLE IF NOT EXISTS public.companies (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Seed active companies (Inex is noted as coming-soon, projects are for Kolpokowsol & Kolpoporisor)
+-- Seed active companies (Inex is noted as coming-soon, projects are for Kolpokowsol & Kolpoporishor)
 INSERT INTO public.companies (name, slug, description)
 VALUES 
-  ('Kolpoporisor', 'kolpoporisor', 'Architecture & Structural Solutions'),
+  ('Kolpoporishor', 'kolpoporishor', 'Architecture & Structural Solutions'),
   ('Kolpokowsol', 'kolpokowsol', 'Interior Design & Spatial Architecture'),
   ('INEX', 'inex', 'Building Materials & Sourcing (Coming Soon)')
 ON CONFLICT (slug) DO NOTHING;

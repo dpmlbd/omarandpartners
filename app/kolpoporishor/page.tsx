@@ -7,12 +7,12 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SectionHeader } from "@/components/ui/section-header";
 import { BentoGallery } from "@/components/ui/bento-gallery";
 import { SocialChannelsSection } from "@/components/ui/social-channels-section";
-import { kolpoporisorGalleryItems } from "@/lib/gallery-data";
+import { kolpoporishorGalleryItems } from "@/lib/gallery-data";
 import { RiArrowRightLine } from "@remixicon/react";
 import { CompanyProjectsFilter } from "@/components/features/companies/company-projects-filter";
 import { siteConfig } from "@/config/site";
 
-const companyInfo = siteConfig.companies.find((c) => c.name === "Kolpoporisor");
+const companyInfo = siteConfig.companies.find((c) => c.name === "Kolpoporishor");
 
 const stats = [
   { value: "50+", label: "Projects Delivered" },
@@ -80,7 +80,7 @@ const services = [
 
 
 
-export default function KolpoporisorPage() {
+export default function KolpoporishorPage() {
   return (
     <div className="flex flex-col w-full overflow-hidden">
 
@@ -96,7 +96,7 @@ export default function KolpoporisorPage() {
         >
           <Image
             src="/images/architecture.png"
-            alt={`${companyInfo?.name || "Kolpoporisor"} — ${companyInfo?.description || "Consultancy"}`}
+            alt={`${companyInfo?.name || "Kolpoporishor"} — ${companyInfo?.description || "Consultancy"}`}
             fill
             priority
             sizes="100vw"
@@ -138,7 +138,7 @@ export default function KolpoporisorPage() {
                   style={{ fontSize: "clamp(2.8rem, 6.5vw, 6rem)" }}
                 >
                   Kolpo<br />
-                  <span className="text-primary">porisor</span>
+                  <span className="text-primary">porishor</span>
                 </h1>
               </motion.div>
             </div>
@@ -151,7 +151,7 @@ export default function KolpoporisorPage() {
               className="lg:pb-2"
             >
               <p className="text-white/60 text-sm md:text-[15px] font-light leading-relaxed max-w-md">
-                {companyInfo?.name || "Kolpoporisor"} is the {companyInfo?.description?.toLowerCase() || "consultancy"} arm of the Omar &amp; Partners ecosystem — delivering monumental structures, sustainable urban environments, and enduring spatial experiences that elevate civic life.
+                {companyInfo?.name || "Kolpoporishor"} is the {companyInfo?.description?.toLowerCase() || "consultancy"} arm of the Omar &amp; Partners ecosystem — delivering monumental structures, sustainable urban environments, and enduring spatial experiences that elevate civic life.
               </p>
             </motion.div>
 
@@ -177,7 +177,7 @@ export default function KolpoporisorPage() {
             </div>
             <div className="md:col-span-5 border-l border-border pl-8 text-muted-foreground text-sm font-light leading-relaxed flex flex-col gap-5">
               <ScrollReveal delay={0.2}>
-                <p>{companyInfo?.name || "Kolpoporisor"} is the {companyInfo?.description?.toLowerCase() || "consultancy"} arm of the Omar &amp; Partners ecosystem. We craft solutions that harmonize with their environment while pushing the boundaries of spatial experience.</p>
+                <p>{companyInfo?.name || "Kolpoporishor"} is the {companyInfo?.description?.toLowerCase() || "consultancy"} arm of the Omar &amp; Partners ecosystem. We craft solutions that harmonize with their environment while pushing the boundaries of spatial experience.</p>
               </ScrollReveal>
               <ScrollReveal delay={0.3}>
                 <p>From large-scale urban master plans to intimate private commissions, every project is executed with the same exacting standards of structural integrity and aesthetic purpose.</p>
@@ -225,7 +225,7 @@ export default function KolpoporisorPage() {
       <section id="projects" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="03" title="Selected Works" subtitle="A curated selection of projects spanning commercial, cultural, residential, and public sectors across 12 countries." />
-          <CompanyProjectsFilter companySlug="kolpoporisor" initialProjects={projects} />
+          <CompanyProjectsFilter companySlug="kolpoporishor" initialProjects={projects} />
         </div>
       </section>
 
@@ -272,15 +272,16 @@ export default function KolpoporisorPage() {
         badge="Architectural Gallery"
         title="Spatial & Structural Archive"
         description="A curated bento archive of structural developments, civic pavilions, and experimental geometries."
-        items={kolpoporisorGalleryItems}
+        items={kolpoporishorGalleryItems}
         itemsPerPage={8}
       />
 
       {/* ── 05. SOCIAL MEDIA SECTION ──────────────────────────────── */}
       <SocialChannelsSection
+        companySlug="kolpoporishor"
         index="05"
         title="Social Media"
-        subtitle="Follow Kolpoporisor for architectural monographs, structural breakthroughs, and ongoing construction milestones."
+        subtitle="Follow Kolpoporishor for architectural monographs, structural breakthroughs, and ongoing construction milestones."
       />
 
     </div>

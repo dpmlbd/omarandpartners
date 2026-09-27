@@ -21,8 +21,8 @@ export const jobs: Job[] = [
   {
     id: "snr-arch-kp",
     title: "Senior Consultant",
-    division: `${comp1?.name || "Kolpoporisor"} (${comp1?.description || "Consultancy"})`,
-    companyName: comp1?.name || "Kolpoporisor",
+    division: `${comp1?.name || "Kolpoporishor"} (${comp1?.description || "Consultancy"})`,
+    companyName: comp1?.name || "Kolpoporishor",
     location: "New York, USA",
     type: "Full-Time",
     desc: "We are seeking a Senior Architect to lead design teams on large-scale monumental and institutional projects. You will be responsible for schematic designs, client relations, and overseeing the execution of architectural vision.",
@@ -116,10 +116,10 @@ export const tabs: TabItem[] = [
     quoteAuthor: "Lina Kowalski, Creative Director",
   },
   {
-    name: comp1?.name || "Kolpoporisor",
+    name: comp1?.name || "Kolpoporishor",
     tag: comp1?.description || "Consultancy",
     image: "/images/architecture.png",
-    culture: `${comp1?.name || "Kolpoporisor"} is a rigorous consultancy studio where grand scales meet blueprint precision. The culture is intellectually demanding but deeply collegial. Specialists here tackle monumental, public-facing designs that reshape skylines. The studio operates like a think-tank — debates are encouraged, models are critiqued publicly, and the best ideas win regardless of seniority.`,
+    culture: `${comp1?.name || "Kolpoporishor"} is a rigorous consultancy studio where grand scales meet blueprint precision. The culture is intellectually demanding but deeply collegial. Specialists here tackle monumental, public-facing designs that reshape skylines. The studio operates like a think-tank — debates are encouraged, models are critiqued publicly, and the best ideas win regardless of seniority.`,
     benefits: "Project ownership from concept to completion, international exposure through global commissions, access to advanced BIM and simulation tools, mentorship from award-winning principals, and a clear path to partnership.",
     quote: "Architecture is not about buildings. It's about the spaces between them, the light within them, and the lives lived inside them.",
     quoteAuthor: "Marcus Webb, Design Principal",

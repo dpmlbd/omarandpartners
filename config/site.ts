@@ -8,8 +8,8 @@ export const siteConfig = {
       description: "Holding Company",
     },
     {
-      name: "Kolpoporisor",
-      href: "/kolpoporisor",
+      name: "Kolpoporishor",
+      href: "/kolpoporishor",
       description: "Consultancy",
     },
     {

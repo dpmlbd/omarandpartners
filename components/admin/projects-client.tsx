@@ -72,7 +72,7 @@ export function ProjectsClient({
             Projects Portfolio
           </h1>
           <p className="text-muted-foreground text-xs font-light mt-1">
-            Manage {comp2?.name || "Kolpokowsol"} ({comp2?.description || "Consultancy & Construction"}) and {comp1?.name || "Kolpoporisor"} ({comp1?.description || "Consultancy"}) developments.
+            Manage {comp2?.name || "Kolpokowsol"} ({comp2?.description || "Consultancy & Construction"}) and {comp1?.name || "Kolpoporishor"} ({comp1?.description || "Consultancy"}) developments.
           </p>
         </div>
 

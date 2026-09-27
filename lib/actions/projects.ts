@@ -29,7 +29,7 @@ export async function getActiveProjectCompanies(): Promise<Company[]> {
   const { data, error } = await supabase
     .from("companies")
     .select("*")
-    .in("slug", ["kolpoporisor", "kolpokowsol"])
+    .in("slug", ["kolpoporishor", "kolpoporisor", "kolpokowsol"])
     .order("name", { ascending: true });
 
   if (error) {
@@ -127,8 +127,8 @@ export async function createProjectAction(
       .eq("id", companyId)
       .single();
 
-    if (!company || !["kolpoporisor", "kolpokowsol"].includes(company.slug)) {
-      return { error: "Projects can only be assigned to Kolpoporisor or Kolpokowsol." };
+    if (!company || !["kolpoporishor", "kolpoporisor", "kolpokowsol"].includes(company.slug)) {
+      return { error: "Projects can only be assigned to Kolpoporishor or Kolpokowsol." };
     }
 
     // Year validation: single year
@@ -219,6 +219,7 @@ export async function createProjectAction(
     }
 
     revalidatePath("/admin/projects");
+    revalidatePath("/kolpoporishor");
     revalidatePath("/kolpoporisor");
     revalidatePath("/kolpokowsol");
     return { success: true, projectId: newProject.id };
@@ -355,6 +356,7 @@ export async function updateProjectAction(
     }
 
     revalidatePath("/admin/projects");
+    revalidatePath("/kolpoporishor");
     revalidatePath("/kolpoporisor");
     revalidatePath("/kolpokowsol");
     return { success: true };
@@ -394,6 +396,7 @@ export async function deleteProjectAction(
     }
 
     revalidatePath("/admin/projects");
+    revalidatePath("/kolpoporishor");
     revalidatePath("/kolpoporisor");
     revalidatePath("/kolpokowsol");
     return { success: true };

@@ -5,14 +5,15 @@ import { getPublicStorageUrl } from "@/lib/supabase/storage";
 import type { PublicProjectListItem } from "@/lib/public/projects";
 
 export async function getPublicProjectsAction(
-  companySlug: "kolpokowsol" | "kolpoporisor"
+  companySlug: "kolpokowsol" | "kolpoporishor" | "kolpoporisor"
 ): Promise<PublicProjectListItem[]> {
   try {
     const supabase = await createClient();
+    const effectiveSlug = companySlug === "kolpoporisor" ? "kolpoporishor" : companySlug;
     const { data: company } = await supabase
       .from("companies")
       .select("id")
-      .eq("slug", companySlug)
+      .in("slug", [effectiveSlug, companySlug])
       .maybeSingle();
 
     if (!company) return [];

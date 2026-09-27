@@ -18,7 +18,7 @@ const comp3 = siteConfig.companies[3];
 const companies = [
   {
     id: "01",
-    name: comp1?.name || "Kolpoporisor",
+    name: comp1?.name || "Kolpoporishor",
     tagline: comp1?.description || "Consultancy",
     icon: <RiBuilding4Line size={24} />,
     color: "#5A6B31",

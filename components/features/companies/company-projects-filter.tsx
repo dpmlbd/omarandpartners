@@ -16,7 +16,7 @@ const CATEGORIES = [
 ] as const;
 
 interface CompanyProjectsFilterProps {
-  companySlug: "kolpokowsol" | "kolpoporisor";
+  companySlug: "kolpokowsol" | "kolpoporishor" | "kolpoporisor";
   initialProjects: PublicProjectListItem[];
 }
 

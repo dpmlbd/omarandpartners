@@ -11,7 +11,7 @@ ALTER TABLE public.team
 
 -- 2. Backfill any team members that have NULL company_id to an active company
 UPDATE public.team 
-SET company_id = (SELECT id FROM public.companies WHERE slug = 'kolpoporisor' LIMIT 1)
+SET company_id = (SELECT id FROM public.companies WHERE slug = 'kolpoporishor' LIMIT 1)
 WHERE company_id IS NULL;
 
 -- 3. Enforce NOT NULL on company_id so every member is assigned to a practice

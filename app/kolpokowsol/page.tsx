@@ -280,6 +280,7 @@ export default function KolpokowsolPage() {
 
       {/* ── 05. SOCIAL MEDIA SECTION ──────────────────────────────── */}
       <SocialChannelsSection
+        companySlug="kolpokowsol"
         index="05"
         title="Social Media"
         subtitle="Follow Kolpokowsol for behind-the-scenes glimpses, material studies, and newly completed spatial works."

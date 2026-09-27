@@ -12,7 +12,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](./LICENSE)
 
 <p align="center">
-  A state-of-the-art enterprise digital platform representing <strong>Omar & Partners</strong> and its tripartite ecosystem of specialized subsidiaries: <strong>Kolpoporisor</strong> (Architecture), <strong>Kolpokowsol</strong> (Interior Design), and <strong>INEX</strong> (Building Materials).
+  A state-of-the-art enterprise digital platform representing <strong>Omar & Partners</strong> and its tripartite ecosystem of specialized subsidiaries: <strong>Kolpoporishor</strong> (Architecture), <strong>Kolpokowsol</strong> (Interior Design), and <strong>INEX</strong> (Building Materials).
 </p>
 
 </div>
@@ -36,7 +36,7 @@ graph TD
 
     %% Operating Subsidiaries
     subgraph TriadEcosystem ["THE OPERATING TRIAD"]
-        ARCH["📐 KOLPOPORISOR<br/><b>01_ARCH · Architecture</b><br/>• Master Planning & Urban Design<br/>• Civic & Commercial Landmarks<br/>• Structural & Sustainable Engineering"]
+        ARCH["📐 KOLPOPORISHOR<br/><b>01_ARCH · Architecture</b><br/>• Master Planning & Urban Design<br/>• Civic & Commercial Landmarks<br/>• Structural & Sustainable Engineering"]
         INT["🛋️ KOLPOKOWSOL<br/><b>02_INT · Interior Design</b><br/>• Luxury Residential & Hospitality<br/>• Spatial Planning & Human Scale<br/>• Custom Millwork & Bespoke Furnishings"]
         MAT["🧱 INEX<br/><b>03_MAT · Building Materials</b><br/>• Direct Quarry Stone & Marble<br/>• Engineered Facades & Surfaces<br/>• Architectural Hardware & Supply Chain"]
     end
@@ -81,7 +81,7 @@ graph TD
 | Entity | Code | Primary Discipline | Scope & Capabilities | Portal Route |
 | :--- | :--- | :--- | :--- | :--- |
 | **Omar & Partners** | `O&P` | **Holding Group** | Executive strategy, cross-entity coordination, capital allocation, unified contracts | [`/`](./app/page.tsx) |
-| **Kolpoporisor** | `01_ARCH` | **Architecture** | Master planning, urban architecture, institutional & residential towers, civic infrastructure | [`/kolpoporisor`](./app/kolpoporisor) |
+| **Kolpoporishor** | `01_ARCH` | **Architecture** | Master planning, urban architecture, institutional & residential towers, civic infrastructure | [`/kolpoporishor`](./app/kolpoporishor) |
 | **Kolpokowsol** | `02_INT` | **Interior Design** | High-end hospitality fit-outs, corporate interiors, bespoke furniture, lighting curation | [`/kolpokowsol`](./app/kolpokowsol) |
 | **INEX** | `03_MAT` | **Building Materials** | Direct quarry stone sourcing, facade engineering, architectural hardware, worldwide logistics | [`/inex`](./app/inex) |
 
@@ -117,7 +117,7 @@ omarandpartners/
 │   │   ├── overview/                  # Division capabilities
 │   │   ├── projects/                  # Portfolio & dynamic project details [id]
 │   │   └── services/                  # Interior design service packages
-│   ├── kolpoporisor/                  # Kolpoporisor Architecture portal
+│   ├── kolpoporishor/                 # Kolpoporishor Architecture portal
 │   │   ├── overview/                  # Architectural practice overview
 │   │   ├── projects/                  # Landmark projects & case studies [id]
 │   │   └── services/                  # Architectural services & master planning

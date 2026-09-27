@@ -55,7 +55,7 @@ export default function CareersPage() {
 
           <ScrollReveal delay={0.1}>
             <div className="flex items-center gap-1 mb-12 md:mb-16 overflow-x-auto pb-2">
-              {["ONP", "Kolpokowsol", "Kolpoporisor", "INEX"].map((tab, i) => (
+              {["ONP", "Kolpokowsol", "Kolpoporishor", "INEX"].map((tab, i) => (
                 <button key={tab} onClick={() => setActiveTab(i)} className={`px-6 py-3 text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300 border-b-2 whitespace-nowrap ${activeTab === i ? "border-primary text-foreground" : "border-transparent text-muted-foreground hover:text-foreground/70"}`}>
                   {tab}
                 </button>

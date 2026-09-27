@@ -87,7 +87,7 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
       {/* ── BACK LINK ────────────────────────────────────────────────────── */}
       <div className="container mx-auto px-6 md:px-14 pt-8">
         <Link
-          href="/kolpoporisor#projects"
+          href="/kolpoporishor#projects"
           className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
         >
           <RiArrowLeftLine size={14} /> Back to Projects

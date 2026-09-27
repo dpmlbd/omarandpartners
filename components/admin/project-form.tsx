@@ -150,7 +150,7 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
                   })}
                 </select>
                 <span className="text-[10px] text-muted-foreground/60">
-                  Projects belong strictly to Kolpoporisor or Kolpokowsol.
+                  Projects belong strictly to Kolpoporishor or Kolpokowsol.
                 </span>
               </div>
 

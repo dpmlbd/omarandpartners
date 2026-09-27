@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { RiMailLine } from "@remixicon/react";
-import { defaultSocialChannels } from "@/components/ui/social-channels-section";
+import { getSocialChannels } from "@/static-data/social-media";
 import { siteConfig } from "@/config/site";
 
+const inexChannels = getSocialChannels("inex");
 const compInex = siteConfig.companies.find((c) => c.name === "INEX");
 
 export default function InexComingSoonPage() {
@@ -172,12 +173,12 @@ export default function InexComingSoonPage() {
             </span>
             <span className="w-6 h-[1px] bg-white/10" />
           </div>
-          <div className="grid grid-cols-3 gap-3 sm:gap-4 w-full">
-            {defaultSocialChannels.map((social) => {
+          <div className={`grid ${inexChannels.length === 4 ? "grid-cols-2 sm:grid-cols-4" : inexChannels.length === 2 ? "grid-cols-2" : "grid-cols-3"} gap-3 sm:gap-4 w-full`}>
+            {inexChannels.map((social) => {
               const Icon = social.icon;
               return (
                 <a
-                  key={social.name}
+                  key={social.id || social.name}
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"

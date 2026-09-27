@@ -26,7 +26,7 @@ const triadEntities = [
   {
     id: "01",
     code: "01_KP",
-    name: comp1?.name || "Kolpoporisor",
+    name: comp1?.name || "Kolpoporishor",
     discipline: comp1?.description || "Consultancy",
     essence: "Structure & Form",
     watermark: "STRUCTURE",
@@ -34,7 +34,7 @@ const triadEntities = [
     context: "Urban & Civic",
     image: "/images/architecture.png",
     icon: RiBuilding4Line,
-    href: comp1?.href || "/kolpoporisor",
+    href: comp1?.href || "/kolpoporishor",
   },
   {
     id: "02",
@@ -72,14 +72,14 @@ const services = [
   { type: "list" as const, title: "Group Benchmarks", items: [{ label: "Avg. Client Satisfaction", value: "97%" }, { label: "On-Budget Delivery", value: "92%" }, { label: "Awards Won", value: "13+" }], colSpan: 1 as const, rowSpan: 2 as const },
   { type: "image" as const, title: comp2?.description || "Consultancy & Construction", image: "/images/interior.png", colSpan: 1 as const },
   { type: "stat" as const, title: "Years of Excellence", stat: "15+", statLabel: "Defining spaces since 2010.", dark: true, colSpan: 1 as const },
-  { type: "feature" as const, title: "Material Intelligence", description: "INEX provides direct material supply to both Kolpoporisor and Kolpokowsol, ensuring specifications are met from factory to site.", colSpan: 1 as const },
+  { type: "feature" as const, title: "Material Intelligence", description: "INEX provides direct material supply to both Kolpoporishor and Kolpokowsol, ensuring specifications are met from factory to site.", colSpan: 1 as const },
 ];
 
 const gallery = [
-  { src: "/images/architecture.png", label: "Civic Landmark", company: "Kolpoporisor", span: "col-span-2 row-span-2" },
+  { src: "/images/architecture.png", label: "Civic Landmark", company: "Kolpoporishor", span: "col-span-2 row-span-2" },
   { src: "/images/interior.png", label: "Luxury Penthouse", company: "Kolpokowsol", span: "col-span-1 row-span-1" },
   { src: "/images/materials.png", label: "Material Selection", company: "INEX", span: "col-span-1 row-span-1" },
-  { src: "/images/hero_architecture.png", label: "Urban Complex", company: "Kolpoporisor", span: "col-span-2 row-span-1" },
+  { src: "/images/hero_architecture.png", label: "Urban Complex", company: "Kolpoporishor", span: "col-span-2 row-span-1" },
 ];
 
 const engagementFramework = [
@@ -88,7 +88,7 @@ const engagementFramework = [
     tag: "MODE // 01",
     scope: "Independent Division",
     title: "Specialist Commission",
-    summary: "Direct appointment of Kolpoporisor, Kolpokowsol, or INEX as autonomous specialists for focused architectural, interior, or material scopes.",
+    summary: "Direct appointment of Kolpoporishor, Kolpokowsol, or INEX as autonomous specialists for focused architectural, interior, or material scopes.",
     parameters: [
       { label: "ENGAGEMENT", value: "Single-discipline scope under direct subsidiary principal leadership" },
       { label: "INTERFACE", value: "Integrates directly with client teams, external architects, or general contractors" },
@@ -104,7 +104,7 @@ const engagementFramework = [
     title: "Turnkey Group Delivery",
     summary: `Complete tripartite execution synchronizing ${comp1?.description?.toLowerCase() || "consultancy"}, ${comp2?.description?.toLowerCase() || "consultancy & construction"}, and material supply under one unified holding agreement.`,
     parameters: [
-      { label: "ENGAGEMENT", value: "Synchronized triad execution across Kolpoporisor + Kolpokowsol + INEX" },
+      { label: "ENGAGEMENT", value: "Synchronized triad execution across Kolpoporishor + Kolpokowsol + INEX" },
       { label: "INTERFACE", value: "Unified project directorship with a single point of executive accountability" },
       { label: "DELIVERY", value: "Single master contract, synchronized BIM modeling, and zero contractor scope gaps" },
     ],

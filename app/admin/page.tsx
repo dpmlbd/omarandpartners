@@ -57,7 +57,7 @@ export default async function AdminDashboardPage() {
       count: projectCount,
       href: "/admin/projects",
       icon: RiBuilding4Line,
-      description: "Kolpokowsol & Kolpoporisor portfolio",
+      description: "Kolpokowsol & Kolpoporishor portfolio",
       tag: "Active Works",
     },
     {
@@ -192,7 +192,7 @@ export default async function AdminDashboardPage() {
             <li className="flex items-start gap-2">
               <RiCheckLine size={16} className="text-primary shrink-0 mt-0.5" />
               <span>
-                <strong>Active Companies:</strong> Projects are restricted to <em>Kolpokowsol</em> and <em>Kolpoporisor</em> across 3 official categories (Building, Interior, Landscape).
+                <strong>Active Companies:</strong> Projects are restricted to <em>Kolpokowsol</em> and <em>Kolpoporishor</em> across 3 official categories (Building, Interior, Landscape).
               </span>
             </li>
             <li className="flex items-start gap-2">

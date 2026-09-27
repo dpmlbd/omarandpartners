@@ -5,7 +5,7 @@ const sections = [
     title: "Acceptance of Terms",
     content: `By accessing and using the Omar & Partners website, you accept and agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use our website.
 
-These terms apply to all visitors, users, and others who access or use the website operated by Omar & Partners and its subsidiary companies: Kolpoporisor, Kolpokowsol, and INEX.`
+These terms apply to all visitors, users, and others who access or use the website operated by Omar & Partners and its subsidiary companies: Kolpoporishor, Kolpokowsol, and INEX.`
   },
   {
     title: "Intellectual Property",

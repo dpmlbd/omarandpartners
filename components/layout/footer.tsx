@@ -16,7 +16,7 @@ export function Footer() {
       email: "info@onp-bd.com",
     },
     {
-      name: comp1?.name || "Kolpoporisor",
+      name: comp1?.name || "Kolpoporishor",
       description: comp1?.description || "Consultancy",
       email: "kolpoporishor@gmail.com",
     },
@@ -113,7 +113,7 @@ export function Footer() {
               <div>
                 <p className="font-medium text-background/80 uppercase tracking-widest text-[10px] mb-1.5">Office Address</p>
                 <p className="text-xs font-light text-background/65 leading-relaxed">
-                  13/A SS Khaled Road (1--4, B-1),<br />
+                  13/A SS Khaled Road (L-4, B-1),<br />
                   Kazir Dewri, Chattogram- 4000, Bangladesh
                 </p>
               </div>

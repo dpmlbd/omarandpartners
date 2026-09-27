@@ -23,7 +23,7 @@ const comp2 = siteConfig.companies[2];
 const comp3 = siteConfig.companies[3];
 
 const heroSlides = [
-  { src: "/images/hero_architecture.png", label: comp1?.description || "Consultancy", tag: `01 / ${comp1?.name || "Kolpoporisor"}` },
+  { src: "/images/hero_architecture.png", label: comp1?.description || "Consultancy", tag: `01 / ${comp1?.name || "Kolpoporishor"}` },
   { src: "/images/interior.png", label: comp2?.description || "Consultancy & Construction", tag: `02 / ${comp2?.name || "Kolpokowsol"}` },
   { src: "/images/materials.png", label: comp3?.description || "Building Materials — Coming Soon", tag: `03 / ${comp3?.name || "INEX"}` },
 ];
@@ -35,7 +35,7 @@ const insights = [
 ];
 
 const projects = [
-  { src: "/images/architecture.png", category: comp1?.description || "Consultancy", title: "The Zenith Tower", href: "/kolpoporisor#projects" },
+  { src: "/images/architecture.png", category: comp1?.description || "Consultancy", title: "The Zenith Tower", href: "/kolpoporishor#projects" },
   { src: "/images/interior.png", category: comp2?.description || "Consultancy & Construction", title: "Lumina Residences", href: "/kolpokowsol#projects" },
 ];
 
@@ -120,7 +120,7 @@ export default async function HomePage() {
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="04" title="Selected Works">
             <ScrollReveal delay={0.2}>
-              <Link href="/kolpoporisor#projects" className="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-medium hover:text-primary transition-colors group">
+              <Link href="/kolpoporishor#projects" className="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-medium hover:text-primary transition-colors group">
                 All Projects <RiArrowRightLine size={13} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </ScrollReveal>

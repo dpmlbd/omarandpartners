@@ -17,22 +17,25 @@ const CATEGORIES = [
 
 interface CompanyProjectsFilterProps {
   companySlug: "kolpokowsol" | "kolpoporishor" | "kolpoporisor";
-  initialProjects: PublicProjectListItem[];
+  initialProjects?: PublicProjectListItem[];
 }
 
 export function CompanyProjectsFilter({
   companySlug,
-  initialProjects,
+  initialProjects = [],
 }: CompanyProjectsFilterProps) {
   const [projects, setProjects] = useState<PublicProjectListItem[]>(initialProjects);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [isLoading, setIsLoading] = useState(initialProjects.length === 0);
 
   useEffect(() => {
     let mounted = true;
     async function loadDbProjects() {
+      setIsLoading(true);
       const dbProjects = await getPublicProjectsAction(companySlug);
-      if (mounted && dbProjects && dbProjects.length > 0) {
-        setProjects(dbProjects);
+      if (mounted) {
+        setProjects(dbProjects || []);
+        setIsLoading(false);
       }
     }
     loadDbProjects();
@@ -49,6 +52,9 @@ export function CompanyProjectsFilter({
       selectedCategory.toLowerCase().includes(p.category.toLowerCase())
     );
   });
+
+  const effectiveCompanySlug =
+    companySlug === "kolpoporisor" ? "kolpoporishor" : companySlug;
 
   return (
     <div className="flex flex-col gap-8 mt-12">
@@ -73,16 +79,34 @@ export function CompanyProjectsFilter({
       </div>
 
       {/* Projects Grid */}
-      {filteredProjects.length === 0 ? (
-        <div className="p-12 text-center border border-border text-muted-foreground text-sm font-mono">
-          No projects found in this category.
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border">
+          {[1, 2].map((n) => (
+            <div
+              key={n}
+              className="aspect-[4/3] bg-secondary/20 animate-pulse flex items-center justify-center p-8"
+            >
+              <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/40">
+                Loading projects...
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : filteredProjects.length === 0 ? (
+        <div className="p-16 text-center border border-border bg-card/30 flex flex-col items-center justify-center">
+          <p className="text-sm font-medium uppercase tracking-wider text-muted-foreground font-mono">
+            No projects published yet
+          </p>
+          <p className="text-xs text-muted-foreground/60 mt-1 font-light">
+            Portfolio projects created in the Admin Portal will appear here.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border">
           {filteredProjects.map((project, i) => (
             <ScrollReveal key={project.id} delay={i * 0.08}>
               <Link
-                href={`/${companySlug}/projects/${project.id}`}
+                href={`/${effectiveCompanySlug}/projects/${project.id}`}
                 className="group relative block aspect-[4/3] overflow-hidden bg-secondary"
               >
                 <Image

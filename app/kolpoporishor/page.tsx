@@ -30,15 +30,6 @@ const capabilities = [
   { id: "06", title: "Heritage & Adaptive Reuse", desc: "Sensitive interventions that honor historical fabric while enabling new programming." },
 ];
 
-const projects = [
-  { id: "zenith-tower", title: "The Zenith Tower", category: "Commercial", location: "New York, USA", image: "/images/hero_architecture.png" },
-  { id: "meridian-hub", title: "Meridian Hub", category: "Mixed Use", location: "London, UK", image: "/images/architecture.png" },
-  { id: "crescent-pavilion", title: "Crescent Pavilion", category: "Cultural", location: "Dubai, UAE", image: "/images/architecture.png" },
-  { id: "summit-residences", title: "Summit Residences", category: "Residential", location: "Singapore", image: "/images/hero_architecture.png" },
-  { id: "horizon-plaza", title: "Horizon Plaza", category: "Commercial", location: "Dhaka, BD", image: "/images/architecture.png" },
-  { id: "echo-pavilion", title: "Echo Pavilion", category: "Public", location: "Tokyo, JP", image: "/images/architecture.png" },
-];
-
 const services = [
   {
     id: "01",
@@ -225,7 +216,7 @@ export default function KolpoporishorPage() {
       <section id="projects" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="03" title="Selected Works" subtitle="A curated selection of projects spanning commercial, cultural, residential, and public sectors across 12 countries." />
-          <CompanyProjectsFilter companySlug="kolpoporishor" initialProjects={projects} />
+          <CompanyProjectsFilter companySlug="kolpoporishor" />
         </div>
       </section>
 

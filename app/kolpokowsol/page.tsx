@@ -30,15 +30,6 @@ const capabilities = [
   { id: "06", title: "Bespoke Joinery", desc: "Custom furniture and built-in millwork crafted by master artisans to exacting specifications." },
 ];
 
-const projects = [
-  { id: "lumina-residences", title: "Lumina Residences", category: "Residential", location: "New York, USA", image: "/images/interior.png" },
-  { id: "serene-hotel", title: "Serene Hotel", category: "Hospitality", location: "London, UK", image: "/images/materials.png" },
-  { id: "apex-tower", title: "Apex Tower Lobby", category: "Corporate", location: "Dubai, UAE", image: "/images/interior.png" },
-  { id: "verde-spa", title: "Verde Spa", category: "Wellness", location: "Singapore", image: "/images/materials.png" },
-  { id: "noir-restaurant", title: "Noir Restaurant", category: "Hospitality", location: "Paris, FR", image: "/images/interior.png" },
-  { id: "canvas-office", title: "Canvas Office", category: "Workplace", location: "Dhaka, BD", image: "/images/materials.png" },
-];
-
 const services = [
   {
     id: "01",
@@ -227,7 +218,7 @@ export default function KolpokowsolPage() {
       <section id="projects" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="03" title="Selected Works" subtitle="A curated selection of interior projects spanning residential, hospitality, corporate, and wellness." />
-          <CompanyProjectsFilter companySlug="kolpokowsol" initialProjects={projects} />
+          <CompanyProjectsFilter companySlug="kolpokowsol" />
         </div>
       </section>
 

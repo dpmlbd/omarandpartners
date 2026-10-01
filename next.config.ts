@@ -35,6 +35,16 @@ const nextConfig: NextConfig = {
         destination: "/kolpoporishor/:path*",
         permanent: true,
       },
+      {
+        source: "/cookies",
+        destination: "/legal/cookie-policy",
+        permanent: true,
+      },
+      {
+        source: "/cookie-policy",
+        destination: "/legal/cookie-policy",
+        permanent: true,
+      },
     ];
   },
 };

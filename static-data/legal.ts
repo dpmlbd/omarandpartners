@@ -31,8 +31,8 @@ We may also disclose your information where required by law, or when we believe 
     content: `We retain your personal information for as long as necessary to fulfill the purposes outlined in this policy, unless a longer retention period is required by law. When your information is no longer needed, we will securely delete or anonymize it.`
   },
   {
-    title: "Cookies",
-    content: `Our website uses cookies to enhance your browsing experience, analyze site traffic, and personalize content. You may choose to disable cookies through your browser settings, though this may affect your ability to use certain features of our website. Please see our Cookie Policy for more information.`
+    title: "Cookies & Local Storage",
+    content: `Our website does not use tracking, advertising, or profiling cookies. We do not engage in cross-site tracking or commercial analytics. The only local data saved is strictly essential for site preferences (such as your visual theme choice). Please see our Cookie Policy for full transparency.`
   },
   {
     title: "Your Rights",
@@ -110,63 +110,31 @@ Any disputes arising under these terms shall be subject to the exclusive jurisdi
 
 export const cookiePolicySections: LegalSection[] = [
   {
-    title: "What Are Cookies?",
-    content: `Cookies are small text files placed on your device by websites you visit. They are widely used to make websites work more efficiently and to provide information to the site owners.
-
-Cookies may be "session cookies" (deleted when you close your browser) or "persistent cookies" (remaining until they expire or you delete them).`
+    title: "Zero-Tracking Commitment",
+    content: `At Omar & Partners, we prioritize architectural clarity and digital privacy. We do not use cookies to track your browsing activities across other websites, compile behavioral profiles, or serve targeted commercial advertising. We do not use marketing pixels, ad networks, or commercial analytics trackers.`
   },
   {
-    title: "How We Use Cookies",
-    content: `Omar & Partners uses cookies to:
+    title: "What Data We Store Locally",
+    content: `The only data stored on your device is strictly essential for site operation, visual performance, and security:
 
-• Ensure the website functions correctly
-• Remember your preferences and settings
-• Understand how visitors use our website through analytics
-• Improve and personalize your browsing experience
-• Deliver relevant content based on your interests`
+• Theme Preference: We save your chosen appearance mode (Light or Dark) in local storage via next-themes so the website renders in your preferred styling.
+• Notice Acknowledgment: We store a simple local flag when you acknowledge our transparency notice so you are not repeatedly prompted during your visits.
+• Admin Session Security: For authorized team members logging into the administrative portal, secure authentication tokens are used strictly to safeguard dashboard access.
+
+None of this information is sold, shared with advertising brokers, or used for behavioral surveillance.`
   },
   {
-    title: "Types of Cookies We Use",
-    content: `Strictly Necessary Cookies
-These cookies are essential for the website to function and cannot be disabled. They are usually set in response to actions you take, such as filling in forms.
-
-Performance & Analytics Cookies
-We use analytics tools (such as Google Analytics) to understand how visitors interact with our website. These cookies collect aggregated, anonymous data to help us improve performance.
-
-Functional Cookies
-These cookies allow us to remember choices you make on our website to provide enhanced, more personal features.
-
-Marketing Cookies
-With your consent, we may use cookies to serve you relevant advertising and to track the effectiveness of our marketing campaigns.`
+    title: "Third-Party Cookies & Analytics",
+    content: `We currently do not run third-party tracking cookies, user profiling engines, or external marketing analytics on our public pages. Any assets (such as official typefaces and imagery) are served directly to deliver optimal speed, aesthetics, and reliability without third-party surveillance.`
   },
   {
-    title: "Third-Party Cookies",
-    content: `Some cookies on our website are placed by third-party services we use, including:
+    title: "Managing Local Data & Preferences",
+    content: `Because we do not store tracking or profiling cookies, you do not need complex consent banners to protect your privacy on our website.
 
-• Google Analytics — for website analytics
-• Google Maps — for embedded location maps
-• LinkedIn, Instagram — for embedded social media content
-
-These third parties have their own privacy policies governing their use of cookies. We encourage you to review their policies.`
+You are always free to clear your browser cookies, cache, and local storage at any time through your browser's security settings. Doing so will simply reset your light/dark theme preference to the system default.`
   },
   {
-    title: "Managing Cookies",
-    content: `You can control and manage cookies through your browser settings. Most browsers allow you to:
-
-• View which cookies are stored and delete them individually
-• Block third-party cookies
-• Block cookies from specific websites
-• Block all cookies
-• Delete all cookies when you close your browser
-
-Please note that disabling certain cookies may affect the functionality of our website.`
-  },
-  {
-    title: "Cookie Consent",
-    content: `When you first visit our website, you will be presented with a cookie banner requesting your consent for non-essential cookies. You may withdraw or adjust your cookie preferences at any time by visiting the cookie settings link in our website footer.`
-  },
-  {
-    title: "Updates to This Policy",
-    content: `We may update this Cookie Policy from time to time to reflect changes in technology, regulation, or our use of cookies. We will notify you of any significant changes by updating the effective date below and, where appropriate, by displaying a notice on our website.`
+    title: "Policy Updates",
+    content: `If we ever introduce interactive services or functional features that require non-essential cookies in the future, we will update this policy and provide a clear, explicit consent mechanism before any such cookies are placed on your device.`
   },
 ];

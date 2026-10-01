@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { termsAndConditionsSections as sections } from "@/static-data/legal";
+
+export const metadata: Metadata = {
+  title: "ONP | Terms & Conditions",
+  description: "Terms and Conditions governing the use of Omar & Partners digital platform and project inquiries.",
+};
 
 export default function TermsAndConditionsPage() {
   return (
@@ -41,7 +47,7 @@ export default function TermsAndConditionsPage() {
             {/* Content col */}
             <div className="md:col-span-8 flex flex-col divide-y divide-border">
               <p className="pb-12 text-muted-foreground text-sm leading-relaxed font-light">
-                Please read these Terms and Conditions carefully before using the Omar &amp; Partners website. These terms govern your use of our website and any services offered through it.
+                Please review these Terms and Conditions carefully prior to engaging with the Omar &amp; Partners platform. These provisions govern your interaction with our digital presence, architectural portfolio assets, and preliminary project consultation requests across our group ecosystem: Kolpoporishor, Kolpokowsol, and INEX.
               </p>
               {sections.map((section, i) => (
                 <div key={i} id={`section-${i}`} className="py-10 scroll-mt-28">

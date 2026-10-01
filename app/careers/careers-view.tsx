@@ -7,15 +7,31 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { StatsGrid } from "@/components/ui/stats-grid";
 import { CTASection } from "@/components/ui/cta-section";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { RiArrowRightLine, RiCloseLine, RiMapPinLine, RiTimeLine, RiBriefcaseLine, RiBuildingLine, RiLightbulbLine, RiGroupLine } from "@remixicon/react";
-import { jobs, tabs, onpStats, type Job } from "@/static-data/careers";
+import {
+  RiArrowRightLine,
+  RiMapPinLine,
+  RiTimeLine,
+  RiBriefcaseLine,
+  RiArrowDownSLine,
+  RiCheckLine,
+  RiMailLine,
+} from "@remixicon/react";
+import { jobs as defaultJobs, tabs, onpStats, type Job } from "@/static-data/careers";
 
-export function CareersView() {
-  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+interface CareersViewProps {
+  initialJobs?: Job[];
+}
+
+export function CareersView({ initialJobs = defaultJobs }: CareersViewProps) {
+  const [expandedJobId, setExpandedJobId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState(0);
 
-  const openGmail = (jobTitle: string) => {
-    const to = "info@onp-bd.com";
+  const toggleJob = (id: string) => {
+    setExpandedJobId((prev) => (prev === id ? null : id));
+  };
+
+  const openGmail = (jobTitle: string, email?: string) => {
+    const to = email || "info@onp-bd.com";
     const subject = encodeURIComponent(`Application for ${jobTitle} - [Your Name]`);
     const body = encodeURIComponent(
       `Dear Recruiting Team,\n\nI am writing to express my interest in the ${jobTitle} position at Omar & Partners.\n\nPlease find attached my Resume and Portfolio for your review.\n\nBest regards,\n[Your Name]\n[Your Contact Number]\n[Portfolio Link / LinkedIn Link]`
@@ -99,70 +115,171 @@ export function CareersView() {
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="02" title="Open Positions" subtitle="Find your fit within our multi-disciplinary holding ecosystem." />
 
-          <div className="grid grid-cols-1 gap-px border border-border bg-border">
-            {jobs.map((job) => (
-              <ScrollReveal key={job.id}>
-                <div onClick={() => setSelectedJob(job)} className="group flex flex-col sm:flex-row justify-between items-start sm:items-center p-8 bg-background hover:bg-secondary/20 transition-all duration-300 cursor-pointer">
-                  <div className="flex flex-col gap-2">
-                    <span className="text-[10px] uppercase tracking-widest text-foreground font-medium">{job.division}</span>
-                    <h3 className="font-heading text-xl md:text-2xl font-medium tracking-tight uppercase group-hover:text-primary transition-colors">{job.title}</h3>
-                    <div className="flex flex-wrap gap-4 text-xs text-muted-foreground font-light mt-1">
-                      <span className="flex items-center gap-1.5"><RiMapPinLine size={14} />{job.location}</span>
-                      <span className="flex items-center gap-1.5"><RiTimeLine size={14} />{job.type}</span>
+          {initialJobs.length === 0 ? (
+            <div className="border border-border p-16 md:p-24 bg-background text-center flex flex-col items-center justify-center">
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-3">
+                Current Opportunities
+              </span>
+              <h3 className="font-heading text-3xl md:text-5xl font-semibold uppercase tracking-tight text-foreground">
+                Stay Tuned
+              </h3>
+              <p className="text-muted-foreground text-sm max-w-lg mt-4 font-light leading-relaxed">
+                There are currently no open positions listed. We are continually growing our architectural, interior, and procurement teams. Please check back soon or send your speculative CV and portfolio to{" "}
+                <a
+                  href="mailto:info@onp-bd.com"
+                  className="text-foreground hover:text-primary transition-colors underline underline-offset-4 font-normal"
+                >
+                  info@onp-bd.com
+                </a>.
+              </p>
+            </div>
+          ) : (
+            <div className="border border-border bg-background divide-y divide-border shadow-sm">
+              {initialJobs.map((job) => {
+                const isExpanded = expandedJobId === job.id;
+                return (
+                  <ScrollReveal key={job.id}>
+                    <div className="transition-colors">
+                      {/* Accordion Trigger Header */}
+                      <button
+                        type="button"
+                        onClick={() => toggleJob(job.id)}
+                        aria-expanded={isExpanded}
+                        className="w-full text-left p-6 md:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-secondary/20 transition-all duration-300 group focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+                      >
+                        <div className="flex flex-col gap-2">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-[10px] uppercase font-mono tracking-widest text-primary font-semibold">
+                              {job.division}
+                            </span>
+                            {job.experience && (
+                              <span className="text-[9px] uppercase tracking-widest px-2 py-0.5 font-medium bg-secondary text-secondary-foreground border border-border">
+                                {job.experience}
+                              </span>
+                            )}
+                          </div>
+
+                          <h3 className="font-heading text-xl md:text-2xl font-medium tracking-tight uppercase group-hover:text-primary transition-colors">
+                            {job.title}
+                          </h3>
+
+                          <div className="flex flex-wrap gap-4 text-xs text-muted-foreground font-light">
+                            <span className="flex items-center gap-1.5">
+                              <RiMapPinLine size={14} className="text-primary/70" />
+                              {job.location}
+                            </span>
+                            <span className="flex items-center gap-1.5">
+                              <RiTimeLine size={14} className="text-primary/70" />
+                              {job.type}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
+                          <span className="text-xs uppercase tracking-widest font-semibold text-muted-foreground group-hover:text-primary transition-colors">
+                            {isExpanded ? "Hide Details" : "View Details"}
+                          </span>
+                          <div
+                            className={`w-8 h-8 rounded-full border border-border flex items-center justify-center transition-all duration-300 ${
+                              isExpanded
+                                ? "rotate-180 bg-foreground text-background border-foreground"
+                                : "group-hover:border-primary group-hover:text-primary"
+                            }`}
+                          >
+                            <RiArrowDownSLine size={18} />
+                          </div>
+                        </div>
+                      </button>
+
+                      {/* Accordion Expandable Content */}
+                      <AnimatePresence initial={false}>
+                        {isExpanded && (
+                          <motion.div
+                            key={`accordion-${job.id}`}
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                            className="overflow-hidden"
+                          >
+                            <div className="p-6 md:p-10 pt-2 border-t border-border/60 bg-secondary/[0.04] flex flex-col gap-8">
+                              {/* Role Description */}
+                              <div className="flex flex-col gap-2">
+                                <span className="text-[10px] uppercase font-mono tracking-widest text-primary font-semibold">
+                                  Role Overview
+                                </span>
+                                <p className="text-sm text-muted-foreground leading-relaxed font-light">
+                                  {job.desc}
+                                </p>
+                              </div>
+
+                              {/* Two Columns: Requirements & Benefits */}
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Requirements */}
+                                <div className="flex flex-col gap-3 p-6 border border-border bg-background">
+                                  <span className="text-[11px] uppercase font-mono tracking-widest text-foreground font-semibold flex items-center gap-2">
+                                    <RiBriefcaseLine size={14} className="text-primary" /> Key Requirements
+                                  </span>
+                                  <ul className="text-xs text-muted-foreground leading-relaxed font-light flex flex-col gap-2.5">
+                                    {job.requirements.map((req, index) => (
+                                      <li key={index} className="flex items-start gap-2">
+                                        <span className="text-primary mt-0.5">•</span>
+                                        <span>{req}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+
+                                {/* Benefits */}
+                                <div className="flex flex-col gap-3 p-6 border border-border bg-background">
+                                  <span className="text-[11px] uppercase font-mono tracking-widest text-foreground font-semibold flex items-center gap-2">
+                                    <RiCheckLine size={14} className="text-primary" /> Compensation &amp; Benefits
+                                  </span>
+                                  <ul className="text-xs text-muted-foreground leading-relaxed font-light flex flex-col gap-2.5">
+                                    {job.benefits.map((benefit, index) => (
+                                      <li key={index} className="flex items-start gap-2">
+                                        <span className="text-primary mt-0.5">•</span>
+                                        <span>{benefit}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              </div>
+
+                              {/* Application Action Bar */}
+                              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 border-t border-border pt-6 mt-2">
+                                <div className="text-xs text-muted-foreground font-light">
+                                  Questions or speculative portfolios:{" "}
+                                  <a
+                                    href={`mailto:${job.applicationEmail || "info@onp-bd.com"}`}
+                                    className="text-foreground hover:text-primary transition-colors font-medium underline underline-offset-4"
+                                  >
+                                    {job.applicationEmail || "info@onp-bd.com"}
+                                  </a>
+                                </div>
+
+                                <div className="flex items-center">
+                                  <button
+                                    type="button"
+                                    onClick={() => openGmail(job.title, job.applicationEmail)}
+                                    className="bg-foreground text-background uppercase tracking-widest text-xs font-semibold px-6 py-3 hover:bg-primary transition-colors flex items-center justify-center gap-2"
+                                  >
+                                    Apply via Gmail <RiArrowRightLine size={14} />
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
-                  </div>
-                  <div className="mt-6 sm:mt-0 flex items-center gap-2 text-xs uppercase tracking-widest font-semibold group-hover:text-primary transition-colors">
-                    View Details <RiArrowRightLine size={14} className="group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
+                  </ScrollReveal>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
-
-      <AnimatePresence>
-        {selectedJob && (
-          <div className="fixed inset-0 bg-foreground/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }} className="bg-background max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-none border border-border shadow-2xl p-6 md:p-10 relative flex flex-col gap-6">
-              <button onClick={() => setSelectedJob(null)} className="absolute top-6 right-6 p-2 rounded-full hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"><RiCloseLine size={20} /></button>
-
-              <div className="flex flex-col gap-2 mt-4 md:mt-0 border-b border-border pb-6">
-                <span className="text-xs uppercase tracking-widest text-foreground font-semibold">{selectedJob.division}</span>
-                <h2 className="font-heading text-2xl md:text-4xl font-semibold uppercase tracking-tight">{selectedJob.title}</h2>
-                <div className="flex flex-wrap gap-6 text-xs text-muted-foreground font-light mt-2">
-                  <span className="flex items-center gap-1.5"><RiMapPinLine size={14} />{selectedJob.location}</span>
-                  <span className="flex items-center gap-1.5"><RiTimeLine size={14} />{selectedJob.type}</span>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <h4 className="text-xs uppercase tracking-widest font-semibold text-foreground">Role Description</h4>
-                <p className="text-sm text-muted-foreground leading-relaxed font-light">{selectedJob.desc}</p>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <h4 className="text-xs uppercase tracking-widest font-semibold text-foreground">Key Requirements</h4>
-                <ul className="list-disc pl-5 text-sm text-muted-foreground leading-relaxed font-light flex flex-col gap-1.5">
-                  {selectedJob.requirements.map((req, index) => (<li key={index}>{req}</li>))}
-                </ul>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <h4 className="text-xs uppercase tracking-widest font-semibold text-foreground">Compensation &amp; Benefits</h4>
-                <ul className="list-disc pl-5 text-sm text-muted-foreground leading-relaxed font-light flex flex-col gap-1.5">
-                  {selectedJob.benefits.map((benefit, index) => (<li key={index}>{benefit}</li>))}
-                </ul>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 border-t border-border pt-6 mt-4">
-                <button onClick={() => openGmail(selectedJob.title)} className="bg-foreground text-background uppercase tracking-widest text-xs font-semibold px-8 py-4 rounded-none hover:bg-primary transition-colors flex items-center justify-center gap-2 flex-1">Apply via Gmail <RiArrowRightLine size={14} /></button>
-                <button onClick={() => setSelectedJob(null)} className="border border-border text-foreground uppercase tracking-widest text-xs font-semibold px-8 py-4 rounded-none hover:bg-secondary transition-colors">Close Window</button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
     </div>
   );

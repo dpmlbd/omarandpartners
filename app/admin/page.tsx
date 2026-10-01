@@ -7,6 +7,7 @@ import {
   RiChatQuoteLine,
   RiArticleLine,
   RiShieldUserLine,
+  RiBriefcaseLine,
   RiArrowRightLine,
   RiCheckLine,
   RiTimeLine,
@@ -24,6 +25,7 @@ export default async function AdminDashboardPage() {
   let testimonialCount = 0;
   let articleCount = 0;
   let moderatorCount = 0;
+  let jobCount = 0;
 
   try {
     const [
@@ -32,12 +34,14 @@ export default async function AdminDashboardPage() {
       { count: testCount },
       { count: aCount },
       { count: mCount },
+      { count: jCount },
     ] = await Promise.all([
       supabase.from("projects").select("*", { count: "exact", head: true }),
       supabase.from("team").select("*", { count: "exact", head: true }),
       supabase.from("testimonials").select("*", { count: "exact", head: true }),
       supabase.from("articles").select("*", { count: "exact", head: true }),
       supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "moderator"),
+      supabase.from("jobs").select("*", { count: "exact", head: true }),
     ]);
 
     projectCount = pCount || 0;
@@ -45,6 +49,7 @@ export default async function AdminDashboardPage() {
     testimonialCount = testCount || 0;
     articleCount = aCount || 0;
     moderatorCount = mCount || 0;
+    jobCount = jCount || 0;
   } catch (err) {
     console.warn("Could not query entity counts (Supabase may not be initialized yet):", err);
   }
@@ -83,6 +88,14 @@ export default async function AdminDashboardPage() {
       icon: RiArticleLine,
       description: "Editorial spatial publications",
       tag: "Publications",
+    },
+    {
+      title: "Careers & Jobs",
+      count: jobCount,
+      href: "/admin/careers",
+      icon: RiBriefcaseLine,
+      description: "Open positions across all divisions",
+      tag: "Talent Acquisition",
     },
     ...(role === "admin"
       ? [

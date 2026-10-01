@@ -119,6 +119,29 @@ CREATE TABLE IF NOT EXISTS public.articles (
 CREATE INDEX IF NOT EXISTS idx_articles_author ON public.articles(author_id);
 CREATE INDEX IF NOT EXISTS idx_articles_published ON public.articles(published);
 
+-- 9. Jobs / Careers table
+CREATE TABLE IF NOT EXISTS public.jobs (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title TEXT NOT NULL,
+  division TEXT NOT NULL,
+  company_name TEXT NOT NULL,
+  location TEXT NOT NULL,
+  job_type TEXT NOT NULL DEFAULT 'Full-Time',
+  experience TEXT,
+  description TEXT NOT NULL,
+  requirements TEXT[] NOT NULL DEFAULT '{}',
+  benefits TEXT[] NOT NULL DEFAULT '{}',
+  application_email TEXT NOT NULL DEFAULT 'info@onp-bd.com',
+  published BOOLEAN NOT NULL DEFAULT true,
+  display_order INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_jobs_published ON public.jobs(published);
+CREATE INDEX IF NOT EXISTS idx_jobs_display_order ON public.jobs(display_order);
+CREATE INDEX IF NOT EXISTS idx_jobs_company_name ON public.jobs(company_name);
+
 -- ==============================================================================
 -- Updated_at Trigger Function
 -- ==============================================================================
@@ -135,6 +158,7 @@ CREATE TRIGGER trg_projects_updated_at BEFORE UPDATE ON public.projects FOR EACH
 CREATE TRIGGER trg_team_updated_at BEFORE UPDATE ON public.team FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 CREATE TRIGGER trg_testimonials_updated_at BEFORE UPDATE ON public.testimonials FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 CREATE TRIGGER trg_articles_updated_at BEFORE UPDATE ON public.articles FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+CREATE TRIGGER trg_jobs_updated_at BEFORE UPDATE ON public.jobs FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 
 -- ==============================================================================
 -- Storage Bucket Setup
@@ -153,6 +177,7 @@ ALTER TABLE public.project_images ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.team ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.testimonials ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.articles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.jobs ENABLE ROW LEVEL SECURITY;
 
 -- Helper function to check if current user is active profile
 CREATE OR REPLACE FUNCTION public.current_profile_role()
@@ -199,6 +224,12 @@ CREATE POLICY "Staff manage testimonials" ON public.testimonials FOR ALL
 CREATE POLICY "Public read published articles" ON public.articles FOR SELECT 
   USING (published = true OR public.current_profile_role() IN ('admin', 'moderator'));
 CREATE POLICY "Staff manage articles" ON public.articles FOR ALL 
+  USING (public.current_profile_role() IN ('admin', 'moderator'));
+
+-- Jobs: Public read published; Staff manage
+CREATE POLICY "Public read published jobs" ON public.jobs FOR SELECT 
+  USING (published = true OR public.current_profile_role() IN ('admin', 'moderator'));
+CREATE POLICY "Staff manage jobs" ON public.jobs FOR ALL 
   USING (public.current_profile_role() IN ('admin', 'moderator'));
 
 -- Storage Policies for 'onp-media'

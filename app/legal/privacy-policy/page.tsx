@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { privacyPolicySections as sections } from "@/static-data/legal";
+
+export const metadata: Metadata = {
+  title: "ONP | Privacy Policy",
+  description: "Privacy Policy and data protection commitments of Omar & Partners and its affiliated studios.",
+};
 
 export default function PrivacyPolicyPage() {
   return (
@@ -41,7 +47,7 @@ export default function PrivacyPolicyPage() {
             {/* Content col */}
             <div className="md:col-span-8 flex flex-col divide-y divide-border">
               <p className="pb-12 text-muted-foreground text-sm leading-relaxed font-light">
-                Omar &amp; Partners (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and protect your personal information when you visit our website or engage with our services.
+                Omar &amp; Partners (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is committed to protecting your privacy and practicing uncompromising data stewardship. This Privacy Policy details how we handle inquiry information, project documentation, and client confidentiality across Omar &amp; Partners and our collaborative ecosystem: Kolpoporishor, Kolpokowsol, and INEX.
               </p>
               {sections.map((section, i) => (
                 <div key={i} id={`section-${i}`} className="py-10 scroll-mt-28">

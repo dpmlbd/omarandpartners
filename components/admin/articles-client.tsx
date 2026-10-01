@@ -10,6 +10,7 @@ import {
   deleteArticleAction,
 } from "@/lib/actions/articles";
 import type { Article, TeamMember } from "@/types/database";
+import { toast } from "@/components/ui/toast";
 import {
   RiAddLine,
   RiEditLine,
@@ -68,7 +69,13 @@ export function ArticlesClient({
 
         if (result?.error) {
           setError(result.error);
+          toast.error(result.error);
         } else {
+          toast.success(
+            editingItem
+              ? "Article updated successfully"
+              : "New article published successfully"
+          );
           setIsModalOpen(false);
           window.location.reload();
         }
@@ -79,6 +86,7 @@ export function ArticlesClient({
             ? err.message
             : "Failed to upload and save article. Please check the image and try again.";
         setError(msg);
+        toast.error(msg);
       }
     });
   };
@@ -88,8 +96,13 @@ export function ArticlesClient({
       const nextPublished = !item.published;
       const result = await toggleArticlePublishedAction(item.id, nextPublished);
       if (result.error) {
-        alert(result.error);
+        toast.error(result.error);
       } else {
+        toast.success(
+          nextPublished
+            ? `Article "${item.title}" published`
+            : `Article "${item.title}" moved to drafts`
+        );
         setArticles((prev) =>
           prev.map((a) => (a.id === item.id ? { ...a, published: nextPublished } : a))
         );
@@ -105,8 +118,9 @@ export function ArticlesClient({
     startTransition(async () => {
       const result = await deleteArticleAction(item.id);
       if (result.error) {
-        alert(result.error);
+        toast.error(result.error);
       } else {
+        toast.success(`Article "${item.title}" deleted`);
         setArticles((prev) => prev.filter((a) => a.id !== item.id));
       }
     });

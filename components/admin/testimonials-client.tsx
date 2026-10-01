@@ -10,6 +10,7 @@ import {
   deleteTestimonialAction,
 } from "@/lib/actions/testimonials";
 import type { Testimonial } from "@/types/database";
+import { toast } from "@/components/ui/toast";
 import {
   RiAddLine,
   RiEditLine,
@@ -73,7 +74,13 @@ export function TestimonialsClient({
 
         if (result?.error) {
           setError(result.error);
+          toast.error(result.error);
         } else {
+          toast.success(
+            editingItem
+              ? "Testimonial updated successfully"
+              : "New testimonial created successfully"
+          );
           setIsModalOpen(false);
           window.location.reload();
         }
@@ -84,6 +91,7 @@ export function TestimonialsClient({
             ? err.message
             : "Failed to upload and save testimonial. Please check the image and try again.";
         setError(msg);
+        toast.error(msg);
       }
     });
   };
@@ -93,8 +101,13 @@ export function TestimonialsClient({
       const nextPublished = !item.published;
       const result = await toggleTestimonialPublishedAction(item.id, nextPublished);
       if (result.error) {
-        alert(result.error);
+        toast.error(result.error);
       } else {
+        toast.success(
+          nextPublished
+            ? `Testimonial from "${item.name}" published`
+            : `Testimonial from "${item.name}" moved to drafts`
+        );
         setTestimonials((prev) =>
           prev.map((t) => (t.id === item.id ? { ...t, published: nextPublished } : t))
         );
@@ -110,8 +123,9 @@ export function TestimonialsClient({
     startTransition(async () => {
       const result = await deleteTestimonialAction(item.id);
       if (result.error) {
-        alert(result.error);
+        toast.error(result.error);
       } else {
+        toast.success(`Testimonial from "${item.name}" deleted`);
         setTestimonials((prev) => prev.filter((t) => t.id !== item.id));
       }
     });

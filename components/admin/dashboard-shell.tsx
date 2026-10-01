@@ -28,6 +28,7 @@ import {
   RiCloseLine,
   RiUser3Line,
   RiLayoutLeftLine,
+  RiBriefcaseLine,
 } from "@remixicon/react";
 
 interface DashboardShellProps {
@@ -58,6 +59,7 @@ export function DashboardShell({
     { name: "Team", href: "/admin/team", icon: RiTeamLine },
     { name: "Testimonials", href: "/admin/testimonials", icon: RiChatQuoteLine },
     { name: "Articles", href: "/admin/articles", icon: RiArticleLine },
+    { name: "Careers", href: "/admin/careers", icon: RiBriefcaseLine },
     // Only Admin can see Moderators navigation
     ...(role === "admin"
       ? [{ name: "Moderators", href: "/admin/moderators", icon: RiShieldUserLine }]

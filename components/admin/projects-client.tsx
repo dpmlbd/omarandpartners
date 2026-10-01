@@ -6,6 +6,7 @@ import Image from "next/image";
 import { deleteProjectAction } from "@/lib/actions/projects";
 import { getPublicStorageUrl } from "@/lib/supabase/storage";
 import type { Company, Project } from "@/types/database";
+import { toast } from "@/components/ui/toast";
 import {
   RiAddLine,
   RiEditLine,
@@ -56,8 +57,9 @@ export function ProjectsClient({
     startTransition(async () => {
       const result = await deleteProjectAction(project.id);
       if (result.error) {
-        alert(result.error);
+        toast.error(result.error);
       } else {
+        toast.success(`Project "${project.title}" deleted successfully`);
         setProjects((prev) => prev.filter((p) => p.id !== project.id));
       }
     });

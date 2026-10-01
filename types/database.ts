@@ -95,6 +95,24 @@ export interface Article {
   author?: TeamMember | null;
 }
 
+export interface DbJob {
+  id: string;
+  title: string;
+  division: string;
+  company_name: string;
+  location: string;
+  job_type: string;
+  experience?: string | null;
+  description: string;
+  requirements: string[];
+  benefits: string[];
+  application_email: string;
+  published: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -161,6 +179,16 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Omit<Article, "id" | "created_at" | "updated_at" | "author">>;
+        Relationships: [];
+      };
+      jobs: {
+        Row: DbJob;
+        Insert: Omit<DbJob, "id" | "created_at" | "updated_at"> & {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<DbJob, "id" | "created_at" | "updated_at">>;
         Relationships: [];
       };
     };

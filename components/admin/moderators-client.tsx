@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import type { Profile } from "@/types/database";
+import { toast } from "@/components/ui/toast";
 import {
   createModeratorAction,
   updateModeratorStatusAction,
@@ -35,7 +36,9 @@ export function ModeratorsClient({ initialModerators }: ModeratorsClientProps) {
       const result = await createModeratorAction(null, formData);
       if (result.error) {
         setFormError(result.error);
+        toast.error(result.error);
       } else {
+        toast.success("Moderator invited successfully");
         setIsModalOpen(false);
         window.location.reload();
       }
@@ -58,8 +61,11 @@ export function ModeratorsClient({ initialModerators }: ModeratorsClientProps) {
     startTransition(async () => {
       const result = await updateModeratorStatusAction(mod.id, nextStatus);
       if (result.error) {
-        alert(result.error);
+        toast.error(result.error);
       } else {
+        toast.success(
+          `Moderator "${mod.name}" is now ${nextStatus}`
+        );
         setModerators((prev) =>
           prev.map((m) => (m.id === mod.id ? { ...m, status: nextStatus } : m))
         );
@@ -80,8 +86,9 @@ export function ModeratorsClient({ initialModerators }: ModeratorsClientProps) {
     startTransition(async () => {
       const result = await deleteModeratorAction(mod.id);
       if (result.error) {
-        alert(result.error);
+        toast.error(result.error);
       } else {
+        toast.success(`Moderator "${mod.name}" deleted`);
         setModerators((prev) => prev.filter((m) => m.id !== mod.id));
       }
     });

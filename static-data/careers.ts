@@ -29,76 +29,11 @@ export interface Job {
   desc: string;
   requirements: string[];
   benefits: string[];
+  experience?: string;
+  applicationEmail?: string;
 }
 
-export const jobs: Job[] = [
-  {
-    id: "snr-arch-kp",
-    title: "Senior Consultant",
-    division: `${comp1?.name || "Kolpoporishor"} (${comp1?.description || "Consultancy"})`,
-    companyName: comp1?.name || "Kolpoporishor",
-    location: "New York, USA",
-    type: "Full-Time",
-    desc: "We are seeking a Senior Architect to lead design teams on large-scale monumental and institutional projects. You will be responsible for schematic designs, client relations, and overseeing the execution of architectural vision.",
-    requirements: [
-      "8+ years of experience in lead design roles within premium architectural firms.",
-      "Master's Degree in Architecture (M.Arch) or equivalent.",
-      "Proficiency in Revit, Rhino, and rendering suites (V-Ray, Twinmotion).",
-      "Proven portfolio of institutional, cultural, or large-scale commercial work.",
-      "Licensure in New York State or equivalent regional credentials."
-    ],
-    benefits: [
-      "Competitive executive salary & performance bonuses.",
-      "Comprehensive health, dental, and vision insurance.",
-      "Annual study trips and professional development budgets.",
-      "401(k) retirement match program."
-    ]
-  },
-  {
-    id: "int-des-kk",
-    title: "Lead Design Specialist",
-    division: `${comp2?.name || "Kolpokowsol"} (${comp2?.description || "Consultancy & Construction"})`,
-    companyName: comp2?.name || "Kolpokowsol",
-    location: "Brooklyn, NY",
-    type: "Full-Time",
-    desc: `${comp2?.name || "Kolpokowsol"} is looking for a Lead Design Specialist to curate premium residential and hospitality interiors. You will conceptualize spatial architecture, source custom furniture, and direct materials specification.`,
-    requirements: [
-      "5+ years of experience specializing in high-end residential or luxury boutique hospitality.",
-      "Bachelor's Degree in Interior Design, Architecture, or Construction.",
-      "Strong material knowledge and global sourcing network contact.",
-      "Proficiency in CAD, SketchUp, and Adobe Creative Suite.",
-      "Excellent client presentation and communication skills."
-    ],
-    benefits: [
-      "Competitive compensation & project performance bonuses.",
-      "Flexible hybrid working models.",
-      "Access to premium design databases & global design weeks.",
-      "Paid family leave and health credits."
-    ]
-  },
-  {
-    id: "mat-spec-inex",
-    title: "Materials Sourcing Specialist",
-    division: `${comp3?.name || "INEX"} (${comp3?.description || "Building Materials — Coming Soon"})`,
-    companyName: comp3?.name || "INEX",
-    location: "Logistics City, NJ",
-    type: "Full-Time",
-    desc: "INEX Sourcing is recruiting a Materials Sourcing Specialist to manage supplier relations and quality control of high-end raw finishes, natural stone, and structural cladding.",
-    requirements: [
-      "4+ years of experience in architectural materials supply chain or structural procurement.",
-      "Degree in Material Science, Civil Engineering, or Supply Chain Management.",
-      "Familiarity with global import regulations and logistics networks.",
-      "Strong negotiation and technical specifications review capabilities.",
-      "Fluency in Italian, Portuguese, or Chinese is a major asset."
-    ],
-    benefits: [
-      "Base salary + procurement commission structures.",
-      "Comprehensive health plan and fitness allowances.",
-      "International travel for factory audits and supply checks.",
-      "Generous training and credentials budget."
-    ]
-  }
-];
+export const jobs: Job[] = [];
 
 export interface TabItem {
   name: string;

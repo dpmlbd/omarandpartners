@@ -7,6 +7,7 @@ import Link from "next/link";
 import { createProjectAction, updateProjectAction } from "@/lib/actions/projects";
 import { getPublicStorageUrl } from "@/lib/supabase/storage";
 import type { Company, Project, ProjectCategory } from "@/types/database";
+import { toast } from "@/components/ui/toast";
 import {
   RiArrowLeftLine,
   RiAlertLine,
@@ -92,7 +93,13 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
 
         if (result?.error) {
           setError(result.error);
+          toast.error(result.error);
         } else {
+          toast.success(
+            initialProject
+              ? "Project updated successfully"
+              : "New project created successfully"
+          );
           router.push("/admin/projects");
           router.refresh();
         }
@@ -103,6 +110,7 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
             ? err.message
             : "Failed to upload and save project. Please check image files and try again.";
         setError(msg);
+        toast.error(msg);
       }
     });
   };

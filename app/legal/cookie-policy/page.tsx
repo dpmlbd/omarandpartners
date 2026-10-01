@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { cookiePolicySections as sections } from "@/static-data/legal";
+
+export const metadata: Metadata = {
+  title: "ONP | Cookie Policy",
+  description: "Transparency statement and zero-tracking commitment for Omar & Partners.",
+};
 
 export default function CookiePolicyPage() {
   return (
@@ -41,7 +47,7 @@ export default function CookiePolicyPage() {
             {/* Content col */}
             <div className="md:col-span-8 flex flex-col divide-y divide-border">
               <p className="pb-12 text-muted-foreground text-sm leading-relaxed font-light">
-                This Cookie Policy explains how Omar &amp; Partners uses cookies and similar technologies on our website. By using our website, you consent to our use of cookies in accordance with this policy.
+                This Cookie Policy details the digital privacy standards of Omar &amp; Partners. We maintain a strict zero-tracking principle: we do not utilize behavioral tracking cookies, cross-site analytics, or commercial advertising pixels across our platform.
               </p>
               {sections.map((section, i) => (
                 <div key={i} id={`section-${i}`} className="py-10 scroll-mt-28">

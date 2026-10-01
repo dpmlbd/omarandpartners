@@ -7,6 +7,7 @@ import {
   deleteTeamMemberAction,
 } from "@/lib/actions/team";
 import type { TeamMember, Company } from "@/types/database";
+import { toast } from "@/components/ui/toast";
 import {
   RiUserAddLine,
   RiEditLine,
@@ -56,7 +57,13 @@ export function TeamClient({ initialMembers }: TeamClientProps) {
 
       if (result.error) {
         setError(result.error);
+        toast.error(result.error);
       } else {
+        toast.success(
+          editingMember
+            ? `Updated team member "${editingMember.name}"`
+            : "New team member added successfully"
+        );
         setIsModalOpen(false);
         window.location.reload();
       }
@@ -75,8 +82,9 @@ export function TeamClient({ initialMembers }: TeamClientProps) {
     startTransition(async () => {
       const result = await deleteTeamMemberAction(member.id);
       if (result.error) {
-        alert(result.error);
+        toast.error(result.error);
       } else {
+        toast.success(`Removed "${member.name}" from the team`);
         setMembers((prev) => prev.filter((m) => m.id !== member.id));
       }
     });

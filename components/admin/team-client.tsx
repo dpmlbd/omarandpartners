@@ -44,8 +44,25 @@ export function TeamClient({ initialMembers }: TeamClientProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-    const form = e.currentTarget;
-    const formData = new FormData(form);
+    const formData = new FormData(e.currentTarget);
+    const name = (formData.get("name") as string)?.trim();
+    const designation = (formData.get("designation") as string)?.trim();
+    const teamType = (formData.get("team_type") as string)?.trim();
+
+    if (!name || name.length < 2) {
+      setError("Full name must be at least 2 characters.");
+      return;
+    }
+
+    if (!designation || designation.length < 2) {
+      setError("Designation must be at least 2 characters.");
+      return;
+    }
+
+    if (!teamType) {
+      setError("Please select a team group.");
+      return;
+    }
 
     startTransition(async () => {
       let result;

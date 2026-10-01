@@ -4,21 +4,41 @@ import { sendEmail } from "@/lib/email";
 
 export const runtime = "nodejs";
 
+const ALLOWED_COMPANIES = [
+  "Omar & Partners",
+  "Kolpoporishor",
+  "Kolpoporisor",
+  "Kolpokowsol",
+  "INEX",
+] as const;
+
 const contactSchema = z.object({
-  name: z.string().trim().min(2, "Full name must be at least 2 characters"),
-  email: z.string().trim().email("Please enter a valid email address"),
-  company: z.string().min(1, "Please select an inquiry destination"),
-  subject: z.string().trim().min(3, "Subject must be at least 3 characters"),
-  message: z.string().trim().min(10, "Message must be at least 10 characters"),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Full name must be at least 2 characters")
+    .max(100, "Full name cannot exceed 100 characters"),
+  email: z
+    .string()
+    .trim()
+    .email("Please enter a valid email address")
+    .max(255, "Email address cannot exceed 255 characters"),
+  company: z.enum(ALLOWED_COMPANIES, {
+    message: "Please select a valid inquiry destination",
+  }),
+  subject: z
+    .string()
+    .trim()
+    .min(3, "Subject must be at least 3 characters")
+    .max(200, "Subject cannot exceed 200 characters"),
+  message: z
+    .string()
+    .trim()
+    .min(10, "Message must be at least 10 characters")
+    .max(5000, "Message cannot exceed 5000 characters"),
 });
 
-export const COMPANY_EMAILS: Record<string, string> = {
-  "Omar & Partners": "info@onp-bd.com",
-  "Kolpoporishor": "kolpoporishor@gmail.com",
-  "Kolpoporisor": "kolpoporishor@gmail.com",
-  "Kolpokowsol": "kolpokowsol@gmail.com",
-  "INEX": "inexmgt.bd@gmail.com",
-};
+export const PRIMARY_CONTACT_EMAIL = "info@onp-bd.com";
 
 export async function POST(request: Request) {
   try {
@@ -40,14 +60,14 @@ export async function POST(request: Request) {
     }
 
     const { name, email, company, subject, message } = result.data;
-    const recipientEmail = COMPANY_EMAILS[company] || "info@onp-bd.com";
+    const recipientEmail = PRIMARY_CONTACT_EMAIL;
 
     const formattedSubject = `[Inquiry - ${company}] ${subject}`;
 
     const textContent = `
 NEW INQUIRY RECEIVED VIA WEBSITE
 ------------------------------------------------
-Inquiry Destination: ${company} (${recipientEmail})
+Inquiry Destination: ${company} (Routed to: ${recipientEmail})
 From: ${name} <${email}>
 Subject: ${subject}
 Date: ${new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" })} (BST)
@@ -84,7 +104,7 @@ Omar & Partners Holding Ecosystem
   <div class="card">
     <div class="header">
       <h1>New Website Inquiry</h1>
-      <div class="badge">Destination: ${company}</div>
+      <div class="badge">Ecosystem Division: ${company}</div>
     </div>
     <div class="content">
       <table class="meta-table">
@@ -93,8 +113,12 @@ Omar & Partners Holding Ecosystem
           <td class="value"><strong>${name}</strong> &lt;<a href="mailto:${email}" style="color:#b45309;text-decoration:none;">${email}</a>&gt;</td>
         </tr>
         <tr>
-          <td class="label">Routing To</td>
-          <td class="value"><strong>${company}</strong> (${recipientEmail})</td>
+          <td class="label">Division</td>
+          <td class="value"><strong>${company}</strong></td>
+        </tr>
+        <tr>
+          <td class="label">Destination</td>
+          <td class="value">${recipientEmail}</td>
         </tr>
         <tr>
           <td class="label">Subject</td>
@@ -115,33 +139,45 @@ Omar & Partners Holding Ecosystem
 </html>
 `;
 
-    // Dispatch via SMTP
+    // Dispatch via Email service (EmailJS or SMTP)
     const emailResult = await sendEmail({
       to: recipientEmail,
       replyTo: email,
       subject: formattedSubject,
       text: textContent,
       html: htmlContent,
+      templateParams: {
+        to_email: recipientEmail,
+        from_name: name,
+        name,
+        from_email: email,
+        email,
+        reply_to: email,
+        company,
+        subject,
+        message,
+        date: new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }),
+      },
     });
 
     if (emailResult.notConfigured) {
       console.warn(
-        `[SMTP Notice] Form submitted for ${company} (${recipientEmail}). Email not dispatched because SMTP_USER / SMTP_PASS are not configured yet.`
+        `[Email Notice] Form submitted for ${company} (${recipientEmail}). Email not dispatched because email credentials (EMAILJS_SERVICE_ID or SMTP_USER) are not configured yet.`
       );
       return NextResponse.json({
         success: true,
-        smtpConfigured: false,
-        message: `Inquiry recorded. (Note: To deliver actual emails, set SMTP_USER and SMTP_PASS in .env.local).`,
+        delivered: false,
+        message: `Inquiry recorded. (Notice: Configure EmailJS or SMTP in environment variables for live delivery).`,
         recipient: recipientEmail,
       });
     }
 
     if (!emailResult.success) {
-      console.error("[SMTP Error]", emailResult.error);
+      console.error("[Email Dispatch Error]", emailResult.error);
       return NextResponse.json(
         {
           success: false,
-          message: "Failed to send email through SMTP service. Please try again later.",
+          message: emailResult.error || "Failed to dispatch email. Please try again later.",
         },
         { status: 500 }
       );
@@ -149,8 +185,8 @@ Omar & Partners Holding Ecosystem
 
     return NextResponse.json({
       success: true,
-      smtpConfigured: true,
-      message: `Your inquiry has been successfully sent to ${company} (${recipientEmail}).`,
+      delivered: true,
+      message: `Your inquiry has been successfully sent to ${recipientEmail}.`,
       recipient: recipientEmail,
     });
   } catch (error) {

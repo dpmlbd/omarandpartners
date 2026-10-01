@@ -40,6 +40,58 @@ function parseList(input: unknown): string[] {
     .filter((line) => line.length > 0);
 }
 
+import { z } from "zod";
+
+const jobSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(2, "Job title must be at least 2 characters")
+    .max(150, "Job title cannot exceed 150 characters"),
+  division: z
+    .string()
+    .trim()
+    .min(2, "Division label must be at least 2 characters")
+    .max(100, "Division cannot exceed 100 characters"),
+  company_name: z
+    .string()
+    .trim()
+    .min(2, "Company name must be at least 2 characters")
+    .max(100, "Company name cannot exceed 100 characters"),
+  location: z
+    .string()
+    .trim()
+    .min(2, "Location must be at least 2 characters")
+    .max(150, "Location cannot exceed 150 characters"),
+  job_type: z
+    .string()
+    .trim()
+    .min(2, "Job type must be at least 2 characters")
+    .max(50, "Job type cannot exceed 50 characters"),
+  experience: z
+    .string()
+    .trim()
+    .max(100, "Experience level cannot exceed 100 characters")
+    .nullable()
+    .optional(),
+  description: z
+    .string()
+    .trim()
+    .min(10, "Job description must be at least 10 characters")
+    .max(10000, "Job description cannot exceed 10,000 characters"),
+  application_email: z
+    .string()
+    .trim()
+    .email("Please provide a valid application email address")
+    .max(255, "Email address cannot exceed 255 characters"),
+  display_order: z
+    .number()
+    .int("Display order must be an integer")
+    .min(0, "Display order must be 0 or greater")
+    .max(9999, "Display order is too large"),
+  published: z.boolean(),
+});
+
 export async function createJobAction(
   prevState: unknown,
   formData: FormData
@@ -47,23 +99,41 @@ export async function createJobAction(
   try {
     await requireStaff();
 
-    const title = (formData.get("title") as string)?.trim();
-    const division = (formData.get("division") as string)?.trim();
-    const company_name = (formData.get("company_name") as string)?.trim();
-    const location = (formData.get("location") as string)?.trim();
-    const job_type = ((formData.get("job_type") as string) || "Full-Time").trim();
-    const experience = (formData.get("experience") as string)?.trim() || null;
-    const description = (formData.get("description") as string)?.trim();
+    const rawExp = formData.get("experience") as string | null;
+    const rawOrder = parseInt((formData.get("display_order") as string) || "0", 10);
+
+    const validation = jobSchema.safeParse({
+      title: formData.get("title"),
+      division: formData.get("division"),
+      company_name: formData.get("company_name"),
+      location: formData.get("location"),
+      job_type: formData.get("job_type") || "Full-Time",
+      experience: rawExp && rawExp.trim().length > 0 ? rawExp.trim() : null,
+      description: formData.get("description"),
+      application_email: formData.get("application_email") || "info@onp-bd.com",
+      display_order: isNaN(rawOrder) ? 0 : rawOrder,
+      published: formData.get("published") === "true",
+    });
+
+    if (!validation.success) {
+      return { error: validation.error.issues[0]?.message || "Validation failed." };
+    }
+
+    const {
+      title,
+      division,
+      company_name,
+      location,
+      job_type,
+      experience,
+      description,
+      application_email,
+      display_order,
+      published,
+    } = validation.data;
+
     const requirements = parseList(formData.get("requirements"));
     const benefits = parseList(formData.get("benefits"));
-    const application_email =
-      (formData.get("application_email") as string)?.trim() || "info@onp-bd.com";
-    const published = formData.get("published") === "true";
-    const display_order = parseInt((formData.get("display_order") as string) || "0", 10) || 0;
-
-    if (!title || !division || !company_name || !location || !description) {
-      return { error: "Please fill in all mandatory job fields: Title, Division, Company, Location, and Description." };
-    }
 
     const admin = createAdminClient();
     const { data, error } = await admin
@@ -74,7 +144,7 @@ export async function createJobAction(
         company_name,
         location,
         job_type,
-        experience,
+        experience: experience || null,
         description,
         requirements,
         benefits,
@@ -106,23 +176,41 @@ export async function updateJobAction(
   try {
     await requireStaff();
 
-    const title = (formData.get("title") as string)?.trim();
-    const division = (formData.get("division") as string)?.trim();
-    const company_name = (formData.get("company_name") as string)?.trim();
-    const location = (formData.get("location") as string)?.trim();
-    const job_type = ((formData.get("job_type") as string) || "Full-Time").trim();
-    const experience = (formData.get("experience") as string)?.trim() || null;
-    const description = (formData.get("description") as string)?.trim();
+    const rawExp = formData.get("experience") as string | null;
+    const rawOrder = parseInt((formData.get("display_order") as string) || "0", 10);
+
+    const validation = jobSchema.safeParse({
+      title: formData.get("title"),
+      division: formData.get("division"),
+      company_name: formData.get("company_name"),
+      location: formData.get("location"),
+      job_type: formData.get("job_type") || "Full-Time",
+      experience: rawExp && rawExp.trim().length > 0 ? rawExp.trim() : null,
+      description: formData.get("description"),
+      application_email: formData.get("application_email") || "info@onp-bd.com",
+      display_order: isNaN(rawOrder) ? 0 : rawOrder,
+      published: formData.get("published") === "true",
+    });
+
+    if (!validation.success) {
+      return { error: validation.error.issues[0]?.message || "Validation failed." };
+    }
+
+    const {
+      title,
+      division,
+      company_name,
+      location,
+      job_type,
+      experience,
+      description,
+      application_email,
+      display_order,
+      published,
+    } = validation.data;
+
     const requirements = parseList(formData.get("requirements"));
     const benefits = parseList(formData.get("benefits"));
-    const application_email =
-      (formData.get("application_email") as string)?.trim() || "info@onp-bd.com";
-    const published = formData.get("published") === "true";
-    const display_order = parseInt((formData.get("display_order") as string) || "0", 10) || 0;
-
-    if (!title || !division || !company_name || !location || !description) {
-      return { error: "Please fill in all mandatory job fields: Title, Division, Company, Location, and Description." };
-    }
 
     const admin = createAdminClient();
     const { data, error } = await admin
@@ -133,7 +221,7 @@ export async function updateJobAction(
         company_name,
         location,
         job_type,
-        experience,
+        experience: experience || null,
         description,
         requirements,
         benefits,

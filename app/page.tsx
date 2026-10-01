@@ -8,11 +8,11 @@ import { EcosystemDiagram } from "@/components/features/landing/ecosystem-diagra
 import { HeroCinematic } from "@/components/features/landing/hero-cinematic";
 import { TestimonialsSection } from "@/components/features/landing/testimonials-section";
 import { fetchPublicTestimonials } from "@/lib/public/testimonials";
-import { RiArrowRightLine } from "@remixicon/react";
+import { fetchPublicInsights } from "@/lib/public/articles";
+import { RiArrowRightLine, RiTimeLine } from "@remixicon/react";
 import { siteConfig } from "@/config/site";
 import {
   heroSlides,
-  landingInsights as insights,
   landingProjects as projects,
   whyItems,
   fallbackTestimonials,
@@ -25,7 +25,10 @@ const comp2 = siteConfig.companies[2];
 const comp3 = siteConfig.companies[3];
 
 export default async function HomePage() {
-  const testimonials = await fetchPublicTestimonials(fallbackTestimonials);
+  const [testimonials, insights] = await Promise.all([
+    fetchPublicTestimonials(fallbackTestimonials),
+    fetchPublicInsights(3),
+  ]);
   return (
     <div className="flex flex-col w-full overflow-hidden">
 
@@ -132,20 +135,39 @@ export default async function HomePage() {
         <div className="container mx-auto px-6 md:px-14">
           <SectionHeader index="06" title="Latest Insights" subtitle="News, articles &amp; press releases from across the ecosystem." />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px border border-border">
-            {insights.map((item, i) => (
-              <ScrollReveal key={i} delay={i * 0.15}>
-                <Link href="/insights/articles" className="group flex flex-col gap-6 p-8 md:p-10 bg-background border-r border-border last:border-r-0 hover:bg-secondary/40 transition-colors duration-300 min-h-[240px]">
-                   <span className="text-[10px] font-semibold uppercase tracking-widest text-foreground">{item.tag}</span>
-                  <h3 className="font-heading text-xl md:text-2xl font-medium leading-tight group-hover:text-primary transition-colors flex-1">{item.title}</h3>
-                  <div className="flex items-center justify-between border-t border-border pt-5">
-                    <span className="text-xs text-muted-foreground">{item.date}</span>
-                    <RiArrowRightLine size={14} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all duration-200" />
-                  </div>
-                </Link>
-              </ScrollReveal>
-            ))}
-          </div>
+          {insights.length === 0 ? (
+            <ScrollReveal>
+              <div className="border border-border bg-card/20 p-12 md:p-16 flex flex-col items-center justify-center text-center">
+                <div className="w-12 h-12 rounded-full border border-border bg-secondary/50 flex items-center justify-center text-muted-foreground mb-4">
+                  <RiTimeLine size={20} className="text-primary" />
+                </div>
+                <span className="font-mono text-[10px] tracking-widest uppercase text-primary mb-2">
+                  Ecosystem Dispatches
+                </span>
+                <h3 className="font-heading text-2xl md:text-3xl font-medium tracking-tight mb-2">
+                  Stay Tuned
+                </h3>
+                <p className="text-muted-foreground text-xs md:text-sm font-light max-w-md leading-relaxed">
+                  Our latest architectural essays, research monographs, and press releases will be published here soon.
+                </p>
+              </div>
+            </ScrollReveal>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-px border border-border">
+              {insights.map((item, i) => (
+                <ScrollReveal key={item.id || i} delay={i * 0.15}>
+                  <Link href={`/insights/articles`} className="group flex flex-col gap-6 p-8 md:p-10 bg-background border-r border-border last:border-r-0 hover:bg-secondary/40 transition-colors duration-300 min-h-[240px]">
+                    <span className="text-[10px] font-semibold uppercase tracking-widest text-primary">{item.tag}</span>
+                    <h3 className="font-heading text-xl md:text-2xl font-medium leading-tight group-hover:text-primary transition-colors flex-1">{item.title}</h3>
+                    <div className="flex items-center justify-between border-t border-border pt-5">
+                      <span className="text-xs text-muted-foreground">{item.date}</span>
+                      <RiArrowRightLine size={14} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all duration-200" />
+                    </div>
+                  </Link>
+                </ScrollReveal>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

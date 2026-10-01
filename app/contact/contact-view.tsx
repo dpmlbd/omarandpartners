@@ -23,11 +23,27 @@ import { faqs } from "@/static-data/faqs";
 import { siteConfig } from "@/config/site";
 
 const contactSchema = z.object({
-  name: z.string().trim().min(2, "Full name must be at least 2 characters"),
-  email: z.string().trim().email("Please enter a valid email address"),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Please enter you name")
+    .max(100, "Full name cannot exceed 100 characters"),
+  email: z
+    .string()
+    .trim()
+    .email("Please enter a valid email address")
+    .max(255, "Email address cannot exceed 255 characters"),
   company: z.string().min(1, "Please select an inquiry destination"),
-  subject: z.string().trim().min(3, "Subject must be at least 3 characters"),
-  message: z.string().trim().min(10, "Message must be at least 10 characters"),
+  subject: z
+    .string()
+    .trim()
+    .min(3, "Please enter a subject")
+    .max(200, "Subject cannot exceed 200 characters"),
+  message: z
+    .string()
+    .trim()
+    .min(10, "Message can't be empty")
+    .max(5000, "Message cannot exceed 5000 characters"),
 });
 
 type ContactFormValues = z.infer<typeof contactSchema>;
@@ -53,13 +69,7 @@ export function ContactView() {
     setOpenFaq(openFaq === index ? null : index);
   };
 
-  const DIVISION_EMAILS: Record<string, string> = {
-    "Omar & Partners": "info@onp-bd.com",
-    "Kolpoporishor": "kolpoporishor@gmail.com",
-    "Kolpoporisor": "kolpoporishor@gmail.com",
-    "Kolpokowsol": "kolpokowsol@gmail.com",
-    "INEX": "inexmgt.bd@gmail.com",
-  };
+  const PRIMARY_CONTACT_EMAIL = "info@onp-bd.com";
 
   const DIVISION_LOGOS: Record<string, string> = {
     "Kolpoporishor": "/logos/kolpoporishor-logo.svg",
@@ -134,7 +144,7 @@ export function ContactView() {
     }
 
     setIsSubmitting(true);
-    const targetEmail = DIVISION_EMAILS[formData.company] || "info@onp-bd.com";
+    const targetEmail = PRIMARY_CONTACT_EMAIL;
     const selectedCompany = formData.company;
 
     try {
@@ -187,7 +197,7 @@ export function ContactView() {
     .map((c, i) => ({
       tag: c.description,
       title: c.name,
-      email: DIVISION_EMAILS[c.name] || "info@onp-bd.com",
+      email: PRIMARY_CONTACT_EMAIL,
       logo: DIVISION_LOGOS[c.name] || "/onp.svg",
       href: c.href,
       footer: `0${i + 1}_${c.name.slice(0, 2).toUpperCase()}`,
@@ -237,11 +247,10 @@ export function ContactView() {
                         value={formData.name}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className={`bg-secondary/20 border p-3 rounded-none focus:outline-none text-sm transition-colors ${
-                          errors.name && touched.name
-                            ? "border-destructive focus:border-destructive text-destructive"
-                            : "border-border focus:border-primary text-foreground"
-                        }`}
+                        className={`bg-secondary/20 border p-3 rounded-none focus:outline-none text-sm transition-colors ${errors.name && touched.name
+                          ? "border-destructive focus:border-destructive text-destructive"
+                          : "border-border focus:border-primary text-foreground"
+                          }`}
                         placeholder="John Doe"
                       />
                       {errors.name && touched.name && (
@@ -265,11 +274,10 @@ export function ContactView() {
                         value={formData.email}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className={`bg-secondary/20 border p-3 rounded-none focus:outline-none text-sm transition-colors ${
-                          errors.email && touched.email
-                            ? "border-destructive focus:border-destructive text-destructive"
-                            : "border-border focus:border-primary text-foreground"
-                        }`}
+                        className={`bg-secondary/20 border p-3 rounded-none focus:outline-none text-sm transition-colors ${errors.email && touched.email
+                          ? "border-destructive focus:border-destructive text-destructive"
+                          : "border-border focus:border-primary text-foreground"
+                          }`}
                         placeholder="john@example.com"
                       />
                       {errors.email && touched.email && (
@@ -283,9 +291,9 @@ export function ContactView() {
 
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="company" className="text-xs uppercase tracking-widest text-muted-foreground flex items-center justify-between">
-                      <span>Inquiry Destination</span>
+                      <span>Inquiry Division</span>
                       <span className="text-[10px] text-primary font-mono">
-                        {DIVISION_EMAILS[formData.company] || "info@onp-bd.com"}
+                        {PRIMARY_CONTACT_EMAIL}
                       </span>
                     </label>
                     <select
@@ -305,11 +313,11 @@ export function ContactView() {
 
                     <div className="flex items-center justify-between px-3 py-2 bg-secondary/30 border border-border/70 text-xs">
                       <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                        Emails will be routed to:
+                        All inquiries routed directly to:
                       </span>
                       <span className="font-mono text-primary text-[11px] font-medium flex items-center gap-1.5">
                         <RiMailLine size={13} />
-                        {DIVISION_EMAILS[formData.company] || "info@onp-bd.com"}
+                        {PRIMARY_CONTACT_EMAIL}
                       </span>
                     </div>
                   </div>
@@ -327,11 +335,10 @@ export function ContactView() {
                       value={formData.subject}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      className={`bg-secondary/20 border p-3 rounded-none focus:outline-none text-sm transition-colors ${
-                        errors.subject && touched.subject
-                          ? "border-destructive focus:border-destructive text-destructive"
-                          : "border-border focus:border-primary text-foreground"
-                      }`}
+                      className={`bg-secondary/20 border p-3 rounded-none focus:outline-none text-sm transition-colors ${errors.subject && touched.subject
+                        ? "border-destructive focus:border-destructive text-destructive"
+                        : "border-border focus:border-primary text-foreground"
+                        }`}
                       placeholder="e.g. Architectural Consultancy / Residential Proposal"
                     />
                     {errors.subject && touched.subject && (
@@ -355,11 +362,10 @@ export function ContactView() {
                       value={formData.message}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      className={`bg-secondary/20 border p-3 rounded-none focus:outline-none text-sm resize-none transition-colors ${
-                        errors.message && touched.message
-                          ? "border-destructive focus:border-destructive text-destructive"
-                          : "border-border focus:border-primary text-foreground"
-                      }`}
+                      className={`bg-secondary/20 border p-3 rounded-none focus:outline-none text-sm resize-none transition-colors ${errors.message && touched.message
+                        ? "border-destructive focus:border-destructive text-destructive"
+                        : "border-border focus:border-primary text-foreground"
+                        }`}
                       placeholder="Tell us about your project requirements, scope, timeline, or inquiries..."
                     />
                     {errors.message && touched.message && (

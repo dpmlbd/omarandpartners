@@ -9,9 +9,20 @@ import type { Profile } from "@/types/database";
 import type { User } from "@supabase/supabase-js";
 
 const createModeratorSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please provide a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name cannot exceed 100 characters"),
+  email: z
+    .string()
+    .trim()
+    .email("Please provide a valid email address")
+    .max(255, "Email address cannot exceed 255 characters"),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .max(128, "Password cannot exceed 128 characters"),
 });
 
 async function requireAdmin(): Promise<{ user: User; profile: Profile }> {

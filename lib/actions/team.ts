@@ -48,6 +48,32 @@ export async function getTeamMembers(teamType?: string): Promise<TeamMember[]> {
   return (data as unknown as TeamMember[]) || [];
 }
 
+import { z } from "zod";
+
+const teamMemberSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, "Full name must be at least 2 characters")
+    .max(100, "Full name cannot exceed 100 characters"),
+  designation: z
+    .string()
+    .trim()
+    .min(2, "Designation / role must be at least 2 characters")
+    .max(150, "Designation cannot exceed 150 characters"),
+  teamType: z
+    .string()
+    .trim()
+    .min(1, "Please select a valid team division / group")
+    .max(50, "Team division cannot exceed 50 characters"),
+  study: z
+    .string()
+    .trim()
+    .max(250, "Education / Study background cannot exceed 250 characters")
+    .nullable()
+    .optional(),
+});
+
 export async function createTeamMemberAction(
   prevState: unknown,
   formData: FormData
@@ -55,21 +81,26 @@ export async function createTeamMemberAction(
   try {
     await requireStaff();
 
-    const name = (formData.get("name") as string)?.trim();
-    const designation = (formData.get("designation") as string)?.trim();
-    const teamType = (formData.get("team_type") as string)?.trim();
-    const study = (formData.get("study") as string)?.trim() || null;
+    const rawStudy = formData.get("study") as string | null;
+    const validation = teamMemberSchema.safeParse({
+      name: formData.get("name"),
+      designation: formData.get("designation"),
+      teamType: formData.get("team_type"),
+      study: rawStudy && rawStudy.trim().length > 0 ? rawStudy.trim() : null,
+    });
 
-    if (!name || !designation || !teamType) {
-      return { error: "Name, designation, and team group are required." };
+    if (!validation.success) {
+      return { error: validation.error.issues[0]?.message || "Validation failed." };
     }
+
+    const { name, designation, teamType, study } = validation.data;
 
     const supabase = await createClient();
     const insertData: Record<string, unknown> = {
       name,
       designation,
       team_type: teamType,
-      study,
+      study: study || null,
     };
 
     const { error: insertError } = await supabase.from("team").insert(insertData);
@@ -94,21 +125,26 @@ export async function updateTeamMemberAction(
   try {
     await requireStaff();
 
-    const name = (formData.get("name") as string)?.trim();
-    const designation = (formData.get("designation") as string)?.trim();
-    const teamType = (formData.get("team_type") as string)?.trim();
-    const study = (formData.get("study") as string)?.trim() || null;
+    const rawStudy = formData.get("study") as string | null;
+    const validation = teamMemberSchema.safeParse({
+      name: formData.get("name"),
+      designation: formData.get("designation"),
+      teamType: formData.get("team_type"),
+      study: rawStudy && rawStudy.trim().length > 0 ? rawStudy.trim() : null,
+    });
 
-    if (!name || !designation || !teamType) {
-      return { error: "Name, designation, and team group are required." };
+    if (!validation.success) {
+      return { error: validation.error.issues[0]?.message || "Validation failed." };
     }
+
+    const { name, designation, teamType, study } = validation.data;
 
     const supabase = await createClient();
     const updateData: Record<string, unknown> = {
       name,
       designation,
       team_type: teamType,
-      study,
+      study: study || null,
     };
 
     const { error: updateError } = await supabase

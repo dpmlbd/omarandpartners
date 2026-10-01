@@ -58,6 +58,30 @@ export function ArticlesClient({
     const form = e.currentTarget;
     const formData = new FormData(form);
 
+    const title = (formData.get("title") as string)?.trim();
+    const description = (formData.get("description") as string)?.trim();
+
+    if (!title || title.length < 3) {
+      setError("Article title must be at least 3 characters.");
+      return;
+    }
+
+    if (!description || description.length < 10) {
+      setError("Article content/synopsis must be at least 10 characters.");
+      return;
+    }
+
+    const imageFile = formData.get("image") as File;
+    if (!editingItem && (!imageFile || imageFile.size === 0)) {
+      setError("Please select a cover image for the article.");
+      return;
+    }
+
+    if (imageFile && imageFile.size > 25 * 1024 * 1024) {
+      setError("Cover image exceeds 25MB limit.");
+      return;
+    }
+
     startTransition(async () => {
       try {
         let result;

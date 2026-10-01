@@ -31,6 +31,22 @@ export function ModeratorsClient({ initialModerators }: ModeratorsClientProps) {
     e.preventDefault();
     setFormError(null);
     const formData = new FormData(e.currentTarget);
+    const name = (formData.get("name") as string)?.trim();
+    const email = (formData.get("email") as string)?.trim();
+    const password = formData.get("password") as string;
+
+    if (!name || name.length < 2) {
+      setFormError("Full name must be at least 2 characters.");
+      return;
+    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setFormError("Please enter a valid email address.");
+      return;
+    }
+    if (!password || password.length < 6) {
+      setFormError("Password must be at least 6 characters.");
+      return;
+    }
 
     startTransition(async () => {
       const result = await createModeratorAction(null, formData);

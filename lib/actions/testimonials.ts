@@ -7,6 +7,33 @@ import { revalidatePath } from "next/cache";
 import { uploadAndOptimizeImage, deleteStorageFile } from "@/lib/storage/service";
 import type { Testimonial } from "@/types/database";
 
+import { z } from "zod";
+import { validateImageFile } from "@/lib/image/process";
+
+const testimonialSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, "Client name must be at least 2 characters")
+    .max(100, "Client name cannot exceed 100 characters"),
+  location: z
+    .string()
+    .trim()
+    .min(2, "Location must be at least 2 characters")
+    .max(120, "Location cannot exceed 120 characters"),
+  work: z
+    .string()
+    .trim()
+    .min(2, "Role/Organization must be at least 2 characters")
+    .max(150, "Role cannot exceed 150 characters"),
+  description: z
+    .string()
+    .trim()
+    .min(10, "Testimonial quote must be at least 10 characters")
+    .max(2000, "Testimonial quote cannot exceed 2000 characters"),
+  published: z.boolean(),
+});
+
 export async function getTestimonials(publishedOnly?: boolean): Promise<Testimonial[]> {
   const supabase = await createClient();
   let query = supabase
@@ -34,19 +61,28 @@ export async function createTestimonialAction(
   try {
     await requireStaff();
 
-    const name = formData.get("name") as string;
-    const location = formData.get("location") as string;
-    const work = formData.get("work") as string;
-    const description = formData.get("description") as string;
-    const published = formData.get("published") === "true";
-    const imageFile = formData.get("image") as File;
+    const validation = testimonialSchema.safeParse({
+      name: formData.get("name"),
+      location: formData.get("location"),
+      work: formData.get("work"),
+      description: formData.get("description"),
+      published: formData.get("published") === "true",
+    });
 
-    if (!name || !location || !work || !description) {
-      return { error: "Please fill in all required testimonial fields." };
+    if (!validation.success) {
+      return { error: validation.error.issues[0]?.message || "Validation failed." };
     }
+
+    const { name, location, work, description, published } = validation.data;
+    const imageFile = formData.get("image") as File;
 
     if (!imageFile || imageFile.size === 0) {
       return { error: "A client portrait image is required." };
+    }
+
+    const imageValidation = validateImageFile(imageFile);
+    if (!imageValidation.valid) {
+      return { error: imageValidation.error };
     }
 
     const fileName = `${Date.now()}-${name.toLowerCase().replace(/\s+/g, "-")}.avif`;
@@ -91,15 +127,26 @@ export async function updateTestimonialAction(
   try {
     await requireStaff();
 
-    const name = formData.get("name") as string;
-    const location = formData.get("location") as string;
-    const work = formData.get("work") as string;
-    const description = formData.get("description") as string;
-    const published = formData.get("published") === "true";
+    const validation = testimonialSchema.safeParse({
+      name: formData.get("name"),
+      location: formData.get("location"),
+      work: formData.get("work"),
+      description: formData.get("description"),
+      published: formData.get("published") === "true",
+    });
+
+    if (!validation.success) {
+      return { error: validation.error.issues[0]?.message || "Validation failed." };
+    }
+
+    const { name, location, work, description, published } = validation.data;
     const imageFile = formData.get("image") as File;
 
-    if (!name || !location || !work || !description) {
-      return { error: "Please fill in all required testimonial fields." };
+    if (imageFile && imageFile.size > 0) {
+      const imageValidation = validateImageFile(imageFile);
+      if (!imageValidation.valid) {
+        return { error: imageValidation.error };
+      }
     }
 
     const admin = createAdminClient();

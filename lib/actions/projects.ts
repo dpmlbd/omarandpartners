@@ -96,6 +96,40 @@ export async function getProjectById(id: string): Promise<Project | null> {
   return data as unknown as Project;
 }
 
+import { z } from "zod";
+import { validateImageFile } from "@/lib/image/process";
+
+const projectSchema = z.object({
+  companyId: z.string().trim().min(1, "Please select an assigned company"),
+  category: z.enum(["Building Projects", "Interior Projects", "Landscape Projects"] as const, {
+    message: "Category must be Building Projects, Interior Projects, or Landscape Projects",
+  }),
+  title: z
+    .string()
+    .trim()
+    .min(2, "Project title must be at least 2 characters")
+    .max(150, "Project title cannot exceed 150 characters"),
+  projectType: z
+    .string()
+    .trim()
+    .min(2, "Project type must be at least 2 characters")
+    .max(100, "Project type cannot exceed 100 characters"),
+  location: z
+    .string()
+    .trim()
+    .min(2, "Location must be at least 2 characters")
+    .max(150, "Location cannot exceed 150 characters"),
+  year: z
+    .string()
+    .trim()
+    .regex(/^\d{4}$/, "Project duration/year must be a 4-digit year (e.g. 2026)"),
+  status: z.string().trim().max(100, "Status cannot exceed 100 characters").nullable().optional(),
+  area: z.string().trim().max(100, "Area cannot exceed 100 characters").nullable().optional(),
+  description: z.string().trim().max(10000, "Description cannot exceed 10,000 characters").nullable().optional(),
+  featured: z.boolean(),
+  published: z.boolean(),
+});
+
 export async function createProjectAction(
   prevState: unknown,
   formData: FormData
@@ -103,22 +137,41 @@ export async function createProjectAction(
   try {
     await requireStaff();
 
-    const companyId = formData.get("company_id") as string;
-    const category = formData.get("category") as ProjectCategory;
-    const title = formData.get("title") as string;
-    const projectType = formData.get("project_type") as string;
-    const location = formData.get("location") as string;
-    const year = formData.get("year") as string;
-    const status = (formData.get("status") as string) || null;
-    const area = (formData.get("area") as string) || null;
-    const description = (formData.get("description") as string) || null;
-    const featured = formData.get("featured") === "true";
-    const published = formData.get("published") === "true";
+    const rawStatus = formData.get("status") as string | null;
+    const rawArea = formData.get("area") as string | null;
+    const rawDesc = formData.get("description") as string | null;
 
-    // Validate required fields
-    if (!companyId || !category || !title || !projectType || !location || !year) {
-      return { error: "Please complete all required fields." };
+    const validation = projectSchema.safeParse({
+      companyId: formData.get("company_id"),
+      category: formData.get("category"),
+      title: formData.get("title"),
+      projectType: formData.get("project_type"),
+      location: formData.get("location"),
+      year: formData.get("year"),
+      status: rawStatus && rawStatus.trim().length > 0 ? rawStatus.trim() : null,
+      area: rawArea && rawArea.trim().length > 0 ? rawArea.trim() : null,
+      description: rawDesc && rawDesc.trim().length > 0 ? rawDesc.trim() : null,
+      featured: formData.get("featured") === "true",
+      published: formData.get("published") === "true",
+    });
+
+    if (!validation.success) {
+      return { error: validation.error.issues[0]?.message || "Validation failed." };
     }
+
+    const {
+      companyId,
+      category,
+      title,
+      projectType,
+      location,
+      year,
+      status,
+      area,
+      description,
+      featured,
+      published,
+    } = validation.data;
 
     // Verify company is active (not Inex)
     const supabase = await createClient();
@@ -132,15 +185,15 @@ export async function createProjectAction(
       return { error: "Projects can only be assigned to Kolpoporishor or Kolpokowsol." };
     }
 
-    // Year validation: single year
-    if (!/^\d{4}$/.test(year.trim())) {
-      return { error: "Project duration/year must be a single 4-digit year (e.g. 2026)." };
-    }
-
     // Image validations
     const mainImageFile = formData.get("main_image") as File;
     if (!mainImageFile || mainImageFile.size === 0) {
       return { error: "A main project hero image is strictly required." };
+    }
+
+    const mainImgValidation = validateImageFile(mainImageFile);
+    if (!mainImgValidation.valid) {
+      return { error: "Main image error: " + mainImgValidation.error };
     }
 
     const galleryFiles = formData.getAll("gallery_images") as File[];
@@ -149,6 +202,13 @@ export async function createProjectAction(
     // Maximum 6 gallery images (total max 7 images: 1 main + 6 gallery)
     if (validGalleryFiles.length > 6) {
       return { error: "Maximum 6 gallery images allowed (up to 7 images total)." };
+    }
+
+    for (const gFile of validGalleryFiles) {
+      const gValidation = validateImageFile(gFile);
+      if (!gValidation.valid) {
+        return { error: `Gallery image "${gFile.name}" error: ` + gValidation.error };
+      }
     }
 
     const baseSlug = slugify(title);
@@ -271,24 +331,76 @@ export async function updateProjectAction(
 
     if (!project) return { error: "Project not found." };
 
-    const companyId = formData.get("company_id") as string;
-    const category = formData.get("category") as ProjectCategory;
-    const title = formData.get("title") as string;
-    const projectType = formData.get("project_type") as string;
-    const location = formData.get("location") as string;
-    const year = formData.get("year") as string;
-    const status = (formData.get("status") as string) || null;
-    const area = (formData.get("area") as string) || null;
-    const description = (formData.get("description") as string) || null;
-    const featured = formData.get("featured") === "true";
-    const published = formData.get("published") === "true";
+    const rawStatus = formData.get("status") as string | null;
+    const rawArea = formData.get("area") as string | null;
+    const rawDesc = formData.get("description") as string | null;
 
-    if (!companyId || !category || !title || !projectType || !location || !year) {
-      return { error: "Please complete all required fields." };
+    const validation = projectSchema.safeParse({
+      companyId: formData.get("company_id"),
+      category: formData.get("category"),
+      title: formData.get("title"),
+      projectType: formData.get("project_type"),
+      location: formData.get("location"),
+      year: formData.get("year"),
+      status: rawStatus && rawStatus.trim().length > 0 ? rawStatus.trim() : null,
+      area: rawArea && rawArea.trim().length > 0 ? rawArea.trim() : null,
+      description: rawDesc && rawDesc.trim().length > 0 ? rawDesc.trim() : null,
+      featured: formData.get("featured") === "true",
+      published: formData.get("published") === "true",
+    });
+
+    if (!validation.success) {
+      return { error: validation.error.issues[0]?.message || "Validation failed." };
     }
 
-    if (!/^\d{4}$/.test(year.trim())) {
-      return { error: "Project duration/year must be a single 4-digit year (e.g. 2026)." };
+    const {
+      companyId,
+      category,
+      title,
+      projectType,
+      location,
+      year,
+      status,
+      area,
+      description,
+      featured,
+      published,
+    } = validation.data;
+
+    // Verify company is active (not Inex)
+    const supabase = await createClient();
+    const { data: company } = await supabase
+      .from("companies")
+      .select("slug")
+      .eq("id", companyId)
+      .single();
+
+    if (!company || !["kolpoporishor", "kolpoporisor", "kolpokowsol"].includes(company.slug)) {
+      return { error: "Projects can only be assigned to Kolpoporishor or Kolpokowsol." };
+    }
+
+    // Check if new main image is provided and valid
+    const newMainImage = formData.get("main_image") as File;
+    if (newMainImage && newMainImage.size > 0) {
+      const mainImgValidation = validateImageFile(newMainImage);
+      if (!mainImgValidation.valid) {
+        return { error: "Main image error: " + mainImgValidation.error };
+      }
+    }
+
+    // Check if new gallery images are provided and valid
+    const newGalleryFiles = formData.getAll("gallery_images") as File[];
+    const validNewGalleryFiles = newGalleryFiles.filter((f) => f && f.size > 0);
+
+    if (validNewGalleryFiles.length > 6) {
+      return { error: "Maximum 6 gallery images permitted." };
+    }
+
+    for (const gFile of validNewGalleryFiles) {
+      const gValidation = validateImageFile(gFile);
+      if (!gValidation.valid) {
+        return { error: `Gallery image "${gFile.name}" error: ` + gValidation.error };
+      }
     }
 
     // Update project attributes
@@ -315,8 +427,7 @@ export async function updateProjectAction(
 
     const folder = `projects/${project.slug}`;
 
-    // Check if new main image is provided
-    const newMainImage = formData.get("main_image") as File;
+    // Upload new main image if provided
     if (newMainImage && newMainImage.size > 0) {
       const existingMain = project.images?.find((img: ProjectImage) => img.role === "main");
       const upload = await uploadAndOptimizeImage({
@@ -351,15 +462,8 @@ export async function updateProjectAction(
       }
     }
 
-    // Check if new gallery images are provided
-    const newGalleryFiles = formData.getAll("gallery_images") as File[];
-    const validNewGalleryFiles = newGalleryFiles.filter((f) => f && f.size > 0);
-
+    // Upload new gallery images if provided
     if (validNewGalleryFiles.length > 0) {
-      // Total gallery images cannot exceed 6
-      if (validNewGalleryFiles.length > 6) {
-        return { error: "Maximum 6 gallery images permitted." };
-      }
 
       // Remove previous gallery images to replace with new set
       const existingGallery = project.images?.filter((img: ProjectImage) => img.role === "gallery") || [];

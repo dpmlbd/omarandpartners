@@ -62,6 +62,32 @@ export function TestimonialsClient({
     }
 
     const formData = new FormData(form);
+    const name = (formData.get("name") as string)?.trim();
+    const location = (formData.get("location") as string)?.trim();
+    const work = (formData.get("work") as string)?.trim();
+    const description = (formData.get("description") as string)?.trim();
+
+    if (!name || name.length < 2) {
+      setError("Client name must be at least 2 characters.");
+      return;
+    }
+    if (!location || location.length < 2) {
+      setError("Location must be at least 2 characters.");
+      return;
+    }
+    if (!work || work.length < 2) {
+      setError("Role/Organization must be at least 2 characters.");
+      return;
+    }
+    if (!description || description.length < 10) {
+      setError("Testimonial quote must be at least 10 characters.");
+      return;
+    }
+
+    if (!editingItem && (!file || file.size === 0)) {
+      setError("Please select a client portrait image.");
+      return;
+    }
 
     startTransition(async () => {
       try {

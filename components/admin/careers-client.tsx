@@ -71,6 +71,38 @@ export function CareersClient({ initialJobs }: CareersClientProps) {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
+    const title = (formData.get("title") as string)?.trim();
+    const division = (formData.get("division") as string)?.trim();
+    const company = (formData.get("company_name") as string)?.trim();
+    const location = (formData.get("location") as string)?.trim();
+    const description = (formData.get("description") as string)?.trim();
+    const email = (formData.get("application_email") as string)?.trim();
+
+    if (!title || title.length < 2) {
+      setError("Job title must be at least 2 characters.");
+      return;
+    }
+    if (!division || division.length < 2) {
+      setError("Division label must be at least 2 characters.");
+      return;
+    }
+    if (!company || company.length < 2) {
+      setError("Company name must be at least 2 characters.");
+      return;
+    }
+    if (!location || location.length < 2) {
+      setError("Location must be at least 2 characters.");
+      return;
+    }
+    if (!description || description.length < 10) {
+      setError("Role description must be at least 10 characters.");
+      return;
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please provide a valid application email address.");
+      return;
+    }
+
     startTransition(async () => {
       try {
         let result;

@@ -43,11 +43,31 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
     existingGallery.map((img) => getPublicStorageUrl(img.storage_path))
   );
 
+  const isValidImageFile = (file: File): boolean => {
+    const validMimes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/avif",
+    ];
+    return (
+      validMimes.includes(file.type.toLowerCase()) ||
+      /\.(jpe?g|png|webp|avif)$/i.test(file.name)
+    );
+  };
+
   const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (!isValidImageFile(file)) {
+        setError("Main image must be a valid image file (JPG, PNG, WebP, or AVIF).");
+        e.target.value = "";
+        return;
+      }
       if (file.size > 25 * 1024 * 1024) {
         setError("Main image exceeds 25MB upload limit.");
+        e.target.value = "";
         return;
       }
       setMainPreview(URL.createObjectURL(file));
@@ -64,6 +84,11 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
     }
 
     for (const f of files) {
+      if (!isValidImageFile(f)) {
+        setError(`File "${f.name}" is not a supported image. Please upload JPG, PNG, WebP, or AVIF.`);
+        e.target.value = "";
+        return;
+      }
       if (f.size > 25 * 1024 * 1024) {
         setError(`File "${f.name}" exceeds 25MB upload limit.`);
         e.target.value = "";
@@ -81,6 +106,44 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
     setError(null);
     const form = e.currentTarget;
     const formData = new FormData(form);
+
+    const companyId = (formData.get("company_id") as string)?.trim();
+    const category = (formData.get("category") as string)?.trim();
+    const title = (formData.get("title") as string)?.trim();
+    const projectType = (formData.get("project_type") as string)?.trim();
+    const location = (formData.get("location") as string)?.trim();
+    const year = (formData.get("year") as string)?.trim();
+
+    if (!companyId) {
+      setError("Please select an operating division / company.");
+      return;
+    }
+    if (!category) {
+      setError("Please select a project category.");
+      return;
+    }
+    if (!title || title.length < 2) {
+      setError("Project title must be at least 2 characters.");
+      return;
+    }
+    if (!projectType || projectType.length < 2) {
+      setError("Project typology / type must be at least 2 characters.");
+      return;
+    }
+    if (!location || location.length < 2) {
+      setError("Location must be at least 2 characters.");
+      return;
+    }
+    if (!year || !/^\d{4}$/.test(year)) {
+      setError("Project year must be a 4-digit year (e.g. 2026).");
+      return;
+    }
+
+    const mainImageFile = formData.get("main_image") as File;
+    if (!initialProject && (!mainImageFile || mainImageFile.size === 0)) {
+      setError("A main project hero image is strictly required.");
+      return;
+    }
 
     startTransition(async () => {
       try {

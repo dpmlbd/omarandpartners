@@ -7,6 +7,24 @@ import { revalidatePath } from "next/cache";
 import { uploadAndOptimizeImage, deleteStorageFile } from "@/lib/storage/service";
 import type { Article } from "@/types/database";
 
+import { z } from "zod";
+import { validateImageFile } from "@/lib/image/process";
+
+const articleSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(3, "Article title must be at least 3 characters")
+    .max(200, "Article title cannot exceed 200 characters"),
+  description: z
+    .string()
+    .trim()
+    .min(10, "Article description / content must be at least 10 characters")
+    .max(20000, "Article content cannot exceed 20,000 characters"),
+  authorId: z.string().trim().nullable().optional(),
+  published: z.boolean(),
+});
+
 function slugify(text: string): string {
   return text
     .toString()
@@ -55,18 +73,27 @@ export async function createArticleAction(
   try {
     await requireStaff();
 
-    const title = formData.get("title") as string;
-    const description = formData.get("description") as string;
-    const authorId = (formData.get("author_id") as string) || null;
-    const published = formData.get("published") === "true";
-    const imageFile = formData.get("image") as File;
+    const validation = articleSchema.safeParse({
+      title: formData.get("title"),
+      description: formData.get("description"),
+      authorId: formData.get("author_id"),
+      published: formData.get("published") === "true",
+    });
 
-    if (!title || !description) {
-      return { error: "Title and description/content are required." };
+    if (!validation.success) {
+      return { error: validation.error.issues[0]?.message || "Validation failed." };
     }
+
+    const { title, description, authorId, published } = validation.data;
+    const imageFile = formData.get("image") as File;
 
     if (!imageFile || imageFile.size === 0) {
       return { error: "A cover article image is required." };
+    }
+
+    const imageValidation = validateImageFile(imageFile);
+    if (!imageValidation.valid) {
+      return { error: imageValidation.error };
     }
 
     const baseSlug = slugify(title);
@@ -135,14 +162,25 @@ export async function updateArticleAction(
   try {
     await requireStaff();
 
-    const title = formData.get("title") as string;
-    const description = formData.get("description") as string;
-    const authorId = (formData.get("author_id") as string) || null;
-    const published = formData.get("published") === "true";
+    const validation = articleSchema.safeParse({
+      title: formData.get("title"),
+      description: formData.get("description"),
+      authorId: formData.get("author_id"),
+      published: formData.get("published") === "true",
+    });
+
+    if (!validation.success) {
+      return { error: validation.error.issues[0]?.message || "Validation failed." };
+    }
+
+    const { title, description, authorId, published } = validation.data;
     const imageFile = formData.get("image") as File;
 
-    if (!title || !description) {
-      return { error: "Title and description/content are required." };
+    if (imageFile && imageFile.size > 0) {
+      const imageValidation = validateImageFile(imageFile);
+      if (!imageValidation.valid) {
+        return { error: imageValidation.error };
+      }
     }
 
     const admin = createAdminClient();

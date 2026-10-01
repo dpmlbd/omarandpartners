@@ -7,67 +7,17 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SectionHeader } from "@/components/ui/section-header";
 import { BentoGallery } from "@/components/ui/bento-gallery";
 import { SocialChannelsSection } from "@/components/ui/social-channels-section";
-import { kolpokowsolGalleryItems } from "@/lib/gallery-data";
+import {
+  kolpokowsolStats as stats,
+  kolpokowsolCapabilities as capabilities,
+  kolpokowsolServices as services,
+} from "@/static-data/divisions";
+import { kolpokowsolGalleryItems } from "@/static-data/gallery";
 import { RiArrowRightLine } from "@remixicon/react";
 import { CompanyProjectsFilter } from "@/components/features/companies/company-projects-filter";
 import { siteConfig } from "@/config/site";
 
 const companyInfo = siteConfig.companies.find((c) => c.name === "Kolpokowsol");
-
-const stats = [
-  { value: "80+", label: "Interiors Delivered" },
-  { value: "5★", label: "Avg. Client Rating" },
-  { value: "40%", label: "Bespoke Pieces" },
-  { value: "05", label: "Design Awards" },
-];
-
-const capabilities = [
-  { id: "01", title: "Residential", desc: "Luxury homes, penthouses, and estates designed around the rituals and rhythms of daily life." },
-  { id: "02", title: "Hospitality", desc: "Hotels, restaurants, and lounges where atmosphere is the product and every detail serves the narrative." },
-  { id: "03", title: "Workplace", desc: "Offices that balance productivity with wellbeing, brand expression with human comfort." },
-  { id: "04", title: "Retail", desc: "Spaces that invite exploration and translate brand identity into physical experience." },
-  { id: "05", title: "Wellness", desc: "Spas, clinics, and wellness centers designed to calm, restore, and inspire." },
-  { id: "06", title: "Bespoke Joinery", desc: "Custom furniture and built-in millwork crafted by master artisans to exacting specifications." },
-];
-
-const services = [
-  {
-    id: "01",
-    title: "Residential Interiors",
-    desc: "Bespoke homes that reflect the lives of those who inhabit them. From penthouses to countryside estates, we craft spaces of quiet luxury.",
-    image: "/images/interior.png",
-  },
-  {
-    id: "02",
-    title: "Hospitality Design",
-    desc: "Hotels, restaurants, and lounges that tell a story. We design environments that guests remember long after they leave.",
-    image: "/images/materials.png",
-  },
-  {
-    id: "03",
-    title: "Workplace & Corporate",
-    desc: "Offices that inspire productivity and belonging. Our workplace designs balance brand expression with human comfort.",
-    image: "/images/interior.png",
-  },
-  {
-    id: "04",
-    title: "Material Curation",
-    desc: "A dedicated materials library spanning natural stone, rare timber, bespoke textiles, and custom joinery — sourced through INEX.",
-    image: "/images/materials.png",
-  },
-  {
-    id: "05",
-    title: "Lighting & Atmosphere",
-    desc: "Lighting is the most emotional element of interior design. We design layered schemes that shift with the day and the mood.",
-    image: "/images/interior.png",
-  },
-  {
-    id: "06",
-    title: "FF&E Specification",
-    desc: "Furniture, fixtures, and equipment specified down to the last detail. Every object is chosen for its contribution to the whole.",
-    image: "/images/materials.png",
-  },
-];
 
 
 
@@ -236,6 +186,7 @@ export default function KolpokowsolPage() {
                     src={svc.image}
                     alt={svc.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />

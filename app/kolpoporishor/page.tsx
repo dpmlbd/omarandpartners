@@ -7,67 +7,16 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SectionHeader } from "@/components/ui/section-header";
 import { BentoGallery } from "@/components/ui/bento-gallery";
 import { SocialChannelsSection } from "@/components/ui/social-channels-section";
-import { kolpoporishorGalleryItems } from "@/lib/gallery-data";
-import { RiArrowRightLine } from "@remixicon/react";
 import { CompanyProjectsFilter } from "@/components/features/companies/company-projects-filter";
+import {
+  kolpoporishorStats as stats,
+  kolpoporishorCapabilities as capabilities,
+  kolpoporishorServices as services,
+} from "@/static-data/divisions";
+import { kolpoporishorGalleryItems } from "@/static-data/gallery";
 import { siteConfig } from "@/config/site";
 
 const companyInfo = siteConfig.companies.find((c) => c.name === "Kolpoporishor");
-
-const stats = [
-  { value: "50+", label: "Projects Delivered" },
-  { value: "12", label: "Countries Active" },
-  { value: "18 mo.", label: "Avg. Build Duration" },
-  { value: "08", label: "Design Awards" },
-];
-
-const capabilities = [
-  { id: "01", title: "Urban Master Planning", desc: "Comprehensive city-scale strategies that balance density, circulation, and public realm." },
-  { id: "02", title: "Monumental Structures", desc: "Iconic buildings designed to become landmarks through structural clarity and material honesty." },
-  { id: "03", title: "Sustainable Design", desc: "Net-zero strategies, passive systems, and lifecycle analysis woven into every schematic decision." },
-  { id: "04", title: "BIM & Digital Twin", desc: "Advanced modeling and simulation tools that reduce risk and accelerate coordination." },
-  { id: "05", title: "Construction Administration", desc: "On-site representation and rigorous documentation to protect design intent through build." },
-  { id: "06", title: "Heritage & Adaptive Reuse", desc: "Sensitive interventions that honor historical fabric while enabling new programming." },
-];
-
-const services = [
-  {
-    id: "01",
-    title: "Urban Master Planning",
-    desc: "Comprehensive city-scale strategies that balance density, circulation, and public realm. We shape the framework within which buildings and communities thrive.",
-    image: "/images/architecture.png",
-  },
-  {
-    id: "02",
-    title: "Monumental Structures",
-    desc: "Iconic buildings designed to become landmarks through structural clarity and material honesty. Every proportion is considered.",
-    image: "/images/hero_architecture.png",
-  },
-  {
-    id: "03",
-    title: "Sustainable Design",
-    desc: "Net-zero strategies, passive systems, and lifecycle analysis woven into every schematic decision. Performance and poetry are not opposites.",
-    image: "/images/architecture.png",
-  },
-  {
-    id: "04",
-    title: "BIM & Digital Twin",
-    desc: "Advanced modeling and simulation tools that reduce risk and accelerate coordination across disciplines.",
-    image: "/images/hero_architecture.png",
-  },
-  {
-    id: "05",
-    title: "Construction Administration",
-    desc: "On-site representation and rigorous documentation to protect design intent through the build process.",
-    image: "/images/architecture.png",
-  },
-  {
-    id: "06",
-    title: "Heritage & Adaptive Reuse",
-    desc: "Sensitive interventions that honor historical fabric while enabling new programming and extended lifespan.",
-    image: "/images/hero_architecture.png",
-  },
-];
 
 
 
@@ -234,6 +183,7 @@ export default function KolpoporishorPage() {
                     src={svc.image}
                     alt={svc.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />

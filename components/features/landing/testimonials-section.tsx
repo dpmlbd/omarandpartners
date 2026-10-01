@@ -107,6 +107,7 @@ function TestimonialContent({ testimonials }: { testimonials: Testimonial[] }) {
               src={testimonials[current].image}
               alt={testimonials[current].name}
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover grayscale"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />

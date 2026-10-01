@@ -63,18 +63,27 @@ export function TestimonialsClient({
     const formData = new FormData(form);
 
     startTransition(async () => {
-      let result;
-      if (editingItem) {
-        result = await updateTestimonialAction(editingItem.id, formData);
-      } else {
-        result = await createTestimonialAction(null, formData);
-      }
+      try {
+        let result;
+        if (editingItem) {
+          result = await updateTestimonialAction(editingItem.id, formData);
+        } else {
+          result = await createTestimonialAction(null, formData);
+        }
 
-      if (result.error) {
-        setError(result.error);
-      } else {
-        setIsModalOpen(false);
-        window.location.reload();
+        if (result?.error) {
+          setError(result.error);
+        } else {
+          setIsModalOpen(false);
+          window.location.reload();
+        }
+      } catch (err: unknown) {
+        console.error("Testimonial submit error:", err);
+        const msg =
+          err instanceof Error
+            ? err.message
+            : "Failed to upload and save testimonial. Please check the image and try again.";
+        setError(msg);
       }
     });
   };
@@ -170,6 +179,7 @@ export function TestimonialsClient({
                               src={avatar}
                               alt={t.name}
                               fill
+                              sizes="40px"
                               className="object-cover"
                             />
                           </div>
@@ -338,7 +348,7 @@ export function TestimonialsClient({
                 <input
                   type="file"
                   name="image"
-                  accept="image/jpeg,image/png,image/webp,image/avif"
+                  accept="image/*,.jpg,.jpeg,.png,.webp,.avif"
                   required={!editingItem}
                   onChange={(e) => {
                     const file = e.target.files?.[0];
@@ -361,6 +371,7 @@ export function TestimonialsClient({
                       src={imagePreview}
                       alt="Preview"
                       fill
+                      sizes="64px"
                       className="object-cover"
                     />
                   </div>

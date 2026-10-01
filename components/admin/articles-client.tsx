@@ -58,18 +58,27 @@ export function ArticlesClient({
     const formData = new FormData(form);
 
     startTransition(async () => {
-      let result;
-      if (editingItem) {
-        result = await updateArticleAction(editingItem.id, formData);
-      } else {
-        result = await createArticleAction(null, formData);
-      }
+      try {
+        let result;
+        if (editingItem) {
+          result = await updateArticleAction(editingItem.id, formData);
+        } else {
+          result = await createArticleAction(null, formData);
+        }
 
-      if (result.error) {
-        setError(result.error);
-      } else {
-        setIsModalOpen(false);
-        window.location.reload();
+        if (result?.error) {
+          setError(result.error);
+        } else {
+          setIsModalOpen(false);
+          window.location.reload();
+        }
+      } catch (err: unknown) {
+        console.error("Article submit error:", err);
+        const msg =
+          err instanceof Error
+            ? err.message
+            : "Failed to upload and save article. Please check the image and try again.";
+        setError(msg);
       }
     });
   };
@@ -168,6 +177,7 @@ export function ArticlesClient({
                               src={cover}
                               alt={art.title}
                               fill
+                              sizes="48px"
                               className="object-cover"
                             />
                           </div>
@@ -335,11 +345,19 @@ export function ArticlesClient({
                 <input
                   type="file"
                   name="image"
-                  accept="image/jpeg,image/png,image/webp,image/avif"
+                  accept="image/*,.jpg,.jpeg,.png,.webp,.avif"
                   required={!editingItem}
                   onChange={(e) => {
                     const file = e.target.files?.[0];
-                    if (file) setImagePreview(URL.createObjectURL(file));
+                    if (file) {
+                      if (file.size > 25 * 1024 * 1024) {
+                        setError("Image exceeds 25MB limit. Please choose a smaller file.");
+                        e.target.value = "";
+                        return;
+                      }
+                      setImagePreview(URL.createObjectURL(file));
+                      setError(null);
+                    }
                   }}
                   className="text-xs file:mr-4 file:py-1.5 file:px-3 file:border file:border-border file:bg-secondary file:text-xs file:uppercase file:font-semibold hover:file:bg-primary hover:file:text-primary-foreground cursor-pointer"
                 />
@@ -349,6 +367,7 @@ export function ArticlesClient({
                       src={imagePreview}
                       alt="Preview"
                       fill
+                      sizes="160px"
                       className="object-cover"
                     />
                   </div>

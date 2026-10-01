@@ -18,6 +18,7 @@ interface ImageCardProps {
   overlayClassName?: string;
   contentClassName?: string;
   children?: ReactNode;
+  sizes?: string;
 }
 
 export function ImageCard({
@@ -31,6 +32,7 @@ export function ImageCard({
   overlayClassName,
   contentClassName,
   children,
+  sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
 }: ImageCardProps) {
   const content = (
     <>
@@ -38,6 +40,7 @@ export function ImageCard({
         src={src}
         alt={alt}
         fill
+        sizes={sizes}
         className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700"
       />
       <div

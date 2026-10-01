@@ -168,6 +168,7 @@ export function ProjectsClient({
                               src={thumb}
                               alt={p.title}
                               fill
+                              sizes="48px"
                               className="object-cover"
                             />
                           </div>

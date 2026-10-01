@@ -4,6 +4,7 @@ import { SiteLayoutShell } from "@/components/layout/site-layout-shell";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
+import { Toaster } from "@/components/ui/toast";
 
 const outfit = Outfit({
   variable: "--font-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col font-sans selection:bg-primary selection:text-white">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <SiteLayoutShell>{children}</SiteLayoutShell>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ONP | Insights",
+  description: "Articles, news, and press releases from Omar & Partners.",
+};
+
 export default function InsightsPage() {
   return (
     <div className="container mx-auto px-6 py-24 min-h-[60vh] flex flex-col items-center justify-center text-center">

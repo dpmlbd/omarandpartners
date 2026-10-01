@@ -2,6 +2,7 @@
 
 import { getCurrentUserAndProfile } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 import { uploadAndOptimizeImage, deleteStorageFolder, deleteStorageFile } from "@/lib/storage/service";
 import type { Company, Project, ProjectCategory, ProjectImage } from "@/types/database";
@@ -153,8 +154,10 @@ export async function createProjectAction(
     const baseSlug = slugify(title);
     const slug = `${baseSlug}-${Date.now().toString().slice(-4)}`;
 
-    // 1. Create project record in database
-    const { data: newProject, error: projectError } = await supabase
+    const admin = createAdminClient();
+
+    // 1. Create project record in database using admin client
+    const { data: newProject, error: projectError } = await admin
       .from("projects")
       .insert({
         company_id: companyId,
@@ -188,33 +191,54 @@ export async function createProjectAction(
 
     if (mainUpload.error || !mainUpload.storagePath) {
       // Rollback project record if image processing/upload fails
-      await supabase.from("projects").delete().eq("id", newProject.id);
+      await admin.from("projects").delete().eq("id", newProject.id);
       return { error: "Main image upload error: " + mainUpload.error };
     }
 
-    await supabase.from("project_images").insert({
+    const { error: mainImgError } = await admin.from("project_images").insert({
       project_id: newProject.id,
       storage_path: mainUpload.storagePath,
       role: "main",
       display_order: 0,
     });
 
-    // 3. Process & upload optional gallery images (01.avif, 02.avif, ...)
-    for (let i = 0; i < validGalleryFiles.length; i++) {
-      const padNum = String(i + 1).padStart(2, "0");
-      const galleryUpload = await uploadAndOptimizeImage({
-        file: validGalleryFiles[i],
-        folder,
-        fileName: `${padNum}.avif`,
-      });
+    if (mainImgError) {
+      await deleteStorageFolder(folder);
+      await admin.from("projects").delete().eq("id", newProject.id);
+      return { error: "Failed to record main project image: " + mainImgError.message };
+    }
 
-      if (galleryUpload.storagePath) {
-        await supabase.from("project_images").insert({
-          project_id: newProject.id,
-          storage_path: galleryUpload.storagePath,
-          role: "gallery",
-          display_order: i + 1,
-        });
+    // 3. Process & upload optional gallery images in parallel
+    if (validGalleryFiles.length > 0) {
+      const galleryUploads = await Promise.all(
+        validGalleryFiles.map(async (file, i) => {
+          const padNum = String(i + 1).padStart(2, "0");
+          const upload = await uploadAndOptimizeImage({
+            file,
+            folder,
+            fileName: `${padNum}.avif`,
+          });
+          return {
+            storagePath: upload.storagePath,
+            order: i + 1,
+            error: upload.error,
+          };
+        })
+      );
+
+      const successfulGallery = galleryUploads.filter((g) => g.storagePath);
+      if (successfulGallery.length > 0) {
+        const { error: galleryErr } = await admin.from("project_images").insert(
+          successfulGallery.map((g) => ({
+            project_id: newProject.id,
+            storage_path: g.storagePath,
+            role: "gallery",
+            display_order: g.order,
+          }))
+        );
+        if (galleryErr) {
+          console.error("Error inserting gallery images:", galleryErr);
+        }
       }
     }
 
@@ -236,10 +260,10 @@ export async function updateProjectAction(
   try {
     await requireStaff();
 
-    const supabase = await createClient();
+    const admin = createAdminClient();
 
     // Verify project exists
-    const { data: project } = await supabase
+    const { data: project } = await admin
       .from("projects")
       .select("*, images:project_images(*)")
       .eq("id", projectId)
@@ -268,7 +292,7 @@ export async function updateProjectAction(
     }
 
     // Update project attributes
-    const { error: updateError } = await supabase
+    const { error: updateError } = await admin
       .from("projects")
       .update({
         company_id: companyId,
@@ -302,19 +326,27 @@ export async function updateProjectAction(
         oldPath: existingMain?.storage_path,
       });
 
-      if (upload.storagePath) {
-        if (existingMain) {
-          await supabase
-            .from("project_images")
-            .update({ storage_path: upload.storagePath })
-            .eq("id", existingMain.id);
-        } else {
-          await supabase.from("project_images").insert({
-            project_id: projectId,
-            storage_path: upload.storagePath,
-            role: "main",
-            display_order: 0,
-          });
+      if (upload.error || !upload.storagePath) {
+        return { error: "Main image upload error: " + upload.error };
+      }
+
+      if (existingMain) {
+        const { error: imgUpdateErr } = await admin
+          .from("project_images")
+          .update({ storage_path: upload.storagePath })
+          .eq("id", existingMain.id);
+        if (imgUpdateErr) {
+          return { error: "Failed to update main image record: " + imgUpdateErr.message };
+        }
+      } else {
+        const { error: imgInsertErr } = await admin.from("project_images").insert({
+          project_id: projectId,
+          storage_path: upload.storagePath,
+          role: "main",
+          display_order: 0,
+        });
+        if (imgInsertErr) {
+          return { error: "Failed to create main image record: " + imgInsertErr.message };
         }
       }
     }
@@ -333,24 +365,37 @@ export async function updateProjectAction(
       const existingGallery = project.images?.filter((img: ProjectImage) => img.role === "gallery") || [];
       for (const img of existingGallery) {
         await deleteStorageFile(img.storage_path);
-        await supabase.from("project_images").delete().eq("id", img.id);
+        await admin.from("project_images").delete().eq("id", img.id);
       }
 
-      for (let i = 0; i < validNewGalleryFiles.length; i++) {
-        const padNum = String(i + 1).padStart(2, "0");
-        const upload = await uploadAndOptimizeImage({
-          file: validNewGalleryFiles[i],
-          folder,
-          fileName: `${padNum}.avif`,
-        });
-
-        if (upload.storagePath) {
-          await supabase.from("project_images").insert({
-            project_id: projectId,
-            storage_path: upload.storagePath,
-            role: "gallery",
-            display_order: i + 1,
+      const galleryUploads = await Promise.all(
+        validNewGalleryFiles.map(async (file, i) => {
+          const padNum = String(i + 1).padStart(2, "0");
+          const upload = await uploadAndOptimizeImage({
+            file,
+            folder,
+            fileName: `${padNum}.avif`,
           });
+          return {
+            storagePath: upload.storagePath,
+            order: i + 1,
+            error: upload.error,
+          };
+        })
+      );
+
+      const successfulGallery = galleryUploads.filter((g) => g.storagePath);
+      if (successfulGallery.length > 0) {
+        const { error: galleryInsertErr } = await admin.from("project_images").insert(
+          successfulGallery.map((g) => ({
+            project_id: projectId,
+            storage_path: g.storagePath,
+            role: "gallery",
+            display_order: g.order,
+          }))
+        );
+        if (galleryInsertErr) {
+          return { error: "Failed to save gallery records: " + galleryInsertErr.message };
         }
       }
     }
@@ -372,9 +417,9 @@ export async function deleteProjectAction(
   try {
     await requireStaff();
 
-    const supabase = await createClient();
+    const admin = createAdminClient();
 
-    const { data: project } = await supabase
+    const { data: project } = await admin
       .from("projects")
       .select("slug")
       .eq("id", projectId)
@@ -386,7 +431,7 @@ export async function deleteProjectAction(
     await deleteStorageFolder(`projects/${project.slug}`);
 
     // 2. Delete project from database (cascades to project_images)
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await admin
       .from("projects")
       .delete()
       .eq("id", projectId);

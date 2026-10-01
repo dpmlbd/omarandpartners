@@ -45,8 +45,8 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
   const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 15 * 1024 * 1024) {
-        setError("Main image exceeds 15MB upload limit.");
+      if (file.size > 25 * 1024 * 1024) {
+        setError("Main image exceeds 25MB upload limit.");
         return;
       }
       setMainPreview(URL.createObjectURL(file));
@@ -62,6 +62,14 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
       return;
     }
 
+    for (const f of files) {
+      if (f.size > 25 * 1024 * 1024) {
+        setError(`File "${f.name}" exceeds 25MB upload limit.`);
+        e.target.value = "";
+        return;
+      }
+    }
+
     const newPreviews = files.map((file) => URL.createObjectURL(file));
     setGalleryPreviews(newPreviews);
     setError(null);
@@ -74,18 +82,27 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
     const formData = new FormData(form);
 
     startTransition(async () => {
-      let result;
-      if (initialProject) {
-        result = await updateProjectAction(initialProject.id, formData);
-      } else {
-        result = await createProjectAction(null, formData);
-      }
+      try {
+        let result;
+        if (initialProject) {
+          result = await updateProjectAction(initialProject.id, formData);
+        } else {
+          result = await createProjectAction(null, formData);
+        }
 
-      if (result.error) {
-        setError(result.error);
-      } else {
-        router.push("/admin/projects");
-        router.refresh();
+        if (result?.error) {
+          setError(result.error);
+        } else {
+          router.push("/admin/projects");
+          router.refresh();
+        }
+      } catch (err: unknown) {
+        console.error("Submission error:", err);
+        const msg =
+          err instanceof Error
+            ? err.message
+            : "Failed to upload and save project. Please check image files and try again.";
+        setError(msg);
       }
     });
   };
@@ -315,7 +332,7 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
               <input
                 type="file"
                 name="main_image"
-                accept="image/jpeg,image/png,image/webp,image/avif"
+                accept="image/*,.jpg,.jpeg,.png,.webp,.avif"
                 required={!initialProject}
                 onChange={handleMainImageChange}
                 className="text-xs file:mr-4 file:py-2 file:px-4 file:border file:border-border file:bg-secondary file:text-xs file:uppercase file:font-semibold hover:file:bg-primary hover:file:text-primary-foreground cursor-pointer"
@@ -327,6 +344,7 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
                     src={mainPreview}
                     alt="Main Preview"
                     fill
+                    sizes="192px"
                     className="object-cover"
                   />
                 </div>
@@ -353,7 +371,7 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
                 type="file"
                 name="gallery_images"
                 multiple
-                accept="image/jpeg,image/png,image/webp,image/avif"
+                accept="image/*,.jpg,.jpeg,.png,.webp,.avif"
                 onChange={handleGalleryImagesChange}
                 className="text-xs file:mr-4 file:py-2 file:px-4 file:border file:border-border file:bg-secondary file:text-xs file:uppercase file:font-semibold hover:file:bg-primary hover:file:text-primary-foreground cursor-pointer"
               />
@@ -369,6 +387,7 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
                         src={url}
                         alt={`Gallery ${idx + 1}`}
                         fill
+                        sizes="(max-width: 640px) 33vw, 16vw"
                         className="object-cover"
                       />
                       <span className="absolute bottom-1 right-1 bg-black/70 text-white text-[9px] font-mono px-1">

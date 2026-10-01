@@ -27,6 +27,7 @@ export function HeroSliderPanel({ slides, activeSlide, onDotClick, activeDot }: 
             src={slides[activeSlide].src}
             alt={slides[activeSlide].label}
             fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover grayscale"
             priority
           />

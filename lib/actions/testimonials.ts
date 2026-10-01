@@ -2,6 +2,7 @@
 
 import { requireStaff } from "@/lib/actions/projects";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 import { uploadAndOptimizeImage, deleteStorageFile } from "@/lib/storage/service";
 import type { Testimonial } from "@/types/database";
@@ -59,8 +60,8 @@ export async function createTestimonialAction(
       return { error: "Image processing error: " + upload.error };
     }
 
-    const supabase = await createClient();
-    const { error: insertError } = await supabase.from("testimonials").insert({
+    const admin = createAdminClient();
+    const { error: insertError } = await admin.from("testimonials").insert({
       name,
       location,
       work,
@@ -101,8 +102,8 @@ export async function updateTestimonialAction(
       return { error: "Please fill in all required testimonial fields." };
     }
 
-    const supabase = await createClient();
-    const { data: existing } = await supabase
+    const admin = createAdminClient();
+    const { data: existing } = await admin
       .from("testimonials")
       .select("image")
       .eq("id", id)
@@ -126,7 +127,7 @@ export async function updateTestimonialAction(
       imagePath = upload.storagePath;
     }
 
-    const { error: updateError } = await supabase
+    const { error: updateError } = await admin
       .from("testimonials")
       .update({
         name,
@@ -157,8 +158,8 @@ export async function toggleTestimonialPublishedAction(
 ): Promise<{ success?: boolean; error?: string }> {
   try {
     await requireStaff();
-    const supabase = await createClient();
-    const { error } = await supabase
+    const admin = createAdminClient();
+    const { error } = await admin
       .from("testimonials")
       .update({ published: nextPublished })
       .eq("id", id);
@@ -179,9 +180,9 @@ export async function deleteTestimonialAction(
 ): Promise<{ success?: boolean; error?: string }> {
   try {
     await requireStaff();
-    const supabase = await createClient();
+    const admin = createAdminClient();
 
-    const { data: existing } = await supabase
+    const { data: existing } = await admin
       .from("testimonials")
       .select("image")
       .eq("id", id)
@@ -192,7 +193,7 @@ export async function deleteTestimonialAction(
       await deleteStorageFile(existingRecord.image);
     }
 
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await admin
       .from("testimonials")
       .delete()
       .eq("id", id);

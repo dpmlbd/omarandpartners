@@ -1,56 +1,5 @@
 import Link from "next/link";
-
-const sections = [
-  {
-    title: "Information We Collect",
-    content: `We collect information you provide directly to us, such as when you fill out a contact form, request a consultation, or communicate with us. This includes your name, email address, phone number, company name, and any messages you send.
-
-We also automatically collect certain information when you visit our website, including your IP address, browser type, operating system, referring URLs, and pages viewed. This information is collected through cookies and similar tracking technologies.`
-  },
-  {
-    title: "How We Use Your Information",
-    content: `We use the information we collect to:
-• Respond to your inquiries and fulfill your requests
-• Communicate with you about our services, projects, and events
-• Send you marketing communications (with your consent)
-• Improve and personalize your experience on our website
-• Analyze usage trends and preferences
-• Comply with legal obligations`
-  },
-  {
-    title: "Information Sharing",
-    content: `We do not sell, trade, or rent your personal information to third parties. We may share your information with trusted service providers who assist us in operating our website and conducting our business, provided those parties agree to keep this information confidential.
-
-We may also disclose your information where required by law, or when we believe disclosure is necessary to protect our rights, your safety, or the safety of others.`
-  },
-  {
-    title: "Data Retention",
-    content: `We retain your personal information for as long as necessary to fulfill the purposes outlined in this policy, unless a longer retention period is required by law. When your information is no longer needed, we will securely delete or anonymize it.`
-  },
-  {
-    title: "Cookies",
-    content: `Our website uses cookies to enhance your browsing experience, analyze site traffic, and personalize content. You may choose to disable cookies through your browser settings, though this may affect your ability to use certain features of our website. Please see our Cookie Policy for more information.`
-  },
-  {
-    title: "Your Rights",
-    content: `Depending on your location, you may have the following rights regarding your personal information:
-• The right to access the personal data we hold about you
-• The right to request correction of inaccurate data
-• The right to request deletion of your data
-• The right to restrict or object to processing
-• The right to data portability
-
-To exercise any of these rights, please contact us at info@onp-bd.com.`
-  },
-  {
-    title: "Security",
-    content: `We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, disclosure, alteration, or destruction. However, no method of transmission over the internet or electronic storage is 100% secure.`
-  },
-  {
-    title: "Changes to This Policy",
-    content: `We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new policy on this page with an updated effective date. We encourage you to review this policy periodically.`
-  },
-];
+import { privacyPolicySections as sections } from "@/static-data/legal";
 
 export default function PrivacyPolicyPage() {
   return (

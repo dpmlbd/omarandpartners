@@ -20,7 +20,7 @@ export const siteConfig = {
     {
       name: "INEX",
       href: "/inex",
-      description: "Building Materials — Coming Soon",
+      description: "Project Management and Development",
     },
   ],
 };

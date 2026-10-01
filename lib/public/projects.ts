@@ -17,6 +17,9 @@ export interface PublicProjectView {
   year: string;
   area: string;
   status: string;
+  projectType?: string;
+  companyName?: string;
+  companySlug?: string;
   description: string;
   image: string;
   gallery: string[];
@@ -74,6 +77,9 @@ export async function fetchProjectDetail(
         year: p.year,
         area: p.area || "N/A",
         status: p.status || "Completed",
+        projectType: p.project_type || "Architectural Project",
+        companyName: p.company?.name || "",
+        companySlug: p.company?.slug || "",
         description: p.description || "",
         image: heroImage,
         gallery: galleryImgs.length > 0 ? galleryImgs : [heroImage],

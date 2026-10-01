@@ -22,18 +22,20 @@ export async function uploadAndOptimizeImage({
       return { storagePath: "", error: validation.error };
     }
 
-    // 2. Read array buffer & process via Sharp to AVIF
+    // 2. Read array buffer & process via Sharp (AVIF with WebP fallback)
     const arrayBuffer = await file.arrayBuffer();
-    const { buffer } = await processImageToAvif(arrayBuffer);
+    const { buffer, format } = await processImageToAvif(arrayBuffer);
 
     const admin = createAdminClient();
-    const targetPath = `${folder.replace(/^\/+|\/+$/g, "")}/${fileName}`;
+    const cleanFileName = fileName.replace(/\.(avif|webp|jpe?g|png)$/i, "");
+    const finalFileName = `${cleanFileName}.${format}`;
+    const targetPath = `${folder.replace(/^\/+|\/+$/g, "")}/${finalFileName}`;
 
-    // 3. Upload optimized AVIF to Supabase Storage
+    // 3. Upload optimized image to Supabase Storage
     const { error: uploadError } = await admin.storage
       .from(STORAGE_BUCKET)
       .upload(targetPath, buffer, {
-        contentType: "image/avif",
+        contentType: `image/${format}`,
         upsert: true,
       });
 

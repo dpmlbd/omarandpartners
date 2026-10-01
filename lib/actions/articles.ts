@@ -2,6 +2,7 @@
 
 import { requireStaff } from "@/lib/actions/projects";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 import { uploadAndOptimizeImage, deleteStorageFile } from "@/lib/storage/service";
 import type { Article } from "@/types/database";
@@ -71,14 +72,14 @@ export async function createArticleAction(
     const baseSlug = slugify(title);
     const slug = `${baseSlug}-${Date.now().toString().slice(-4)}`;
 
-    const supabase = await createClient();
+    const admin = createAdminClient();
 
     // Look up author from team table for snapshot fallback
     let authorName: string | null = null;
     let authorDesignation: string | null = null;
 
     if (authorId && authorId !== "none") {
-      const { data: teamMember } = (await supabase
+      const { data: teamMember } = (await admin
         .from("team")
         .select("name, designation")
         .eq("id", authorId)
@@ -101,7 +102,7 @@ export async function createArticleAction(
       return { error: "Image processing failed: " + upload.error };
     }
 
-    const { error: insertError } = await supabase.from("articles").insert({
+    const { error: insertError } = await admin.from("articles").insert({
       title,
       slug,
       description,
@@ -144,9 +145,9 @@ export async function updateArticleAction(
       return { error: "Title and description/content are required." };
     }
 
-    const supabase = await createClient();
+    const admin = createAdminClient();
 
-    const { data: existing } = await supabase
+    const { data: existing } = await admin
       .from("articles")
       .select("image, slug")
       .eq("id", id)
@@ -160,7 +161,7 @@ export async function updateArticleAction(
     let authorDesignation: string | null = null;
 
     if (authorId && authorId !== "none") {
-      const { data: teamMember } = (await supabase
+      const { data: teamMember } = (await admin
         .from("team")
         .select("name, designation")
         .eq("id", authorId)
@@ -186,7 +187,7 @@ export async function updateArticleAction(
       imagePath = upload.storagePath;
     }
 
-    const { error: updateError } = await supabase
+    const { error: updateError } = await admin
       .from("articles")
       .update({
         title,
@@ -219,8 +220,8 @@ export async function toggleArticlePublishedAction(
 ): Promise<{ success?: boolean; error?: string }> {
   try {
     await requireStaff();
-    const supabase = await createClient();
-    const { error } = await supabase
+    const admin = createAdminClient();
+    const { error } = await admin
       .from("articles")
       .update({ published: nextPublished })
       .eq("id", id);
@@ -242,9 +243,9 @@ export async function deleteArticleAction(
 ): Promise<{ success?: boolean; error?: string }> {
   try {
     await requireStaff();
-    const supabase = await createClient();
+    const admin = createAdminClient();
 
-    const { data: existing } = await supabase
+    const { data: existing } = await admin
       .from("articles")
       .select("image")
       .eq("id", id)
@@ -255,7 +256,7 @@ export async function deleteArticleAction(
       await deleteStorageFile(existingRecord.image);
     }
 
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await admin
       .from("articles")
       .delete()
       .eq("id", id);

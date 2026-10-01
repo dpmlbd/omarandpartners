@@ -158,6 +158,7 @@ export function HeroSection({
                   src={rightPanelImage.src}
                   alt={rightPanelImage.alt}
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover grayscale"
                   priority={rightPanelImage.priority}
                 />

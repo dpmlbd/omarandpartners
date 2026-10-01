@@ -93,7 +93,10 @@ export function BrandsView() {
                       />
                       <div>
                         <span className="text-xs font-medium uppercase tracking-wider block">Primary Brand Color</span>
-                        <span className="text-[10px] text-muted-foreground font-mono">{brand.color}</span>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-xs font-medium text-foreground">{brand.colorName}</span>
+                          <span className="text-[10px] text-muted-foreground font-mono">({brand.color})</span>
+                        </div>
                       </div>
                     </div>
 

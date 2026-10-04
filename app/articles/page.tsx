@@ -63,10 +63,14 @@ export default async function ArticlesPage() {
                   : "/images/architecture.png";
                 const authorName = art.author?.name || art.author_name || "Editorial Fellow";
                 const authorRole = art.author?.designation || art.author_designation || "ONP";
+                const targetSlug = art.slug || art.id;
 
                 return (
                   <ScrollReveal key={art.id} delay={idx * 0.1}>
-                    <article className="group flex flex-col border border-border bg-card overflow-hidden hover:border-primary/50 transition-colors duration-500">
+                    <Link
+                      href={`/articles/${targetSlug}`}
+                      className="group flex flex-col border border-border bg-card overflow-hidden hover:border-primary/50 transition-colors duration-500 h-full"
+                    >
                       {/* Cover Photo */}
                       <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
                         <Image
@@ -121,7 +125,7 @@ export default async function ArticlesPage() {
                           />
                         </div>
                       </div>
-                    </article>
+                    </Link>
                   </ScrollReveal>
                 );
               })}

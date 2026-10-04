@@ -4,11 +4,6 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { RiArrowDownLine, RiArrowRightLine } from "@remixicon/react";
-import { siteConfig } from "@/config/site";
-
-const comp1 = siteConfig.companies[1];
-const comp2 = siteConfig.companies[2];
-const comp3 = siteConfig.companies[3];
 
 interface HeroSlide {
   src: string;
@@ -128,65 +123,37 @@ export function HeroCinematic({ slides }: HeroCinematicProps) {
 
       {/* ── Center Content ───────────────────────────────────────────── */}
       <div className="relative z-10 h-full flex flex-col justify-center items-start container mx-auto px-6 md:px-14">
-        {/* Top tag line */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="flex items-center gap-3 mb-6"
-        >
-          <span className="w-10 h-[1px] bg-primary" />
-          <span className="text-[10px] uppercase tracking-[0.35em] text-white/50 font-medium">
-            {comp1?.description} · {comp2?.description} · {comp3?.description}
-          </span>
-        </motion.div>
-
         {/* Main Heading */}
-        <div className="overflow-hidden">
+        <div className="overflow-hidden pr-4 sm:pr-8 pb-2">
           <motion.h1
             initial={{ y: 120, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="font-heading font-bold leading-[0.88] tracking-tighter uppercase text-white"
-            style={{ fontSize: "clamp(3.5rem, 9vw, 9rem)" }}
+            className="font-heading font-bold leading-[0.92] tracking-tighter uppercase text-white"
+            style={{ fontSize: "clamp(3rem, 8vw, 8rem)" }}
           >
             Omar
           </motion.h1>
         </div>
-        <div className="overflow-hidden">
+        <div className="overflow-hidden pr-4 sm:pr-8 pb-2">
           <motion.h1
             initial={{ y: 120, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1.2, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="font-heading font-bold leading-[0.88] tracking-tighter uppercase text-white flex items-baseline gap-4"
-            style={{ fontSize: "clamp(3.5rem, 9vw, 9rem)" }}
+            className="font-heading font-bold leading-[0.92] tracking-tighter uppercase text-white flex items-baseline gap-4"
+            style={{ fontSize: "clamp(3rem, 8vw, 8rem)" }}
           >
             <span className="text-primary">&amp;</span>
-            <span>Partners</span>
+            <span className="pr-1">Partners</span>
           </motion.h1>
         </div>
-
-        {/* Subtitle */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-          className="mt-8 max-w-md"
-        >
-          <div className="w-full h-[1px] bg-gradient-to-r from-primary via-primary/40 to-transparent mb-5" />
-          <p className="text-white/55 text-sm md:text-base font-light leading-relaxed">
-            Three independent companies. One unified vision.
-            <br className="hidden md:block" />{" "}
-            {comp1?.description}, {comp2?.description}, and {comp3?.description} in complete synergy.
-          </p>
-        </motion.div>
 
         {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.1 }}
-          className="mt-8 flex items-center gap-4"
+          transition={{ duration: 0.8, delay: 0.55 }}
+          className="mt-8 md:mt-10 flex items-center gap-4"
         >
           <a
             href="#ecosystem"

@@ -8,18 +8,22 @@ import { GalleryGrid } from "@/components/ui/gallery-grid";
 import { CTASection } from "@/components/ui/cta-section";
 import { ServicesBentoGrid } from "@/components/ui/services-bento-grid";
 import { EcosystemDiagram } from "@/components/features/landing/ecosystem-diagram";
-import { RiArrowRightUpLine } from "@remixicon/react";
+import { RiArrowRightUpLine, RiTimeLine } from "@remixicon/react";
 import {
   companiesServices as services,
-  companiesGallery as gallery,
   engagementFramework,
 } from "@/static-data/companies";
 import { siteConfig } from "@/config/site";
+import type { PublicCompanyGalleryItem } from "@/lib/public/projects";
 
 const comp1 = siteConfig.companies[1];
 const comp2 = siteConfig.companies[2];
 
-export function CompaniesView() {
+export function CompaniesView({
+  initialGallery = [],
+}: {
+  initialGallery?: PublicCompanyGalleryItem[];
+}) {
   return (
     <div className="flex flex-col w-full overflow-hidden">
 
@@ -91,7 +95,7 @@ export function CompaniesView() {
             transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="text-muted-foreground text-sm sm:text-base md:text-lg font-light leading-relaxed max-w-2xl text-center px-4"
           >
-            Three autonomous yet deeply synchronized operating entities unified under one holding vision — bridging master architecture, bespoke interiors, and material intelligence into a seamless closed-loop execution model.
+            Autonomous yet deeply synchronized operating entities unified under one holding vision — bridging master architecture, engineering, and bespoke interiors into a seamless closed-loop execution model.
           </motion.p>
 
         </div>
@@ -99,22 +103,41 @@ export function CompaniesView() {
 
       <section id="ecosystem" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="01" title="Our Ecosystem" subtitle="Three specialized entities, one unified vision of excellence." />
+          <SectionHeader index="01" title="Our Ecosystem" subtitle="Specialized entities under one unified vision of excellence." />
           <EcosystemDiagram />
         </div>
       </section>
 
       <section id="services" className="py-24 md:py-36 border-b border-border bg-secondary/10 scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="02" title="Services Overview" subtitle={`A comprehensive range of services across ${comp1?.description?.toLowerCase() || "consultancy"}, ${comp2?.description?.toLowerCase() || "consultancy & construction"}, and materials — all under one roof.`} />
+          <SectionHeader index="02" title="Services Overview" subtitle={`A comprehensive range of services across ${comp1?.description?.toLowerCase() || "consultancy"} and ${comp2?.description?.toLowerCase() || "consultancy & construction"} — all under one roof.`} />
           <ServicesBentoGrid services={services} />
         </div>
       </section>
 
       <section id="works" className="py-24 md:py-36 border-b border-border scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="03" title="Selected Works" subtitle={`A curated showcase across ${comp1?.description?.toLowerCase() || "consultancy"}, ${comp2?.description?.toLowerCase() || "consultancy & construction"}, and material excellence.`} />
-          <GalleryGrid items={gallery} />
+          <SectionHeader index="03" title="Selected Works" subtitle={`A curated showcase across ${comp1?.description?.toLowerCase() || "consultancy"} and ${comp2?.description?.toLowerCase() || "consultancy & construction"}.`} />
+          {initialGallery.length === 0 ? (
+            <div className="border border-border bg-card/20 p-12 md:p-16 flex flex-col items-center justify-center text-center mt-12">
+              <div className="w-12 h-12 rounded-full border border-border bg-secondary/50 flex items-center justify-center text-muted-foreground mb-4">
+                <RiTimeLine size={20} className="text-primary" />
+              </div>
+              <span className="font-mono text-[10px] tracking-widest uppercase text-primary mb-2">
+                Portfolio Showcase
+              </span>
+              <h3 className="font-heading text-2xl md:text-3xl font-medium tracking-tight mb-2">
+                Selected Works Coming Soon
+              </h3>
+              <p className="text-muted-foreground text-xs md:text-sm font-light max-w-md leading-relaxed">
+                Our portfolio of architectural and construction commissions across companies is currently being curated.
+              </p>
+            </div>
+          ) : (
+            <div className="mt-12">
+              <GalleryGrid items={initialGallery} />
+            </div>
+          )}
         </div>
       </section>
 
@@ -124,7 +147,7 @@ export function CompaniesView() {
           <SectionHeader
             index="04"
             title="Engagement Models"
-            subtitle="Three structured delivery frameworks calibrated for independent agility or unified group execution."
+            subtitle="Structured delivery frameworks calibrated for independent agility or unified group execution."
           />
 
           {/* Ledger Technical Header */}

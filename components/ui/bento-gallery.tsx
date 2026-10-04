@@ -65,49 +65,63 @@ export function BentoGallery({
         </div>
 
         {/* Bento Grid */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentPage}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-[280px] gap-4 pt-10"
-          >
-            {currentItems.map((item, idx) => {
-              const colSpanClass =
-                item.colSpan === 2 ? "sm:col-span-2" : "col-span-1";
-              const rowSpanClass =
-                item.rowSpan === 2 ? "row-span-2" : "row-span-1";
+        {items.length === 0 ? (
+          <div className="border border-border bg-card/20 p-12 md:p-16 flex flex-col items-center justify-center text-center mt-10">
+            <span className="font-mono text-[10px] tracking-widest uppercase text-primary mb-2">
+              Portfolio In Curation
+            </span>
+            <h3 className="font-heading text-xl md:text-2xl font-medium tracking-tight mb-2">
+              Visual Archive Coming Soon
+            </h3>
+            <p className="text-muted-foreground text-xs md:text-sm font-light max-w-md leading-relaxed">
+              Imagery from current and completed commissions will appear here once published.
+            </p>
+          </div>
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentPage}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-[280px] gap-4 pt-10"
+            >
+              {currentItems.map((item, idx) => {
+                const colSpanClass =
+                  item.colSpan === 2 ? "sm:col-span-2" : "col-span-1";
+                const rowSpanClass =
+                  item.rowSpan === 2 ? "row-span-2" : "row-span-1";
 
-              return (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.45,
-                    delay: idx * 0.05,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className={`group relative overflow-hidden border border-border bg-card/40 ${colSpanClass} ${rowSpanClass} hover:border-primary/80 transition-colors duration-500`}
-                >
-                  {/* Clean Image with Smooth Hover Zoom - Absolutely No Text */}
-                  <Image
-                    src={item.image}
-                    alt={item.title || "Gallery work"}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
+                return (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.45,
+                      delay: idx * 0.05,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className={`group relative overflow-hidden border border-border bg-card/40 ${colSpanClass} ${rowSpanClass} hover:border-primary/80 transition-colors duration-500`}
+                  >
+                    {/* Clean Image with Smooth Hover Zoom - Absolutely No Text */}
+                    <Image
+                      src={item.image}
+                      alt={item.title || "Gallery work"}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
 
-                  {/* Corner Accent on Hover */}
-                  <div className="absolute top-0 left-0 h-[2px] w-0 bg-primary group-hover:w-full transition-all duration-500" />
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </AnimatePresence>
+                    {/* Corner Accent on Hover */}
+                    <div className="absolute top-0 left-0 h-[2px] w-0 bg-primary group-hover:w-full transition-all duration-500" />
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </AnimatePresence>
+        )}
 
         {/* Pagination Controls */}
         {totalPages > 1 && (

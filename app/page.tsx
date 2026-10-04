@@ -9,11 +9,11 @@ import { HeroCinematic } from "@/components/features/landing/hero-cinematic";
 import { TestimonialsSection } from "@/components/features/landing/testimonials-section";
 import { fetchPublicTestimonials } from "@/lib/public/testimonials";
 import { fetchPublicInsights } from "@/lib/public/articles";
+import { fetchLandingProjects } from "@/lib/public/projects";
 import { RiArrowRightLine, RiTimeLine } from "@remixicon/react";
 import { siteConfig } from "@/config/site";
 import {
   heroSlides,
-  landingProjects as projects,
   whyItems,
   fallbackTestimonials,
 } from "@/static-data/landing";
@@ -25,9 +25,10 @@ const comp2 = siteConfig.companies[2];
 const comp3 = siteConfig.companies[3];
 
 export default async function HomePage() {
-  const [testimonials, insights] = await Promise.all([
+  const [testimonials, insights, projects] = await Promise.all([
     fetchPublicTestimonials(fallbackTestimonials),
     fetchPublicInsights(3),
+    fetchLandingProjects(4),
   ]);
   return (
     <div className="flex flex-col w-full overflow-hidden">
@@ -84,11 +85,37 @@ export default async function HomePage() {
             </ScrollReveal>
           </SectionHeader>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border">
-            {projects.map((p, i) => (
-              <ImageCard key={i} src={p.src} alt={p.title} title={p.title} subtitle={p.category} href={p.href} />
-            ))}
-          </div>
+          {projects.length === 0 ? (
+            <ScrollReveal>
+              <div className="border border-border bg-card/20 p-12 md:p-16 flex flex-col items-center justify-center text-center">
+                <div className="w-12 h-12 rounded-full border border-border bg-secondary/50 flex items-center justify-center text-muted-foreground mb-4">
+                  <RiTimeLine size={20} className="text-primary" />
+                </div>
+                <span className="font-mono text-[10px] tracking-widest uppercase text-primary mb-2">
+                  Portfolio Archive
+                </span>
+                <h3 className="font-heading text-2xl md:text-3xl font-medium tracking-tight mb-2">
+                  Selected Works Coming Soon
+                </h3>
+                <p className="text-muted-foreground text-xs md:text-sm font-light max-w-md leading-relaxed">
+                  Our portfolio of architectural and construction commissions is currently being updated. Visit our individual division portfolios for full project archives.
+                </p>
+              </div>
+            </ScrollReveal>
+          ) : (
+            <div className={`grid grid-cols-1 ${projects.length === 1 ? "md:grid-cols-1" : "md:grid-cols-2"} gap-px border border-border`}>
+              {projects.map((p, i) => (
+                <ImageCard
+                  key={p.id || i}
+                  src={p.image}
+                  alt={p.title}
+                  title={p.title}
+                  subtitle={p.category}
+                  href={p.href}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -98,30 +125,27 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px border border-border">
             {whyItems.map((item, i) => (
-              <ScrollReveal key={i} delay={i * 0.15}>
-                <div className="group flex flex-col gap-6 p-8 md:p-10 bg-background border-r border-border last:border-r-0 hover:bg-secondary/40 transition-all duration-500">
-                  <div className="w-10 h-10 border border-border flex items-center justify-center text-primary group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+              <ScrollReveal key={i} delay={i * 0.15} className="h-full">
+                <div className="group flex flex-col gap-6 p-8 md:p-10 bg-background border-r border-border last:border-r-0 hover:bg-secondary/20 transition-colors duration-300 h-full">
+                  <div className="w-10 h-10 border border-border flex items-center justify-center text-primary">
                     {item.icon}
                   </div>
                   <div>
                     <h4 className="font-heading text-xl font-medium uppercase tracking-tight mb-3">{item.title}</h4>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      <span className="group-hover:max-h-0 group-hover:opacity-0 max-h-24 overflow-hidden transition-all duration-500 inline-block align-top">{item.shortDesc}</span>
-                      <span className="max-h-0 opacity-0 group-hover:max-h-40 group-hover:opacity-100 transition-all duration-500 delay-75 inline-block align-top">{item.desc}</span>
-                    </p>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
                   </div>
                   {item.image && (
-                    <div className="relative h-40 overflow-hidden rounded-lg border border-border mt-2">
+                    <div className="relative h-44 overflow-hidden border border-border mt-auto">
                       <Image
                         src={item.image}
                         alt={item.title}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700"
+                        className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
                       />
                     </div>
                   )}
-                  <span className="font-mono text-[10px] text-border mt-auto">0{i + 1}</span>
+                  <span className="font-mono text-[10px] text-border pt-2">0{i + 1}</span>
                 </div>
               </ScrollReveal>
             ))}
@@ -133,7 +157,7 @@ export default async function HomePage() {
 
       <section className="py-24 md:py-36 border-b border-border">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="06" title="Latest Insights" subtitle="News, articles &amp; press releases from across the ecosystem." />
+          <SectionHeader index="06" title="Latest Articles" subtitle="Spatial monographs, architectural analyses, and material essays." />
 
           {insights.length === 0 ? (
             <ScrollReveal>
@@ -142,13 +166,13 @@ export default async function HomePage() {
                   <RiTimeLine size={20} className="text-primary" />
                 </div>
                 <span className="font-mono text-[10px] tracking-widest uppercase text-primary mb-2">
-                  Ecosystem Dispatches
+                  Editorial &amp; Research
                 </span>
                 <h3 className="font-heading text-2xl md:text-3xl font-medium tracking-tight mb-2">
                   Stay Tuned
                 </h3>
                 <p className="text-muted-foreground text-xs md:text-sm font-light max-w-md leading-relaxed">
-                  Our latest architectural essays, research monographs, and press releases will be published here soon.
+                  Our latest architectural essays and research monographs will be published here soon.
                 </p>
               </div>
             </ScrollReveal>
@@ -156,7 +180,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-px border border-border">
               {insights.map((item, i) => (
                 <ScrollReveal key={item.id || i} delay={i * 0.15}>
-                  <Link href={`/insights/articles`} className="group flex flex-col gap-6 p-8 md:p-10 bg-background border-r border-border last:border-r-0 hover:bg-secondary/40 transition-colors duration-300 min-h-[240px]">
+                  <Link href={`/articles/${item.slug || item.id}`} className="group flex flex-col gap-6 p-8 md:p-10 bg-background border-r border-border last:border-r-0 hover:bg-secondary/40 transition-colors duration-300 min-h-[240px]">
                     <span className="text-[10px] font-semibold uppercase tracking-widest text-primary">{item.tag}</span>
                     <h3 className="font-heading text-xl md:text-2xl font-medium leading-tight group-hover:text-primary transition-colors flex-1">{item.title}</h3>
                     <div className="flex items-center justify-between border-t border-border pt-5">

@@ -6,11 +6,11 @@ import { motion } from "motion/react";
 import { SectionHeader } from "@/components/ui/section-header";
 import { CTASection } from "@/components/ui/cta-section";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { AwardsShowcase } from "@/components/ui/awards-showcase";
-import { timeline, awards, partners, awardStats } from "@/static-data/about";
+import { timeline } from "@/static-data/about";
 import type { Leader } from "@/lib/public/leadership";
 import { getLeadershipAction } from "@/lib/actions/leadership";
 import { siteConfig } from "@/config/site";
+import { Highlighter } from "@/components/ui/highlighter";
 
 const compHolding = siteConfig.companies[0];
 const comp1 = siteConfig.companies[1];
@@ -55,7 +55,7 @@ export function AboutView() {
           className="absolute inset-0 z-0"
         >
           <Image
-            src="/images/architecture.png"
+            src="/images/about_hero.jpg"
             alt="ONP Studio — Architecture & Design"
             fill
             priority
@@ -75,31 +75,25 @@ export function AboutView() {
 
         {/* Centered text content */}
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-          {/* Small label */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex items-center gap-3 mb-6"
-          >
-            <span className="w-8 h-[1px] bg-primary" />
-            <span className="text-[10px] uppercase tracking-[0.35em] text-primary font-bold">
-              Est. 2015
-            </span>
-            <span className="w-8 h-[1px] bg-primary" />
-          </motion.div>
 
           {/* Main heading */}
-          <div className="overflow-hidden">
+          <div className="overflow-hidden py-1 px-3">
             <motion.h1
               initial={{ y: 60, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="font-heading font-bold leading-[1.05] tracking-tight text-white"
+              className="font-heading font-bold leading-[1.12] tracking-tight text-white"
               style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)" }}
             >
               Shaping Spaces,<br />
-              Inspiring Lives
+              <Highlighter
+                action="highlight"
+                color="rgba(16, 185, 129, 0.35)"
+                delay={700}
+                padding={[2, 6]}
+              >
+                Inspiring Lives
+              </Highlighter>
             </motion.h1>
           </div>
 
@@ -108,9 +102,19 @@ export function AboutView() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6 }}
-            className="text-black dark:text-white text-sm md:text-[15px] font-light leading-relaxed max-w-lg mt-5"
+            className="text-white/85 text-sm md:text-[15px] font-light leading-relaxed max-w-lg mt-5"
           >
-            Over a decade of crafting built environments with vision, precision, and an uncompromising commitment to excellence.
+            Over a decade of crafting{" "}
+            <Highlighter
+              action="underline"
+              color="rgba(16, 185, 129, 0.9)"
+              strokeWidth={1.5}
+              delay={1200}
+              padding={[0, 2]}
+            >
+              built environments
+            </Highlighter>{" "}
+            with vision, precision, and an uncompromising commitment to excellence.
           </motion.p>
         </div>
 
@@ -155,30 +159,33 @@ export function AboutView() {
           <SectionHeader index="02" title="Leadership" subtitle="The minds and hands that shape the future of Omar &amp; Partners." />
 
           {isLoadingLeadership ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border">
-              {[1, 2, 3, 4].map((n) => (
-                <div key={n} className="h-64 bg-background/50 animate-pulse border-r border-border last:border-r-0" />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+              {[1, 2].map((n) => (
+                <div key={n} className="h-80 bg-background/50 animate-pulse border border-border" />
               ))}
             </div>
           ) : leadership.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
               {leadership.map((person, i) => (
                 <ScrollReveal key={person.id || person.name || i} delay={i * 0.1}>
-                  <div className="group flex flex-col md:flex-row bg-background border-r border-border last:border-r-0 overflow-hidden hover:bg-secondary/20 transition-colors duration-300">
-                    <div className="relative w-full md:w-48 shrink-0 aspect-square md:aspect-auto overflow-hidden bg-secondary">
+                  <div className="group flex flex-col sm:flex-row bg-background border border-border overflow-hidden hover:border-foreground/30 hover:bg-secondary/10 transition-all duration-300 h-full">
+                    <div className="relative w-full sm:w-52 md:w-60 shrink-0 aspect-[4/5] overflow-hidden bg-neutral-100 dark:bg-neutral-900">
                       <Image
                         src={person.image}
                         alt={person.name}
                         fill
-                        sizes="(max-width: 768px) 100vw, 192px"
-                        className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 240px, 240px"
+                        className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.01]"
+                        priority
                       />
-                      <div className="absolute top-3 left-3 font-mono text-[10px] text-white/60">{person.tag}</div>
+                      <div className="absolute top-3 left-3 font-mono text-[10px] text-white bg-black/70 backdrop-blur-sm px-2 py-0.5 tracking-widest">
+                        {person.tag}
+                      </div>
                     </div>
-                    <div className="flex flex-col justify-center p-6 md:p-8 flex-1 border-t md:border-t-0 md:border-l border-border">
+                    <div className="flex flex-col justify-center p-6 md:p-8 flex-1 border-t sm:border-t-0 sm:border-l border-border">
                       <div>
-                        <span className="text-[10px] uppercase tracking-widest text-foreground font-medium block mb-2">{person.role}</span>
-                        <h3 className="font-heading text-xl md:text-2xl font-medium tracking-tight mb-4">{person.name}</h3>
+                        <span className="text-[10px] uppercase tracking-widest text-primary font-medium block mb-2">{person.role}</span>
+                        <h3 className="font-heading text-xl md:text-2xl font-medium tracking-tight mb-3">{person.name}</h3>
                         <p className="text-muted-foreground text-sm leading-relaxed">{person.bio}</p>
                       </div>
                     </div>
@@ -485,41 +492,11 @@ export function AboutView() {
           </div>
         </div>
       </section>
-
-      <section id="awards" className="py-24 md:py-36 border-b border-border scroll-mt-24">
+      <section className="py-20 md:py-28 border-t border-border">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="06" title="Awards &amp;<br />Certifications" subtitle="Recognition from the industry's most respected institutions." />
-
-          <AwardsShowcase
-            featuredAward={{
-              year: "2024",
-              name: "Aga Khan Award for Architecture",
-              body: "International — Architecture",
-              desc: "Recognized for outstanding architectural innovation and cultural sensitivity in our social housing project in Dhaka.",
-            }}
-            awards={awards.slice(1)}
-            awardStats={awardStats}
-          />
-        </div>
-      </section>
-
-      <section id="partners" className="py-24 md:py-36 scroll-mt-24">
-        <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="07" title="Partners" subtitle="Global collaborators and strategic partners who share our commitment to excellence." />
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px border border-border">
-            {partners.map((partner, i) => (
-              <ScrollReveal key={i} delay={i * 0.08}>
-                <div className="group flex items-center justify-center p-10 bg-background border-r border-border hover:bg-secondary/30 transition-colors duration-300 min-h-[120px]">
-                  <span className="font-heading text-base md:text-lg font-medium text-muted-foreground group-hover:text-foreground transition-colors tracking-tight text-center">{partner}</span>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-
           <CTASection
-            title="Become a Partner"
-            subtitle="We are always open to forming new strategic alliances with organizations that share our values of excellence and innovation."
+            title="Let's build something enduring together"
+            subtitle="Discover how our multi-disciplinary studios can realize your architectural, engineering, and spatial aspirations."
             href="/contact"
             buttonText="Get in Touch"
           />

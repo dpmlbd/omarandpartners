@@ -146,8 +146,7 @@ export async function createArticleAction(
     }
 
     revalidatePath("/admin/articles");
-    revalidatePath("/insights");
-    revalidatePath("/insights/articles");
+    revalidatePath("/articles");
     return { success: true };
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Failed to create article.";
@@ -243,8 +242,7 @@ export async function updateArticleAction(
     }
 
     revalidatePath("/admin/articles");
-    revalidatePath("/insights");
-    revalidatePath("/insights/articles");
+    revalidatePath("/articles");
     return { success: true };
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Failed to update article.";
@@ -267,8 +265,7 @@ export async function toggleArticlePublishedAction(
     if (error) return { error: error.message };
 
     revalidatePath("/admin/articles");
-    revalidatePath("/insights");
-    revalidatePath("/insights/articles");
+    revalidatePath("/articles");
     return { success: true };
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Failed to toggle published status.";
@@ -304,8 +301,7 @@ export async function deleteArticleAction(
     }
 
     revalidatePath("/admin/articles");
-    revalidatePath("/insights");
-    revalidatePath("/insights/articles");
+    revalidatePath("/articles");
     return { success: true };
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Failed to delete article.";

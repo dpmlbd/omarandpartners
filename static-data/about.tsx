@@ -4,7 +4,7 @@ import {
   RiBuilding4Line,
   RiEarthLine,
   RiTeamLine,
-  RiAwardLine,
+  RiShieldCheckLine,
 } from "@remixicon/react";
 import { siteConfig } from "@/config/site";
 
@@ -39,7 +39,7 @@ export const coreValues: CoreValueItem[] = [
   { icon: <RiEarthLine size={20} />, title: "Sustainability", desc: "We design for the future, integrating ecological responsibility into every phase of our process." },
   { icon: <RiTeamLine size={20} />, title: "Collaboration", desc: "Great spaces emerge from the synergy of diverse minds, disciplines, and perspectives." },
   { icon: <RiShakeHandsLine size={20} />, title: "Excellence", desc: "We hold ourselves to the highest standards of craft, service, and professional accountability." },
-  { icon: <RiAwardLine size={20} />, title: "Legacy", desc: "We build not just for today, but to leave enduring marks on the communities we serve." },
+  { icon: <RiShieldCheckLine size={20} />, title: "Legacy", desc: "We build not just for today, but to leave enduring marks on the communities we serve." },
 ];
 
 export interface TimelineItem {
@@ -55,42 +55,4 @@ export const timeline: TimelineItem[] = [
   { year: "2021", title: `${comp3?.name || "INEX"} Operations`, desc: `${comp3?.name || "INEX"} begins operations for specialized interior management and supply chain sourcing.` },
   { year: "2024", title: "Ecosystem Integration", desc: "Consolidation under a unified collaborative leadership team delivering cohesive turnkey solutions." },
   { year: "2026", title: "New Era", desc: "Nurturing local creative talent, embracing advanced technologies, and expanding unique services into global markets." },
-];
-
-export interface AwardItem {
-  year: string;
-  name: string;
-  body: string;
-}
-
-export const awards: AwardItem[] = [
-  { year: "2024", name: "Aga Khan Award for Architecture", body: "International — Architecture" },
-  { year: "2023", name: "World Architecture Festival", body: "Berlin, Germany — Best Office" },
-  { year: "2023", name: "Interior Design Excellence Award", body: "Regional — Residential" },
-  { year: "2022", name: "Green Building Council Certification", body: "LEED Platinum — INEX" },
-  { year: "2021", name: "A+Awards — Architecture", body: "Architizer — Residential" },
-  { year: "2020", name: "Forbes Middle East Top 50 Design Firms", body: "Forbes — Business" },
-];
-
-export const partners = [
-  "Henkel AG",
-  "Saint-Gobain",
-  "Lafarge Holcim",
-  "Zaha Hadid Architects",
-  "Arup Group",
-  "Foster + Partners",
-  "Gensler",
-  "HOK",
-];
-
-export interface AwardStatItem {
-  value: string;
-  label: string;
-}
-
-export const awardStats: AwardStatItem[] = [
-  { value: "12", label: "International Awards" },
-  { value: "8", label: "Design Honors" },
-  { value: "3", label: "LEED Certifications" },
-  { value: "5", label: "Forbes Recognitions" },
 ];

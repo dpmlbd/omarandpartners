@@ -445,18 +445,18 @@ export function ContactView() {
                   <div className="mt-8 flex flex-col gap-2">
                     <div className="relative w-full h-[220px] border border-border overflow-hidden grayscale contrast-[1.1] opacity-90">
                       <iframe
-                        src="https://maps.google.com/maps?q=22.3482466,91.8278386&hl=en&z=17&output=embed"
+                        src="https://maps.google.com/maps?q=22.3482638,91.827792&hl=en&z=18&output=embed"
                         width="100%"
                         height="100%"
                         style={{ border: 0 }}
                         allowFullScreen={false}
                         loading="lazy"
                         referrerPolicy="no-referrer-when-downgrade"
-                        title="13/A SS Khaled Road, Kazir Dewri, Chattogram"
+                        title="Omar and Partners — Head Office"
                       />
                     </div>
                     <a
-                      href="https://maps.google.com/?q=22.3482466,91.8278386"
+                      href="https://maps.app.goo.gl/7LMH4MJKjBVHtTQU6"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[11px] text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 uppercase tracking-wider font-medium"

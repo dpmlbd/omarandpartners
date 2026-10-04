@@ -69,7 +69,7 @@ export const tabs: TabItem[] = [
     tag: comp1?.description || "Consultancy",
     image: "/images/architecture.png",
     culture: `${comp1?.name || "Kolpoporishor"} is a rigorous consultancy studio where grand scales meet blueprint precision. The culture is intellectually demanding but deeply collegial. Specialists here tackle monumental, public-facing designs that reshape skylines. The studio operates like a think-tank — debates are encouraged, models are critiqued publicly, and the best ideas win regardless of seniority.`,
-    benefits: "Project ownership from concept to completion, international exposure through global commissions, access to advanced BIM and simulation tools, mentorship from award-winning principals, and a clear path to partnership.",
+    benefits: "Project ownership from concept to completion, international exposure through global commissions, access to advanced BIM and simulation tools, mentorship from industry-leading principals, and a clear path to partnership.",
     quote: "Architecture is not about buildings. It's about the spaces between them, the light within them, and the lives lived inside them.",
     quoteAuthor: "Marcus Webb, Design Principal",
   },

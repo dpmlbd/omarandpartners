@@ -46,6 +46,31 @@ const nextConfig: NextConfig = {
         destination: "/legal/cookie-policy",
         permanent: true,
       },
+      {
+        source: "/insights",
+        destination: "/articles",
+        permanent: true,
+      },
+      {
+        source: "/insights/articles",
+        destination: "/articles",
+        permanent: true,
+      },
+      {
+        source: "/insights/articles/:slug*",
+        destination: "/articles/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/blog",
+        destination: "/articles",
+        permanent: true,
+      },
+      {
+        source: "/blog/:slug*",
+        destination: "/articles/:slug*",
+        permanent: true,
+      },
     ];
   },
 };

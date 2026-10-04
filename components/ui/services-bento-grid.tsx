@@ -23,9 +23,9 @@ interface ServicesBentoGridProps {
 
 export function ServicesBentoGrid({ services }: ServicesBentoGridProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[200px] gap-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 auto-rows-[220px] gap-3">
       {services.map((service, i) => {
-        const colClass = service.colSpan === 2 ? "col-span-2" : "col-span-1";
+        const colClass = service.colSpan === 2 ? "sm:col-span-2 col-span-1" : "col-span-1";
         const rowClass = service.rowSpan === 2 ? "row-span-2" : "row-span-1";
         const darkClass = service.dark
           ? "bg-foreground text-background border-foreground"
@@ -45,31 +45,18 @@ export function ServicesBentoGrid({ services }: ServicesBentoGridProps) {
               <RiArrowRightUpLine size={13} />
             </div>
 
-            {/* STAT card */}
-            {service.type === "stat" && (
-              <>
-                <span className={`text-[10px] uppercase tracking-widest font-medium ${service.dark ? "text-background/50" : "text-foreground"}`}>
-                  {service.title}
-                </span>
-                <div>
-                  <p className={`font-heading font-bold leading-none tracking-tighter ${service.dark ? "text-background" : "text-foreground"}`}
-                    style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}>
-                    {service.stat}
-                  </p>
-                  <p className={`text-xs font-light mt-2 leading-relaxed ${service.dark ? "text-background/50" : "text-muted-foreground"}`}>
-                    {service.statLabel}
-                  </p>
-                </div>
-              </>
-            )}
-
             {/* FEATURE card */}
             {service.type === "feature" && (
               <>
-                <span className={`text-[10px] uppercase tracking-widest font-medium ${service.dark ? "text-background/50" : "text-foreground"}`}>
-                  {service.title}
-                </span>
-                <p className={`text-xs font-light leading-relaxed ${service.dark ? "text-background/60" : "text-muted-foreground"}`}>
+                <div>
+                  <span className={`text-[10px] uppercase font-mono tracking-widest font-semibold ${service.dark ? "text-primary" : "text-primary"}`}>
+                    Capability
+                  </span>
+                  <h3 className={`font-heading text-base md:text-lg font-semibold uppercase tracking-tight mt-1.5 ${service.dark ? "text-background" : "text-foreground"}`}>
+                    {service.title}
+                  </h3>
+                </div>
+                <p className={`text-xs font-light leading-relaxed mt-2 ${service.dark ? "text-background/80" : "text-muted-foreground"}`}>
                   {service.description}
                 </p>
               </>
@@ -85,27 +72,10 @@ export function ServicesBentoGrid({ services }: ServicesBentoGridProps) {
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-                <div className="absolute bottom-5 left-5 right-5">
-                   <p className="text-[10px] uppercase tracking-widest text-foreground font-medium mb-1">Service</p>
-                  <h3 className="font-heading text-white font-medium tracking-tight text-base md:text-lg uppercase">{service.title}</h3>
-                </div>
-              </>
-            )}
-
-            {/* LIST card */}
-            {service.type === "list" && (
-              <>
-                <span className={`text-[10px] uppercase tracking-widest font-medium ${service.dark ? "text-background/50" : "text-foreground"}`}>
-                  {service.title}
-                </span>
-                <div className="flex flex-col gap-2 mt-2">
-                  {service.items?.map((item, j) => (
-                    <div key={j} className={`flex justify-between items-center pb-2 border-b ${service.dark ? "border-background/10" : "border-border/50"}`}>
-                      <span className={`text-[10px] uppercase tracking-wider ${service.dark ? "text-background/50" : "text-muted-foreground"}`}>{item.label}</span>
-                      <span className={`font-heading text-sm font-semibold ${service.dark ? "text-background" : "text-foreground"}`}>{item.value}</span>
-                    </div>
-                  ))}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
+                <div className="absolute bottom-5 left-5 right-5 z-10">
+                  <p className="text-[10px] uppercase tracking-widest text-primary font-mono font-medium mb-1">Operating Studio</p>
+                  <h3 className="font-heading text-white font-medium tracking-tight text-base md:text-xl uppercase">{service.title}</h3>
                 </div>
               </>
             )}

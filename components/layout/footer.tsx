@@ -78,6 +78,7 @@ export function Footer() {
                 { label: "Home", href: "/" },
                 { label: "About", href: "/about" },
                 { label: "Teams", href: "/teams" },
+                { label: "Articles", href: "/articles" },
                 { label: "Careers", href: "/careers" },
                 { label: "Contact", href: "/contact" },
                 { label: "Brand Assets", href: "/brands" },

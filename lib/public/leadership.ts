@@ -9,28 +9,26 @@ export interface Leader {
   tag: string;
 }
 
-const DEFAULT_LEADER_IMAGES = [
-  "/images/architecture.png",
-  "/images/interior.png",
-  "/images/hero_architecture.png",
-  "/images/materials.png",
+const DEFAULT_LEADERS: Leader[] = [
+  {
+    name: "Ar. Abdullah Al Omar",
+    role: "Principal Architect & CEO",
+    bio: "Principal Architect & CEO with specialized credentials: B.Arch (SUST), PM (EDCP)-Japan, MSGED (UIU).",
+    image: "/images/leadership/ceo.jpeg",
+    tag: "01",
+  },
+  {
+    name: "Engr. Md. Mohiuddin Ovi",
+    role: "COO",
+    bio: "COO with specialized credentials: B.Sc-Civil (CUET), PGD-PM (Edu Pro, UK).",
+    image: "/images/leadership/coo.jpeg",
+    tag: "02",
+  },
 ];
-
-function getRoleRank(designation: string, teamType: string): number {
-  const d = (designation || "").toLowerCase();
-  const t = (teamType || "").toLowerCase();
-
-  if (d.includes("ceo") || d.includes("principal")) return 1;
-  if (d.includes("coo") || d.includes("chief operating")) return 2;
-  if (d.includes("head")) return 3;
-  if (t === "team lead") return 4;
-  if (d.includes("lead")) return 5;
-  return 6;
-}
 
 /**
  * Fetches leadership personnel dynamically from the Supabase backend.
- * Queries members categorized under Team Lead or holding key leadership designations.
+ * Exclusively returns CEO and COO with official portraits from the leadership directory.
  */
 export async function fetchLeadership(): Promise<Leader[]> {
   try {
@@ -39,49 +37,68 @@ export async function fetchLeadership(): Promise<Leader[]> {
     const { data, error } = await supabase
       .from("team")
       .select("*")
-      .or(
-        "team_type.eq.Team Lead,team_type.ilike.%leadership%,designation.ilike.%CEO%,designation.ilike.%COO%,designation.ilike.%Head of Design Studio%,designation.ilike.%Lead%"
-      )
+      .or("designation.ilike.%CEO%,designation.ilike.%COO%,name.ilike.%Omar%,name.ilike.%Mohiuddin%")
       .order("created_at", { ascending: true });
 
-    if (error) {
-      console.error("Error fetching leadership members from Supabase:", error);
-      return [];
+    if (error || !data || data.length === 0) {
+      if (error) {
+        console.error("Error fetching leadership members from Supabase:", error);
+      }
+      return DEFAULT_LEADERS;
     }
 
-    if (!data || data.length === 0) {
-      return [];
+    const ceoMember = data.find((m) =>
+      (m.designation || "").toLowerCase().includes("ceo") ||
+      (m.name || "").toLowerCase().includes("omar")
+    );
+
+    const cooMember = data.find((m) =>
+      (m.designation || "").toLowerCase().includes("coo") ||
+      (m.name || "").toLowerCase().includes("ovi") ||
+      (m.name || "").toLowerCase().includes("mohiuddin")
+    );
+
+    const leaders: Leader[] = [];
+
+    // CEO entry
+    if (ceoMember) {
+      leaders.push({
+        id: ceoMember.id,
+        name: ceoMember.name || "Ar. Abdullah Al Omar",
+        role: ceoMember.designation || "Principal Architect & CEO",
+        bio:
+          ceoMember.bio ||
+          (ceoMember.study
+            ? `${ceoMember.designation} with specialized credentials: ${ceoMember.study}.`
+            : "Principal Architect & CEO at Omar & Partners."),
+        image: "/images/leadership/ceo.jpeg",
+        tag: "01",
+      });
+    } else {
+      leaders.push(DEFAULT_LEADERS[0]);
     }
 
-    // Sort by executive rank (CEO -> COO -> Head of Design Studio -> Team Leads)
-    const sorted = [...data].sort((a, b) => {
-      const rankA = getRoleRank(a.designation, a.team_type);
-      const rankB = getRoleRank(b.designation, b.team_type);
-      return rankA - rankB;
-    });
+    // COO entry
+    if (cooMember) {
+      leaders.push({
+        id: cooMember.id,
+        name: cooMember.name || "Engr. Md. Mohiuddin Ovi",
+        role: cooMember.designation || "COO",
+        bio:
+          cooMember.bio ||
+          (cooMember.study
+            ? `${cooMember.designation} with specialized credentials: ${cooMember.study}.`
+            : "COO at Omar & Partners."),
+        image: "/images/leadership/coo.jpeg",
+        tag: "02",
+      });
+    } else {
+      leaders.push(DEFAULT_LEADERS[1]);
+    }
 
-    return sorted.map((member, index) => {
-      const bio =
-        member.bio ||
-        (member.study
-          ? `${member.designation} with specialized credentials: ${member.study}.`
-          : `${member.designation} at Omar & Partners.`);
-
-      const image =
-        member.image ||
-        DEFAULT_LEADER_IMAGES[index % DEFAULT_LEADER_IMAGES.length];
-
-      return {
-        id: member.id,
-        name: member.name,
-        role: member.designation,
-        bio,
-        image,
-        tag: String(index + 1).padStart(2, "0"),
-      };
-    });
+    return leaders;
   } catch (err) {
     console.error("Database query failed in fetchLeadership:", err);
-    return [];
+    return DEFAULT_LEADERS;
   }
 }

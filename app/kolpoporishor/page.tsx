@@ -1,26 +1,35 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { motion } from "motion/react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SectionHeader } from "@/components/ui/section-header";
-import { BentoGallery } from "@/components/ui/bento-gallery";
+import { BentoGallery, type BentoGalleryItem } from "@/components/ui/bento-gallery";
 import { SocialChannelsSection } from "@/components/ui/social-channels-section";
 import { CompanyProjectsFilter } from "@/components/features/companies/company-projects-filter";
-import {
-  kolpoporishorStats as stats,
-  kolpoporishorCapabilities as capabilities,
-  kolpoporishorServices as services,
-} from "@/static-data/divisions";
-import { kolpoporishorGalleryItems } from "@/static-data/gallery";
+import { getPublicCompanyGalleryAction } from "@/lib/actions/public-projects";
+import { kolpoporishorCapabilities as capabilities, coreCapabilitiesIntro } from "@/static-data/divisions";
 import { siteConfig } from "@/config/site";
 
 const companyInfo = siteConfig.companies.find((c) => c.name === "Kolpoporishor");
 
-
-
 export default function KolpoporishorPage() {
+  const [galleryItems, setGalleryItems] = useState<BentoGalleryItem[]>([]);
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadGallery() {
+      const items = await getPublicCompanyGalleryAction("kolpoporishor", 20);
+      if (mounted) {
+        setGalleryItems(items.slice(0, 20));
+      }
+    }
+    loadGallery();
+    return () => {
+      mounted = false;
+    };
+  }, []);
   return (
     <div className="flex flex-col w-full overflow-hidden">
 
@@ -35,7 +44,7 @@ export default function KolpoporishorPage() {
           className="absolute inset-0"
         >
           <Image
-            src="/images/architecture.png"
+            src="/images/kp_hero.jpg"
             alt={`${companyInfo?.name || "Kolpoporishor"} — ${companyInfo?.description || "Consultancy"}`}
             fill
             priority
@@ -48,53 +57,27 @@ export default function KolpoporishorPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70 z-[1]" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent z-[1]" />
 
-        {/* Text content overlaid on image — same grid alignment */}
+        {/* Text content overlaid on image */}
         <div className="relative z-10 h-full flex items-center pt-20 container mx-auto px-6 md:px-14">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-end w-full">
+          <div className="flex flex-col w-full max-w-5xl">
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className="font-heading font-bold leading-none tracking-tight text-white whitespace-nowrap"
+              style={{ fontSize: "clamp(2.8rem, 7vw, 6.5rem)" }}
+            >
+              Kolpoporishor
+            </motion.h1>
 
-            {/* Left: heading */}
-            <div className="flex flex-col">
-              {/* Metadata label */}
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="flex items-center gap-3 mb-6"
-              >
-                <span className="w-8 h-[1px] bg-primary" />
-                <span className="font-mono text-[10px] uppercase tracking-[0.35em] text-primary font-medium">
-                  {companyInfo?.description || "Consultancy"} Division
-                </span>
-              </motion.div>
-
-              {/* Giant stacked heading */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <h1
-                  className="font-heading font-bold leading-[0.92] tracking-tighter uppercase text-white"
-                  style={{ fontSize: "clamp(2.8rem, 6.5vw, 6rem)" }}
-                >
-                  Kolpo<br />
-                  <span className="text-primary">porishor</span>
-                </h1>
-              </motion.div>
-            </div>
-
-            {/* Right: description */}
-            <motion.div
+            <motion.p
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
-              className="lg:pb-2"
+              transition={{ duration: 0.7, delay: 0.35 }}
+              className="text-white/85 text-base md:text-xl lg:text-2xl font-light tracking-wide mt-4"
             >
-              <p className="text-white/60 text-sm md:text-[15px] font-light leading-relaxed max-w-md">
-                {companyInfo?.name || "Kolpoporishor"} is the {companyInfo?.description?.toLowerCase() || "consultancy"} arm of the Omar &amp; Partners ecosystem — delivering monumental structures, sustainable urban environments, and enduring spatial experiences that elevate civic life.
-              </p>
-            </motion.div>
-
+              {companyInfo?.description || "Consultancy"}
+            </motion.p>
           </div>
         </div>
       </section>
@@ -127,30 +110,29 @@ export default function KolpoporishorPage() {
               </ScrollReveal>
             </div>
           </div>
-
-          {/* Metrics Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px border border-border mt-16 md:mt-20">
-            {stats.map((stat, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
-                <div className="flex flex-col gap-2 p-6 md:p-8 bg-background hover:bg-secondary/20 transition-colors duration-300">
-                  <span className="font-heading text-3xl md:text-4xl font-semibold text-primary">{stat.value}</span>
-                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{stat.label}</span>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
         </div>
       </section>
 
       {/* ── CORE CAPABILITIES ────────────────────────────────────── */}
       <section id="capabilities" className="py-24 md:py-36 border-b border-border bg-secondary/10 scroll-mt-24">
         <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="02" title="Core Capabilities" subtitle="End-to-end architectural disciplines from master planning to construction administration." />
+          <SectionHeader index="02" title="Core Capabilities" subtitle="End-to-end architectural and engineering disciplines from planning to post-construction." />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px border border-border mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
+            <div className="hidden md:block md:col-span-2" />
+            <div className="md:col-span-10">
+              <ScrollReveal delay={0.1}>
+                <p className="text-muted-foreground text-sm md:text-base font-light leading-relaxed max-w-4xl">
+                  {coreCapabilitiesIntro}
+                </p>
+              </ScrollReveal>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {capabilities.map((cap, i) => (
-              <ScrollReveal key={cap.id} delay={i * 0.08}>
-                <div className="flex flex-col gap-4 p-6 md:p-8 bg-background hover:bg-secondary/20 transition-colors duration-300 min-h-[190px]">
+              <ScrollReveal key={cap.id} delay={i * 0.08} className="h-full">
+                <div className="flex flex-col gap-4 p-6 md:p-8 bg-background border border-border hover:border-primary/40 hover:bg-secondary/20 transition-all duration-300 h-full">
                   <span className="text-[10px] uppercase tracking-widest text-primary font-semibold">{cap.id}</span>
                   <h3 className="font-heading text-lg font-medium uppercase tracking-tight">{cap.title}</h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">{cap.desc}</p>
@@ -169,58 +151,19 @@ export default function KolpoporishorPage() {
         </div>
       </section>
 
-      {/* ── 03. SERVICES SECTION ─────────────────────────────────── */}
-      <section id="services" className="py-24 md:py-36 border-b border-border scroll-mt-24">
-        <div className="container mx-auto px-6 md:px-14">
-          <SectionHeader index="04" title={`${companyInfo?.description || "Consultancy"} Services`} subtitle="Full-spectrum delivery handled by specialized teams adhering to highest international codes." />
-
-          {/* Service Feature Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-            {services.map((svc, i) => (
-              <ScrollReveal key={svc.id} delay={i * 0.08}>
-                <div className="group relative h-[320px] overflow-hidden border border-border bg-background hover:border-primary transition-all duration-500">
-                  <Image
-                    src={svc.image}
-                    alt={svc.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-
-                  <div className="relative h-full flex flex-col justify-between p-8">
-                    <div>
-                      <span className="text-[10px] uppercase tracking-[0.3em] text-primary font-medium block mb-2">
-                        {svc.id}
-                      </span>
-                      <h3 className="font-heading text-xl md:text-2xl font-semibold tracking-tight text-white">
-                        {svc.title}
-                      </h3>
-                    </div>
-                    <p className="text-white/70 text-xs font-light leading-relaxed">
-                      {svc.desc}
-                    </p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── BENTO GALLERY WITH PAGINATION ────────────────────────── */}
       <BentoGallery
         badge="Architectural Gallery"
         title="Spatial & Structural Archive"
         description="A curated bento archive of structural developments, civic pavilions, and experimental geometries."
-        items={kolpoporishorGalleryItems}
+        items={galleryItems}
         itemsPerPage={8}
       />
 
-      {/* ── 05. SOCIAL MEDIA SECTION ──────────────────────────────── */}
+      {/* ── 04. SOCIAL MEDIA SECTION ──────────────────────────────── */}
       <SocialChannelsSection
         companySlug="kolpoporishor"
-        index="05"
+        index="04"
         title="Social Media"
         subtitle="Follow Kolpoporishor for architectural monographs, structural breakthroughs, and ongoing construction milestones."
       />

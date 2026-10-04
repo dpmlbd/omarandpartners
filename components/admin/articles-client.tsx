@@ -156,7 +156,7 @@ export function ArticlesClient({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="font-heading text-2xl md:text-3xl font-bold uppercase tracking-tight">
-            Articles &amp; Insights
+            Articles &amp; Editorial
           </h1>
           <p className="text-muted-foreground text-xs font-light mt-1">
             Publish spatial essays, architectural monographs, and industry research.
@@ -421,7 +421,7 @@ export function ArticlesClient({
                   className="w-4 h-4 accent-primary"
                 />
                 <span className="text-xs font-semibold uppercase tracking-wider text-foreground">
-                  Published (Visible in Insights &amp; Articles)
+                  Published (Visible in Articles)
                 </span>
               </label>
 

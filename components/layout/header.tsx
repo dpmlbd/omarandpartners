@@ -39,7 +39,13 @@ export function Header() {
     >
       <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group z-50">
-          <Image src="/onp.svg" alt="ONP" width={32} height={32} className="shrink-0 transition-transform duration-500 group-hover:scale-95" />
+          <Image
+            src="/onp.svg"
+            alt="ONP"
+            width={32}
+            height={32}
+            className="w-8 h-8 object-contain shrink-0 transition-transform duration-500 group-hover:scale-95"
+          />
           <span className="font-heading text-lg md:text-xl font-bold tracking-tighter uppercase text-foreground whitespace-nowrap">
             Omar &amp; Partners{companyName && <span className="text-muted-foreground font-normal"> | {companyName}</span>}
           </span>

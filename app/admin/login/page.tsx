@@ -28,7 +28,7 @@ export default function AdminLoginPage() {
             alt="ONP"
             width={32}
             height={32}
-            className="shrink-0 transition-transform duration-500 group-hover:scale-95"
+            className="w-8 h-8 object-contain shrink-0 transition-transform duration-500 group-hover:scale-95"
           />
           <span className="font-heading text-lg font-bold tracking-tighter uppercase">
             Omar &amp; Partners

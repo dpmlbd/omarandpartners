@@ -430,10 +430,12 @@ export async function updateProjectAction(
     // Upload new main image if provided
     if (newMainImage && newMainImage.size > 0) {
       const existingMain = project.images?.find((img: ProjectImage) => img.role === "main");
+      // Use timestamped filename to bust browser/CDN cache when replacing
+      const ts = Date.now();
       const upload = await uploadAndOptimizeImage({
         file: newMainImage,
         folder,
-        fileName: "main.avif",
+        fileName: `main-${ts}.avif`,
         oldPath: existingMain?.storage_path,
       });
 
@@ -472,13 +474,14 @@ export async function updateProjectAction(
         await admin.from("project_images").delete().eq("id", img.id);
       }
 
+      const galleryTs = Date.now();
       const galleryUploads = await Promise.all(
         validNewGalleryFiles.map(async (file, i) => {
           const padNum = String(i + 1).padStart(2, "0");
           const upload = await uploadAndOptimizeImage({
             file,
             folder,
-            fileName: `${padNum}.avif`,
+            fileName: `${padNum}-${galleryTs}.avif`,
           });
           return {
             storagePath: upload.storagePath,
@@ -508,6 +511,10 @@ export async function updateProjectAction(
     revalidatePath("/kolpoporishor");
     revalidatePath("/kolpoporisor");
     revalidatePath("/kolpokowsol");
+    // Also revalidate the specific project detail pages
+    revalidatePath(`/kolpoporishor/projects/${projectId}`);
+    revalidatePath(`/kolpoporisor/projects/${projectId}`);
+    revalidatePath(`/kolpokowsol/projects/${projectId}`);
     return { success: true };
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Failed to update project.";

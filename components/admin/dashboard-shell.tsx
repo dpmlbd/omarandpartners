@@ -90,7 +90,7 @@ export function DashboardShell({
       {/* ── Mobile Top Bar ─────────────────────────────────────────── */}
       <div className="md:hidden flex items-center justify-between px-4 h-16 border-b border-border bg-card shrink-0 z-30">
         <Link href="/admin" className="flex items-center gap-2">
-          <Image src="/onp.svg" alt="ONP" width={24} height={24} />
+          <Image src="/onp.svg" alt="ONP" width={24} height={24} className="w-6 h-6 object-contain shrink-0" />
           <span className="font-heading font-bold text-sm tracking-tight uppercase">
             ONP Admin
           </span>
@@ -124,7 +124,7 @@ export function DashboardShell({
           {/* Logo Section - exactly matching the main header height (h-16) */}
           <div className="h-16 px-6 border-b border-border flex items-center justify-between shrink-0">
             <Link href="/admin" className="flex items-center gap-3">
-              <Image src="/onp.svg" alt="ONP" width={28} height={28} />
+              <Image src="/onp.svg" alt="ONP" width={28} height={28} className="w-7 h-7 object-contain shrink-0" />
               <div className="flex flex-col">
                 <span className="font-heading text-sm font-bold tracking-tighter uppercase leading-tight">
                   Omar &amp; Partners

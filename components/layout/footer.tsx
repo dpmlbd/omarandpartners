@@ -54,7 +54,13 @@ export function Footer() {
           {/* Column 1: Brand */}
           <div className="md:col-span-3 flex flex-col gap-6">
             <Link href="/" className="flex flex-col gap-5 items-start group">
-              <Image src="/onp.svg" alt="ONP" width={80} height={80} className="shrink-0" />
+              <Image
+                src="/onp.svg"
+                alt="ONP"
+                width={80}
+                height={80}
+                className="w-20 h-20 object-contain shrink-0"
+              />
               <span className="font-heading text-2xl font-bold tracking-tighter uppercase text-background">
                 Omar &amp; Partners
               </span>

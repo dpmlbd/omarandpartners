@@ -18,9 +18,8 @@ export function ProjectDetailView({ project, companySlug }: ProjectDetailViewPro
       ? project.gallery
       : [project.image];
 
-  // Project specification items (Location and Practice Entity excluded)
+  // Project specification items (Category, Location, and Practice Entity excluded)
   const specItems = [
-    { label: "Category", value: project.category },
     { label: "Project Type", value: project.projectType || "Architectural Project" },
     { label: "Year / Duration", value: project.year },
     { label: "Spatial Area", value: project.area },
@@ -40,7 +39,7 @@ export function ProjectDetailView({ project, companySlug }: ProjectDetailViewPro
       </div>
 
       {/* ── TOP SECTION (LOCATION ONLY, NO TABLE STYLE) ───────────────────── */}
-      <section className="relative py-20 md:py-28 border-b border-border">
+      <section className="relative pt-16 pb-6 md:pt-24 md:pb-12">
         <div className="container mx-auto px-6 md:px-14">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
             {/* Left: Metadata & Title */}
@@ -49,10 +48,6 @@ export function ProjectDetailView({ project, companySlug }: ProjectDetailViewPro
                 <div className="flex items-center gap-3 mb-6">
                   <span className="text-[10px] uppercase tracking-[0.3em] text-primary font-medium font-mono">
                     {project.category}
-                  </span>
-                  <span className="w-4 h-[1px] bg-border" />
-                  <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-mono">
-                    {project.status}
                   </span>
                 </div>
                 <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl font-bold tracking-tighter uppercase leading-[0.92] text-foreground">
@@ -64,16 +59,11 @@ export function ProjectDetailView({ project, companySlug }: ProjectDetailViewPro
             {/* Right: Clean Location (No table box) */}
             <div className="md:col-span-4 flex flex-col justify-end">
               <ScrollReveal delay={0.15}>
-                <div className="flex items-start gap-3 pt-2 md:pt-0">
+                <div className="flex items-center gap-3 pt-2 md:pt-0">
                   <RiMapPinLine size={18} className="text-primary shrink-0 mt-0.5" />
-                  <div className="flex flex-col">
-                    <span className="text-[10px] uppercase tracking-widest font-mono text-muted-foreground">
-                      Location
-                    </span>
-                    <span className="text-foreground text-sm md:text-base font-light tracking-wide mt-1">
-                      {project.location}
-                    </span>
-                  </div>
+                  <span className="text-foreground text-sm md:text-base font-light tracking-wide mt-1">
+                    {project.location}
+                  </span>
                 </div>
               </ScrollReveal>
             </div>
@@ -82,18 +72,17 @@ export function ProjectDetailView({ project, companySlug }: ProjectDetailViewPro
       </section>
 
       {/* ── HERO IMAGE ───────────────────────────────────────────────────── */}
-      <section className="py-10 md:py-14 border-b border-border">
+      <section className="py-4 md:py-6">
         <div className="container mx-auto px-6 md:px-14">
-          <div className="group relative aspect-[16/9] md:aspect-[21/9] max-h-[580px] w-full overflow-hidden border border-border bg-secondary">
+          <div className="relative aspect-[4/3] max-h-[720px] w-full overflow-hidden bg-secondary">
             <Image
               src={project.image}
               alt={project.title}
               fill
-              className="object-cover grayscale-0 group-hover:grayscale scale-100 group-hover:scale-105 transition-all duration-700 ease-out"
+              className="object-cover"
               priority
               sizes="(max-width: 1280px) 100vw, 1280px"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
           </div>
         </div>
       </section>
@@ -107,9 +96,6 @@ export function ProjectDetailView({ project, companySlug }: ProjectDetailViewPro
                 01
               </span>
               <span className="w-12 h-[1px] md:w-[1px] md:h-12 bg-border" />
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground hidden md:block">
-                About
-              </span>
             </div>
             <div className="md:col-span-10">
               <ScrollReveal>
@@ -117,7 +103,7 @@ export function ProjectDetailView({ project, companySlug }: ProjectDetailViewPro
                 <h2 className="font-heading text-3xl md:text-5xl font-semibold tracking-tighter uppercase mb-8">
                   About
                 </h2>
-                <div className="text-muted-foreground text-sm md:text-base font-light leading-relaxed max-w-3xl whitespace-pre-line space-y-4">
+                <div className="text-muted-foreground text-sm md:text-base font-light leading-relaxed text-justify max-w-5xl whitespace-pre-line space-y-4">
                   {project.description || "No project narrative provided yet."}
                 </div>
               </ScrollReveal>
@@ -135,9 +121,6 @@ export function ProjectDetailView({ project, companySlug }: ProjectDetailViewPro
                 02
               </span>
               <span className="w-12 h-[1px] md:w-[1px] md:h-12 bg-border" />
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground hidden md:block">
-                Data
-              </span>
             </div>
             <div className="md:col-span-10">
               <ScrollReveal>
@@ -151,8 +134,8 @@ export function ProjectDetailView({ project, companySlug }: ProjectDetailViewPro
             </div>
           </div>
 
-          {/* 5 specification cards (location and practice entity removed) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-px border border-border bg-border">
+          {/* 4 specification cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px border border-border bg-border">
             {specItems.map((item, idx) => (
               <ScrollReveal key={item.label} delay={idx * 0.05}>
                 <div className="flex flex-col justify-between p-6 md:p-8 bg-background hover:bg-secondary/20 transition-colors duration-300 min-h-[140px]">
@@ -169,7 +152,7 @@ export function ProjectDetailView({ project, companySlug }: ProjectDetailViewPro
         </div>
       </section>
 
-      {/* ── 03. GALLERY SECTION (2 BY 3 GRID) ────────────────────────────── */}
+      {/* ── 03. GALLERY SECTION (MASONRY STYLE) ────────────────────────────── */}
       {galleryItems.length > 0 && (
         <section id="gallery" className="py-24 md:py-36 border-b border-border bg-secondary/10 scroll-mt-24">
           <div className="container mx-auto px-6 md:px-14">
@@ -179,9 +162,6 @@ export function ProjectDetailView({ project, companySlug }: ProjectDetailViewPro
                   03
                 </span>
                 <span className="w-12 h-[1px] md:w-[1px] md:h-12 bg-border" />
-                <span className="text-[10px] uppercase tracking-widest text-muted-foreground hidden md:block">
-                  Gallery
-                </span>
               </div>
               <div className="md:col-span-10">
                 <ScrollReveal>
@@ -189,30 +169,26 @@ export function ProjectDetailView({ project, companySlug }: ProjectDetailViewPro
                     Gallery
                   </h2>
                   <p className="mt-2 text-muted-foreground text-xs md:text-sm font-light">
-                    Visual curation in 2 by 3 grid.
+                    Visual curation in dynamic masonry archive.
                   </p>
                 </ScrollReveal>
               </div>
             </div>
 
-            {/* 2 by 3 Grid: 2 columns on small screens, 3 columns on large screens */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px border border-border bg-border">
+            {/* 2 by 3 Grid: images fill cells with object-cover + hover zoom */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {galleryItems.map((img: string, i: number) => (
-                <ScrollReveal key={i} delay={i * 0.05}>
-                  <div className="group relative aspect-[4/3] overflow-hidden bg-background">
+                <ScrollReveal key={i} delay={i * 0.04}>
+                  <div className="group relative w-full aspect-[4/3] overflow-hidden bg-secondary cursor-pointer">
                     <Image
                       src={img}
-                      alt={`${project.title} visual 0${i + 1}`}
+                      alt={`${project.title} visual ${String(i + 1).padStart(2, "0")}`}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover grayscale-0 group-hover:grayscale scale-100 group-hover:scale-105 transition-all duration-700 ease-out"
+                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500 pointer-events-none" />
-
-                    {/* Numbering badge */}
-                    <span className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm text-white text-[10px] font-mono px-2 py-1">
-                      0{i + 1}
-                    </span>
+                    {/* Subtle overlay on hover */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 pointer-events-none" />
                   </div>
                 </ScrollReveal>
               ))}

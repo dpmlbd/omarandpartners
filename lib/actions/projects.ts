@@ -308,6 +308,7 @@ export async function createProjectAction(
     revalidatePath("/kolpokowsol");
     return { success: true, projectId: newProject.id };
   } catch (error: unknown) {
+    console.error("[createProjectAction Error]:", error);
     const msg = error instanceof Error ? error.message : "An unexpected error occurred while creating project.";
     return { error: msg };
   }
@@ -517,6 +518,7 @@ export async function updateProjectAction(
     revalidatePath(`/kolpokowsol/projects/${projectId}`);
     return { success: true };
   } catch (error: unknown) {
+    console.error("[updateProjectAction Error]:", error);
     const msg = error instanceof Error ? error.message : "Failed to update project.";
     return { error: msg };
   }

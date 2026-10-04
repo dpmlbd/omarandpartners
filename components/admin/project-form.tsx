@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { createProjectAction, updateProjectAction } from "@/lib/actions/projects";
 import { getPublicStorageUrl } from "@/lib/supabase/storage";
+import { compressImageForUpload } from "@/lib/image/client-compress";
 import type { Company, Project, ProjectCategory } from "@/types/database";
 import { toast } from "@/components/ui/toast";
 import {
@@ -147,6 +148,24 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
 
     startTransition(async () => {
       try {
+        // Optimize visuals client-side to prevent Vercel 4.5MB payload limit & timeout errors
+        const mainImageFile = formData.get("main_image") as File;
+        if (mainImageFile && mainImageFile.size > 0) {
+          const compressedMain = await compressImageForUpload(mainImageFile);
+          formData.set("main_image", compressedMain);
+        }
+
+        const galleryFiles = formData.getAll("gallery_images") as File[];
+        if (galleryFiles.length > 0) {
+          formData.delete("gallery_images");
+          for (const gFile of galleryFiles) {
+            if (gFile && gFile.size > 0) {
+              const compressedG = await compressImageForUpload(gFile);
+              formData.append("gallery_images", compressedG);
+            }
+          }
+        }
+
         let result;
         if (initialProject) {
           result = await updateProjectAction(initialProject.id, formData);

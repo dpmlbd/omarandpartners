@@ -84,6 +84,25 @@ export async function processImageToAvif(
       throw new Error("Invalid or unreadable image file format.");
     }
 
+    // Fast-path: If the image is already modern WebP or AVIF and fits within max bounds,
+    // bypass expensive server re-encoding to eliminate Serverless Function timeouts on Vercel
+    const fmt = metadata.format as string;
+    const isAlreadyOptimized =
+      (fmt === "webp" || fmt === "heif" || fmt === "avif") &&
+      (metadata.width || 0) <= MAX_LONGEST_SIDE &&
+      (metadata.height || 0) <= MAX_LONGEST_SIDE &&
+      inputBuffer.byteLength < 1.5 * 1024 * 1024;
+
+    if (isAlreadyOptimized) {
+      return {
+        buffer: inputBuffer,
+        width: metadata.width,
+        height: metadata.height,
+        format: fmt === "webp" ? "webp" : "avif",
+        sizeBytes: inputBuffer.byteLength,
+      };
+    }
+
     // Preserve aspect ratio, only scale down if larger than MAX_LONGEST_SIDE, never upscale
     const resizeOptions: ResizeOptions = {
       width: MAX_LONGEST_SIDE,

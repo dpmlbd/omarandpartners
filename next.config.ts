@@ -1,13 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: [
-    "sharp",
-    "@img/sharp-win32-x64",
-    "@img/sharp-libvips-win32-x64",
-    "@img/sharp-linux-x64",
-    "@img/sharp-libvips-linux-x64",
-  ],
+  serverExternalPackages: ["sharp"],
   images: {
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",

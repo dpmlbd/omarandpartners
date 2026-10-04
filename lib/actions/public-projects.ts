@@ -18,12 +18,24 @@ export async function getPublicProjectsAction(
 
     if (!company) return [];
 
-    const { data: projects, error } = await supabase
+    let { data: projects, error } = await supabase
       .from("projects")
       .select("id, slug, title, category, location, images:project_images(storage_path, role)")
-      .eq("company_id", company.id)
+      .or(`company_id.eq.${company.id},is_shared.eq.true`)
       .eq("published", true)
       .order("created_at", { ascending: false });
+
+    // Fallback if is_shared column hasn't been migrated yet in Supabase
+    if (error && error.message?.includes("is_shared")) {
+      const fallbackResult = await supabase
+        .from("projects")
+        .select("id, slug, title, category, location, images:project_images(storage_path, role)")
+        .eq("company_id", company.id)
+        .eq("published", true)
+        .order("created_at", { ascending: false });
+      projects = fallbackResult.data;
+      error = fallbackResult.error;
+    }
 
     if (error || !projects) return [];
 

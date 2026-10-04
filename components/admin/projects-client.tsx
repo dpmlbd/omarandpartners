@@ -36,8 +36,14 @@ export function ProjectsClient({
   const [isPending, startTransition] = useTransition();
 
   const filteredProjects = projects.filter((p) => {
-    if (selectedCompany !== "all" && p.company?.slug !== selectedCompany) {
-      return false;
+    if (selectedCompany !== "all") {
+      if (selectedCompany === "shared") {
+        if (!p.is_shared) return false;
+      } else {
+        if (p.company?.slug !== selectedCompany && !p.is_shared) {
+          return false;
+        }
+      }
     }
     if (selectedCategory !== "all" && p.category !== selectedCategory) {
       return false;
@@ -106,6 +112,7 @@ export function ProjectsClient({
               {c.name}
             </option>
           ))}
+          <option value="shared">Shared (Both Companies)</option>
         </select>
 
         {/* Category filter */}
@@ -186,9 +193,16 @@ export function ProjectsClient({
                       </td>
 
                       <td className="py-4 px-6 font-medium">
-                        <span className="text-[10px] uppercase font-mono tracking-wider px-2 py-0.5 border border-border">
-                          {p.company?.name || "ONP"}
-                        </span>
+                        <div className="flex flex-col gap-1 items-start">
+                          <span className="text-[10px] uppercase font-mono tracking-wider px-2 py-0.5 border border-border">
+                            {p.company?.name || "ONP"}
+                          </span>
+                          {p.is_shared && (
+                            <span className="text-[9px] uppercase font-mono tracking-wider px-1.5 py-0.5 bg-primary/10 text-primary border border-primary/20">
+                              Both Companies
+                            </span>
+                          )}
+                        </div>
                       </td>
 
                       <td className="py-4 px-6 text-muted-foreground font-medium">

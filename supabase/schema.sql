@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS public.projects (
   description TEXT,
   featured BOOLEAN NOT NULL DEFAULT false,
   published BOOLEAN NOT NULL DEFAULT true,
+  is_shared BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -61,6 +62,7 @@ CREATE TABLE IF NOT EXISTS public.projects (
 CREATE INDEX IF NOT EXISTS idx_projects_company ON public.projects(company_id);
 CREATE INDEX IF NOT EXISTS idx_projects_category ON public.projects(category);
 CREATE INDEX IF NOT EXISTS idx_projects_published ON public.projects(published);
+CREATE INDEX IF NOT EXISTS idx_projects_is_shared ON public.projects(is_shared);
 
 -- 5. Project Images table (Max 7 images total per project: 1 main + up to 6 gallery)
 CREATE TABLE IF NOT EXISTS public.project_images (

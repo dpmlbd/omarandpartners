@@ -39,6 +39,7 @@ export interface Project {
   description: string | null;
   featured: boolean;
   published: boolean;
+  is_shared?: boolean;
   created_at: string;
   updated_at: string;
   // Joins

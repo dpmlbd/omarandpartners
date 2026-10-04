@@ -74,7 +74,9 @@ export async function getProjects(filters?: {
   let projects = (data as unknown as Project[]) || [];
 
   if (filters?.companySlug) {
-    projects = projects.filter((p) => p.company?.slug === filters.companySlug);
+    projects = projects.filter(
+      (p) => p.company?.slug === filters.companySlug || p.is_shared === true
+    );
   }
 
   return projects;
@@ -128,6 +130,7 @@ const projectSchema = z.object({
   description: z.string().trim().max(10000, "Description cannot exceed 10,000 characters").nullable().optional(),
   featured: z.boolean(),
   published: z.boolean(),
+  isShared: z.boolean().default(false),
 });
 
 export async function createProjectAction(
@@ -153,6 +156,7 @@ export async function createProjectAction(
       description: rawDesc && rawDesc.trim().length > 0 ? rawDesc.trim() : null,
       featured: formData.get("featured") === "true",
       published: formData.get("published") === "true",
+      isShared: formData.get("is_shared") === "true" || formData.get("is_shared") === "on",
     });
 
     if (!validation.success) {
@@ -171,6 +175,7 @@ export async function createProjectAction(
       description,
       featured,
       published,
+      isShared,
     } = validation.data;
 
     // Verify company is active (not Inex)
@@ -232,6 +237,7 @@ export async function createProjectAction(
         description,
         featured,
         published,
+        is_shared: isShared,
       })
       .select()
       .single();
@@ -348,6 +354,7 @@ export async function updateProjectAction(
       description: rawDesc && rawDesc.trim().length > 0 ? rawDesc.trim() : null,
       featured: formData.get("featured") === "true",
       published: formData.get("published") === "true",
+      isShared: formData.get("is_shared") === "true" || formData.get("is_shared") === "on",
     });
 
     if (!validation.success) {
@@ -366,6 +373,7 @@ export async function updateProjectAction(
       description,
       featured,
       published,
+      isShared,
     } = validation.data;
 
     // Verify company is active (not Inex)
@@ -419,6 +427,7 @@ export async function updateProjectAction(
         description,
         featured,
         published,
+        is_shared: isShared,
       })
       .eq("id", projectId);
 

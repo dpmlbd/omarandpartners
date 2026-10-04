@@ -282,6 +282,29 @@ export function ProjectForm({ companies, initialProject }: ProjectFormProps) {
                 </span>
               </div>
             </div>
+
+            {/* Cross-listing / Shared Project */}
+            <div className="flex items-start gap-3 p-4 bg-secondary/20 border border-border">
+              <input
+                type="checkbox"
+                id="is_shared"
+                name="is_shared"
+                value="true"
+                defaultChecked={initialProject?.is_shared || false}
+                className="mt-0.5 accent-primary h-4 w-4 cursor-pointer"
+              />
+              <div className="flex flex-col gap-0.5">
+                <label
+                  htmlFor="is_shared"
+                  className="text-xs font-semibold text-foreground tracking-wide cursor-pointer uppercase font-mono"
+                >
+                  Feature on both Kolpoporishor &amp; Kolpokowsol
+                </label>
+                <p className="text-[11px] text-muted-foreground font-light leading-relaxed">
+                  Upload once: this project will appear in the portfolio galleries of both companies without re-uploading or duplicating storage.
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* ── 2. Project Specifications ────────────────────────────── */}

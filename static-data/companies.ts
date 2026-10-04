@@ -32,14 +32,47 @@ export interface CompanyGalleryItem {
   src: string;
   label: string;
   company: string;
-  span: string;
+  span?: string;
+  href?: string;
 }
 
 export const companiesGallery: CompanyGalleryItem[] = [
-  { src: "/images/architecture.png", label: "Civic Landmark", company: "Kolpoporishor", span: "col-span-2 row-span-2" },
-  { src: "/images/interior.png", label: "Luxury Penthouse", company: "Kolpokowsol", span: "col-span-1 row-span-1" },
-  { src: "/images/materials.png", label: "Material Selection", company: "INEX", span: "col-span-1 row-span-1" },
-  { src: "/images/hero_architecture.png", label: "Urban Complex", company: "Kolpoporishor", span: "col-span-2 row-span-1" },
+  {
+    src: "/images/architecture.png",
+    label: "Civic Landmark",
+    company: "Kolpoporishor",
+    href: "/kolpoporishor",
+  },
+  {
+    src: "/images/interior.png",
+    label: "Luxury Penthouse",
+    company: "Kolpokowsol",
+    href: "/kolpokowsol",
+  },
+  {
+    src: "/images/materials.png",
+    label: "Material Selection",
+    company: "INEX",
+    href: "/inex",
+  },
+  {
+    src: "/images/hero_architecture.png",
+    label: "Urban Complex",
+    company: "Kolpoporishor",
+    href: "/kolpoporishor",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80",
+    label: "Hospitality Suite",
+    company: "Kolpokowsol",
+    href: "/kolpokowsol",
+  },
+  {
+    src: "/images/about_hero.png",
+    label: "Atelier Pavilion",
+    company: "INEX",
+    href: "/inex",
+  },
 ];
 
 export interface EngagementParameter {

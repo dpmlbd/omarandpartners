@@ -20,6 +20,10 @@ import {
   RiArticleLine,
   RiEyeLine,
   RiEyeOffLine,
+  RiSearchLine,
+  RiFilterLine,
+  RiArrowLeftLine,
+  RiArrowRightLine,
 } from "@remixicon/react";
 
 interface ArticlesClientProps {
@@ -36,6 +40,10 @@ export function ArticlesClient({
   const [editingItem, setEditingItem] = useState<Article | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [isPending, startTransition] = useTransition();
 
   const openCreateModal = () => {
@@ -150,54 +158,140 @@ export function ArticlesClient({
     });
   };
 
+  const filteredArticles = articles.filter((a) => {
+    if (statusFilter === "published" && !a.published) return false;
+    if (statusFilter === "draft" && a.published) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      const matchTitle = a.title.toLowerCase().includes(q);
+      const matchDesc = a.description?.toLowerCase().includes(q);
+      const matchAuthor = (a.author?.name || a.author_name || "").toLowerCase().includes(q);
+      if (!matchTitle && !matchDesc && !matchAuthor) return false;
+    }
+    return true;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filteredArticles.length / pageSize));
+  const activePage = Math.min(currentPage, totalPages);
+  const startIndex = (activePage - 1) * pageSize;
+  const paginatedArticles = filteredArticles.slice(startIndex, startIndex + pageSize);
+
+  const getPageNumbers = () => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    if (activePage <= 4) {
+      return [1, 2, 3, 4, 5, "...", totalPages];
+    }
+    if (activePage >= totalPages - 3) {
+      return [1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [1, "...", activePage - 1, activePage, activePage + 1, "...", totalPages];
+  };
+
   return (
-    <div className="flex flex-col gap-6 max-w-7xl mx-auto">
+    <div className="flex-1 min-h-0 flex flex-col w-full">
       {/* ── Header ─────────────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex items-center justify-between shrink-0 mb-3">
         <div>
-          <h1 className="font-heading text-2xl md:text-3xl font-bold uppercase tracking-tight">
+          <h1 className="font-heading text-lg md:text-xl font-bold uppercase tracking-tight">
             Articles &amp; Editorial
           </h1>
-          <p className="text-muted-foreground text-xs font-light mt-1">
-            Publish spatial essays, architectural monographs, and industry research.
-          </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="bg-primary text-primary-foreground px-4 py-2.5 text-xs uppercase tracking-wider font-semibold hover:bg-primary/90 transition-colors inline-flex items-center gap-2 self-start"
+          className="bg-primary text-primary-foreground px-4 py-2 text-[11px] uppercase tracking-wider font-semibold hover:bg-primary/90 transition-colors inline-flex items-center gap-2"
         >
-          <RiAddLine size={16} />
+          <RiAddLine size={14} />
           <span>New Article</span>
         </button>
       </div>
 
+      {/* ── Filters Bar ────────────────────────────────────────────── */}
+      <div className="p-3 border border-border bg-card flex flex-wrap items-center gap-3 text-xs shrink-0 mb-3">
+        <div className="relative flex-1 min-w-[200px] max-w-sm">
+          <RiSearchLine
+            size={14}
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground"
+          />
+          <input
+            type="text"
+            placeholder="Search by title, synopsis, or author..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full bg-secondary/30 border border-border pl-8 pr-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+          />
+        </div>
+
+        <div className="flex items-center gap-2 text-muted-foreground font-mono uppercase text-[10px]">
+          <RiFilterLine size={14} />
+          <span>Status:</span>
+        </div>
+
+        <select
+          value={statusFilter}
+          onChange={(e) => {
+            setStatusFilter(e.target.value);
+            setCurrentPage(1);
+          }}
+          className="bg-secondary/30 border border-border px-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary"
+        >
+          <option value="all">All Statuses</option>
+          <option value="published">Published</option>
+          <option value="draft">Drafts</option>
+        </select>
+
+        <div className="flex items-center gap-2">
+          <span className="text-muted-foreground font-mono uppercase text-[10px]">Per Page:</span>
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+              setCurrentPage(1);
+            }}
+            className="bg-secondary/30 border border-border px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary"
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+          </select>
+        </div>
+
+        <span className="ml-auto text-[11px] font-mono text-muted-foreground">
+          {filteredArticles.length === 0 ? 0 : startIndex + 1}–{Math.min(startIndex + pageSize, filteredArticles.length)} of {filteredArticles.length}
+        </span>
+      </div>
+
       {/* ── Table Card ─────────────────────────────────────────────── */}
-      <div className="border border-border bg-card overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
+      <div className="border border-border bg-card flex-1 min-h-0 flex flex-col overflow-hidden shadow-sm">
+        <div className="flex-1 min-h-0 overflow-y-auto">
           <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="border-b border-border bg-secondary/20 text-muted-foreground font-mono uppercase tracking-widest text-[10px]">
-                <th className="py-3.5 px-6">Article</th>
-                <th className="py-3.5 px-6">Author (Team)</th>
-                <th className="py-3.5 px-6">Publication Date</th>
-                <th className="py-3.5 px-6">Status</th>
-                <th className="py-3.5 px-6 text-right">Actions</th>
+            <thead className="sticky top-0 z-10 bg-secondary/95 backdrop-blur-sm border-b border-border shadow-xs">
+              <tr className="text-muted-foreground font-mono uppercase tracking-widest text-[10px]">
+                <th className="py-3 px-5">Article</th>
+                <th className="py-3 px-5">Author (Team)</th>
+                <th className="py-3 px-5">Publication Date</th>
+                <th className="py-3 px-5">Status</th>
+                <th className="py-3 px-5 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border font-light">
-              {articles.length === 0 ? (
+              {filteredArticles.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-16 text-center text-muted-foreground">
                     <RiArticleLine size={32} className="mx-auto mb-3 opacity-30" />
-                    <p className="text-sm font-medium">No articles published yet</p>
+                    <p className="text-sm font-medium">No articles match your criteria</p>
                     <p className="text-xs text-muted-foreground mt-1 font-light">
                       Click &quot;New Article&quot; to publish spatial design and architectural insights.
                     </p>
                   </td>
                 </tr>
               ) : (
-                articles.map((art) => {
+                paginatedArticles.map((art) => {
                   const cover = art.image
                     ? getPublicStorageUrl(art.image)
                     : "/images/architecture.png";
@@ -208,14 +302,14 @@ export function ArticlesClient({
 
                   return (
                     <tr key={art.id} className="hover:bg-secondary/10 transition-colors">
-                      <td className="py-4 px-6">
+                      <td className="py-3 px-5">
                         <div className="flex items-center gap-3">
-                          <div className="relative w-12 h-10 border border-border bg-secondary shrink-0 overflow-hidden">
+                          <div className="relative w-10 h-8 border border-border bg-secondary shrink-0 overflow-hidden">
                             <Image
                               src={cover}
                               alt={art.title}
                               fill
-                              sizes="48px"
+                              sizes="40px"
                               className="object-cover"
                             />
                           </div>
@@ -223,14 +317,14 @@ export function ArticlesClient({
                             <span className="font-semibold text-foreground text-xs block">
                               {art.title}
                             </span>
-                            <span className="text-[10px] text-muted-foreground line-clamp-1 max-w-sm font-light">
+                            <span className="text-[10px] text-muted-foreground line-clamp-1 max-w-md font-light">
                               {art.description}
                             </span>
                           </div>
                         </div>
                       </td>
 
-                      <td className="py-4 px-6">
+                      <td className="py-3 px-5">
                         <span className="font-medium text-foreground block">
                           {authorDisplay}
                         </span>
@@ -239,7 +333,7 @@ export function ArticlesClient({
                         </span>
                       </td>
 
-                      <td className="py-4 px-6 text-muted-foreground font-mono text-[11px]">
+                      <td className="py-3 px-5 text-muted-foreground font-mono text-[11px]">
                         {new Date(art.created_at).toLocaleDateString("en-US", {
                           year: "numeric",
                           month: "short",
@@ -247,7 +341,7 @@ export function ArticlesClient({
                         })}
                       </td>
 
-                      <td className="py-4 px-6">
+                      <td className="py-3 px-5">
                         <button
                           onClick={() => handleTogglePublish(art)}
                           disabled={isPending}
@@ -269,7 +363,7 @@ export function ArticlesClient({
                         </button>
                       </td>
 
-                      <td className="py-4 px-6 text-right">
+                      <td className="py-3 px-5 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => openEditModal(art)}
@@ -294,6 +388,59 @@ export function ArticlesClient({
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* ── Pagination Controls ────────────────────────────────────── */}
+        <div className="border-t border-border px-5 py-2.5 bg-secondary/10 flex items-center justify-between shrink-0">
+          <span className="font-mono text-[11px] text-muted-foreground">
+            Page {activePage} of {totalPages}
+          </span>
+
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={activePage <= 1}
+              aria-label="Previous Page"
+              className="px-2.5 py-1 border border-border flex items-center gap-1 text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-[11px] font-mono"
+            >
+              <RiArrowLeftLine size={12} /> Prev
+            </button>
+
+            {getPageNumbers().map((page, idx) =>
+              page === "..." ? (
+                <span
+                  key={`ellipsis-${idx}`}
+                  className="min-w-7 py-1 px-1.5 text-center font-mono text-[11px] text-muted-foreground"
+                >
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={page}
+                  type="button"
+                  onClick={() => setCurrentPage(Number(page))}
+                  className={`min-w-7 py-1 px-2 font-mono text-[11px] tracking-wider transition-colors border ${
+                    activePage === page
+                      ? "bg-primary text-primary-foreground border-primary font-semibold"
+                      : "border-border text-muted-foreground hover:text-foreground hover:bg-secondary/30"
+                  }`}
+                >
+                  {page}
+                </button>
+              )
+            )}
+
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={activePage >= totalPages}
+              aria-label="Next Page"
+              className="px-2.5 py-1 border border-border flex items-center gap-1 text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-[11px] font-mono"
+            >
+              Next <RiArrowRightLine size={12} />
+            </button>
+          </div>
         </div>
       </div>
 

@@ -215,9 +215,9 @@ export function DashboardShell({
       </aside>
 
       {/* ── Main Area ──────────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         {/* Top Header with Sidebar Toggle & Breadcrumbs - exactly h-16 */}
-        <header className="hidden md:flex items-center justify-between px-6 md:px-8 h-16 border-b border-border bg-card/40 backdrop-blur-md sticky top-0 z-30 shrink-0">
+        <header className="hidden md:flex items-center justify-between px-6 md:px-8 h-16 border-b border-border bg-card/40 backdrop-blur-md shrink-0 z-30">
           <div className="flex items-center gap-4">
             {/* Sidebar Hide/Show Toggle */}
             <button
@@ -279,7 +279,7 @@ export function DashboardShell({
         </header>
 
         {/* Content Container */}
-        <main className="flex-1 p-6 md:p-10">{children}</main>
+        <main className="flex-1 min-h-0 flex flex-col p-4 md:p-6 overflow-y-auto">{children}</main>
       </div>
     </div>
   );

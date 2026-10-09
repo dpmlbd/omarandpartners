@@ -20,6 +20,10 @@ import {
   RiChatQuoteLine,
   RiEyeLine,
   RiEyeOffLine,
+  RiSearchLine,
+  RiFilterLine,
+  RiArrowLeftLine,
+  RiArrowRightLine,
 } from "@remixicon/react";
 
 interface TestimonialsClientProps {
@@ -34,6 +38,10 @@ export function TestimonialsClient({
   const [editingItem, setEditingItem] = useState<Testimonial | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [isPending, startTransition] = useTransition();
 
   const openCreateModal = () => {
@@ -157,69 +165,156 @@ export function TestimonialsClient({
     });
   };
 
+  const filteredTestimonials = testimonials.filter((t) => {
+    if (statusFilter === "published" && !t.published) return false;
+    if (statusFilter === "draft" && t.published) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      const matchName = t.name.toLowerCase().includes(q);
+      const matchWork = t.work.toLowerCase().includes(q);
+      const matchLoc = t.location.toLowerCase().includes(q);
+      const matchDesc = t.description?.toLowerCase().includes(q);
+      if (!matchName && !matchWork && !matchLoc && !matchDesc) return false;
+    }
+    return true;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filteredTestimonials.length / pageSize));
+  const activePage = Math.min(currentPage, totalPages);
+  const startIndex = (activePage - 1) * pageSize;
+  const paginatedTestimonials = filteredTestimonials.slice(startIndex, startIndex + pageSize);
+
+  const getPageNumbers = () => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    if (activePage <= 4) {
+      return [1, 2, 3, 4, 5, "...", totalPages];
+    }
+    if (activePage >= totalPages - 3) {
+      return [1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [1, "...", activePage - 1, activePage, activePage + 1, "...", totalPages];
+  };
+
   return (
-    <div className="flex flex-col gap-6 max-w-7xl mx-auto">
+    <div className="flex-1 min-h-0 flex flex-col w-full">
       {/* ── Header ─────────────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex items-center justify-between shrink-0 mb-3">
         <div>
-          <h1 className="font-heading text-2xl md:text-3xl font-bold uppercase tracking-tight">
+          <h1 className="font-heading text-lg md:text-xl font-bold uppercase tracking-tight">
             Client Voices &amp; Testimonials
           </h1>
-          <p className="text-muted-foreground text-xs font-light mt-1">
-            Curate verified client perspectives featured on the public homepage.
-          </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="bg-primary text-primary-foreground px-4 py-2.5 text-xs uppercase tracking-wider font-semibold hover:bg-primary/90 transition-colors inline-flex items-center gap-2 self-start"
+          className="bg-primary text-primary-foreground px-4 py-2 text-[11px] uppercase tracking-wider font-semibold hover:bg-primary/90 transition-colors inline-flex items-center gap-2"
         >
-          <RiAddLine size={16} />
+          <RiAddLine size={14} />
           <span>New Testimonial</span>
         </button>
       </div>
 
+      {/* ── Filters Bar ────────────────────────────────────────────── */}
+      <div className="p-3 border border-border bg-card flex flex-wrap items-center gap-3 text-xs shrink-0 mb-3">
+        <div className="relative flex-1 min-w-[200px] max-w-sm">
+          <RiSearchLine
+            size={14}
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground"
+          />
+          <input
+            type="text"
+            placeholder="Search by client, company, location, or quote..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full bg-secondary/30 border border-border pl-8 pr-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+          />
+        </div>
+
+        <div className="flex items-center gap-2 text-muted-foreground font-mono uppercase text-[10px]">
+          <RiFilterLine size={14} />
+          <span>Status:</span>
+        </div>
+
+        <select
+          value={statusFilter}
+          onChange={(e) => {
+            setStatusFilter(e.target.value);
+            setCurrentPage(1);
+          }}
+          className="bg-secondary/30 border border-border px-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary"
+        >
+          <option value="all">All Statuses</option>
+          <option value="published">Published</option>
+          <option value="draft">Drafts</option>
+        </select>
+
+        <div className="flex items-center gap-2">
+          <span className="text-muted-foreground font-mono uppercase text-[10px]">Per Page:</span>
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+              setCurrentPage(1);
+            }}
+            className="bg-secondary/30 border border-border px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary"
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+          </select>
+        </div>
+
+        <span className="ml-auto text-[11px] font-mono text-muted-foreground">
+          {filteredTestimonials.length === 0 ? 0 : startIndex + 1}–{Math.min(startIndex + pageSize, filteredTestimonials.length)} of {filteredTestimonials.length}
+        </span>
+      </div>
+
       {/* ── Table Card ─────────────────────────────────────────────── */}
-      <div className="border border-border bg-card overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
+      <div className="border border-border bg-card flex-1 min-h-0 flex flex-col overflow-hidden shadow-sm">
+        <div className="flex-1 min-h-0 overflow-y-auto">
           <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="border-b border-border bg-secondary/20 text-muted-foreground font-mono uppercase tracking-widest text-[10px]">
-                <th className="py-3.5 px-6">Client</th>
-                <th className="py-3.5 px-6">Organization / Role</th>
-                <th className="py-3.5 px-6">Location</th>
-                <th className="py-3.5 px-6">Quote Excerpt</th>
-                <th className="py-3.5 px-6">Status</th>
-                <th className="py-3.5 px-6 text-right">Actions</th>
+            <thead className="sticky top-0 z-10 bg-secondary/95 backdrop-blur-sm border-b border-border shadow-xs">
+              <tr className="text-muted-foreground font-mono uppercase tracking-widest text-[10px]">
+                <th className="py-3 px-5">Client</th>
+                <th className="py-3 px-5">Organization / Role</th>
+                <th className="py-3 px-5">Location</th>
+                <th className="py-3 px-5">Quote Excerpt</th>
+                <th className="py-3 px-5">Status</th>
+                <th className="py-3 px-5 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border font-light">
-              {testimonials.length === 0 ? (
+              {filteredTestimonials.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-16 text-center text-muted-foreground">
                     <RiChatQuoteLine size={32} className="mx-auto mb-3 opacity-30" />
-                    <p className="text-sm font-medium">No testimonials found</p>
+                    <p className="text-sm font-medium">No testimonials match your criteria</p>
                     <p className="text-xs text-muted-foreground mt-1 font-light">
                       Click &quot;New Testimonial&quot; to publish client endorsements.
                     </p>
                   </td>
                 </tr>
               ) : (
-                testimonials.map((t) => {
+                paginatedTestimonials.map((t) => {
                   const avatar = t.image
                     ? getPublicStorageUrl(t.image)
                     : "/images/hero_architecture.png";
 
                   return (
                     <tr key={t.id} className="hover:bg-secondary/10 transition-colors">
-                      <td className="py-4 px-6">
+                      <td className="py-3 px-5">
                         <div className="flex items-center gap-3">
-                          <div className="relative w-10 h-10 rounded-full border border-border bg-secondary shrink-0 overflow-hidden">
+                          <div className="relative w-8 h-8 rounded-full border border-border bg-secondary shrink-0 overflow-hidden">
                             <Image
                               src={avatar}
                               alt={t.name}
                               fill
-                              sizes="40px"
+                              sizes="32px"
                               className="object-cover"
                             />
                           </div>
@@ -229,21 +324,21 @@ export function TestimonialsClient({
                         </div>
                       </td>
 
-                      <td className="py-4 px-6 text-foreground font-medium">
+                      <td className="py-3 px-5 text-foreground font-medium">
                         {t.work}
                       </td>
 
-                      <td className="py-4 px-6 text-muted-foreground">
+                      <td className="py-3 px-5 text-muted-foreground">
                         {t.location}
                       </td>
 
-                      <td className="py-4 px-6 text-muted-foreground font-light max-w-xs">
-                        <span className="line-clamp-2 italic">
+                      <td className="py-3 px-5 text-muted-foreground font-light max-w-sm">
+                        <span className="line-clamp-1 italic">
                           &ldquo;{t.description}&rdquo;
                         </span>
                       </td>
 
-                      <td className="py-4 px-6">
+                      <td className="py-3 px-5">
                         <button
                           onClick={() => handleTogglePublish(t)}
                           disabled={isPending}
@@ -265,7 +360,7 @@ export function TestimonialsClient({
                         </button>
                       </td>
 
-                      <td className="py-4 px-6 text-right">
+                      <td className="py-3 px-5 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => openEditModal(t)}
@@ -290,6 +385,59 @@ export function TestimonialsClient({
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* ── Pagination Controls ────────────────────────────────────── */}
+        <div className="border-t border-border px-5 py-2.5 bg-secondary/10 flex items-center justify-between shrink-0">
+          <span className="font-mono text-[11px] text-muted-foreground">
+            Page {activePage} of {totalPages}
+          </span>
+
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={activePage <= 1}
+              aria-label="Previous Page"
+              className="px-2.5 py-1 border border-border flex items-center gap-1 text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-[11px] font-mono"
+            >
+              <RiArrowLeftLine size={12} /> Prev
+            </button>
+
+            {getPageNumbers().map((page, idx) =>
+              page === "..." ? (
+                <span
+                  key={`ellipsis-${idx}`}
+                  className="min-w-7 py-1 px-1.5 text-center font-mono text-[11px] text-muted-foreground"
+                >
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={page}
+                  type="button"
+                  onClick={() => setCurrentPage(Number(page))}
+                  className={`min-w-7 py-1 px-2 font-mono text-[11px] tracking-wider transition-colors border ${
+                    activePage === page
+                      ? "bg-primary text-primary-foreground border-primary font-semibold"
+                      : "border-border text-muted-foreground hover:text-foreground hover:bg-secondary/30"
+                  }`}
+                >
+                  {page}
+                </button>
+              )
+            )}
+
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={activePage >= totalPages}
+              aria-label="Next Page"
+              className="px-2.5 py-1 border border-border flex items-center gap-1 text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-[11px] font-mono"
+            >
+              Next <RiArrowRightLine size={12} />
+            </button>
+          </div>
         </div>
       </div>
 

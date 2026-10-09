@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useMemo } from "react";
 import {
   createTeamMemberAction,
   updateTeamMemberAction,
@@ -15,6 +15,10 @@ import {
   RiCloseLine,
   RiAlertLine,
   RiTeamLine,
+  RiSearchLine,
+  RiFilterLine,
+  RiArrowLeftLine,
+  RiArrowRightLine,
 } from "@remixicon/react";
 
 interface TeamClientProps {
@@ -27,7 +31,19 @@ export function TeamClient({ initialMembers }: TeamClientProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState<string>("all");
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [isPending, startTransition] = useTransition();
+
+  const groups = useMemo(() => {
+    const set = new Set<string>();
+    members.forEach((m) => {
+      if (m.team_type) set.add(m.team_type);
+    });
+    return Array.from(set).sort();
+  }, [members]);
 
   const openCreateModal = () => {
     setEditingMember(null);
@@ -107,54 +123,144 @@ export function TeamClient({ initialMembers }: TeamClientProps) {
     });
   };
 
+  const filteredMembers = members.filter((m) => {
+    if (selectedGroup !== "all" && m.team_type !== selectedGroup) {
+      return false;
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      const matchName = m.name.toLowerCase().includes(q);
+      const matchDesig = m.designation.toLowerCase().includes(q);
+      const matchStudy = m.study?.toLowerCase().includes(q);
+      if (!matchName && !matchDesig && !matchStudy) return false;
+    }
+    return true;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filteredMembers.length / pageSize));
+  const activePage = Math.min(currentPage, totalPages);
+  const startIndex = (activePage - 1) * pageSize;
+  const paginatedMembers = filteredMembers.slice(startIndex, startIndex + pageSize);
+
+  const getPageNumbers = () => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    if (activePage <= 4) {
+      return [1, 2, 3, 4, 5, "...", totalPages];
+    }
+    if (activePage >= totalPages - 3) {
+      return [1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [1, "...", activePage - 1, activePage, activePage + 1, "...", totalPages];
+  };
+
   return (
-    <div className="flex flex-col gap-6 max-w-7xl mx-auto">
+    <div className="flex-1 min-h-0 flex flex-col w-full">
       {/* ── Header ─────────────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex items-center justify-between shrink-0 mb-3">
         <div>
-          <h1 className="font-heading text-2xl md:text-3xl font-bold uppercase tracking-tight">
+          <h1 className="font-heading text-lg md:text-xl font-bold uppercase tracking-tight">
             Team Management
           </h1>
-          <p className="text-muted-foreground text-xs font-light mt-1">
-            Maintain leadership, partner, architectural, and interior personnel records.
-          </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="bg-primary text-primary-foreground px-4 py-2.5 text-xs uppercase tracking-wider font-semibold hover:bg-primary/90 transition-colors inline-flex items-center gap-2 self-start"
+          className="bg-primary text-primary-foreground px-4 py-2 text-[11px] uppercase tracking-wider font-semibold hover:bg-primary/90 transition-colors inline-flex items-center gap-2"
         >
-          <RiUserAddLine size={16} />
+          <RiUserAddLine size={14} />
           <span>New Team Member</span>
         </button>
       </div>
 
+      {/* ── Filters Bar ────────────────────────────────────────────── */}
+      <div className="p-3 border border-border bg-card flex flex-wrap items-center gap-3 text-xs shrink-0 mb-3">
+        <div className="relative flex-1 min-w-[200px] max-w-sm">
+          <RiSearchLine
+            size={14}
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground"
+          />
+          <input
+            type="text"
+            placeholder="Search by name, designation, or study..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full bg-secondary/30 border border-border pl-8 pr-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+          />
+        </div>
+
+        <div className="flex items-center gap-2 text-muted-foreground font-mono uppercase text-[10px]">
+          <RiFilterLine size={14} />
+          <span>Group:</span>
+        </div>
+
+        <select
+          value={selectedGroup}
+          onChange={(e) => {
+            setSelectedGroup(e.target.value);
+            setCurrentPage(1);
+          }}
+          className="bg-secondary/30 border border-border px-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary"
+        >
+          <option value="all">All Groups</option>
+          {groups.map((grp) => (
+            <option key={grp} value={grp}>
+              {grp}
+            </option>
+          ))}
+        </select>
+
+        <div className="flex items-center gap-2">
+          <span className="text-muted-foreground font-mono uppercase text-[10px]">Per Page:</span>
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+              setCurrentPage(1);
+            }}
+            className="bg-secondary/30 border border-border px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary"
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+          </select>
+        </div>
+
+        <span className="ml-auto text-[11px] font-mono text-muted-foreground">
+          {filteredMembers.length === 0 ? 0 : startIndex + 1}–{Math.min(startIndex + pageSize, filteredMembers.length)} of {filteredMembers.length}
+        </span>
+      </div>
+
       {/* ── Table Card ─────────────────────────────────────────────── */}
-      <div className="border border-border bg-card overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
+      <div className="border border-border bg-card flex-1 min-h-0 flex flex-col overflow-hidden shadow-sm">
+        <div className="flex-1 min-h-0 overflow-y-auto">
           <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="border-b border-border bg-secondary/20 text-muted-foreground font-mono uppercase tracking-widest text-[10px]">
-                <th className="py-3.5 px-6">Member Name</th>
-                <th className="py-3.5 px-6">Designation</th>
-                <th className="py-3.5 px-6">Team Group / Type</th>
-                <th className="py-3.5 px-6">Study / Qualifications</th>
-                <th className="py-3.5 px-6 text-right">Actions</th>
+            <thead className="sticky top-0 z-10 bg-secondary/95 backdrop-blur-sm border-b border-border shadow-xs">
+              <tr className="text-muted-foreground font-mono uppercase tracking-widest text-[10px]">
+                <th className="py-3 px-5">Member Name</th>
+                <th className="py-3 px-5">Designation</th>
+                <th className="py-3 px-5">Team Group / Type</th>
+                <th className="py-3 px-5">Study / Qualifications</th>
+                <th className="py-3 px-5 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border font-light">
-              {members.length === 0 ? (
+              {filteredMembers.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-16 text-center text-muted-foreground">
                     <RiTeamLine size={32} className="mx-auto mb-3 opacity-30" />
-                    <p className="text-sm font-medium">No team members registered</p>
+                    <p className="text-sm font-medium">No team members match your criteria</p>
                     <p className="text-xs text-muted-foreground mt-1 font-light">
                       Click &quot;New Team Member&quot; to add staff profiles.
                     </p>
                   </td>
                 </tr>
               ) : (
-                members.map((m) => {
+                paginatedMembers.map((m) => {
                   const initials = m.name
                     .split(" ")
                     .map((n) => n[0])
@@ -164,9 +270,9 @@ export function TeamClient({ initialMembers }: TeamClientProps) {
 
                   return (
                     <tr key={m.id} className="hover:bg-secondary/10 transition-colors">
-                      <td className="py-4 px-6">
+                      <td className="py-3 px-5">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-sm border border-border bg-secondary flex items-center justify-center font-mono text-[11px] font-bold text-foreground shrink-0">
+                          <div className="w-8 h-8 border border-border bg-secondary flex items-center justify-center font-mono text-[11px] font-bold text-foreground shrink-0">
                             {initials}
                           </div>
                           <div>
@@ -177,21 +283,21 @@ export function TeamClient({ initialMembers }: TeamClientProps) {
                         </div>
                       </td>
 
-                      <td className="py-4 px-6 text-foreground font-medium">
+                      <td className="py-3 px-5 text-foreground font-medium">
                         {m.designation}
                       </td>
 
-                      <td className="py-4 px-6">
+                      <td className="py-3 px-5">
                         <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 border border-border bg-secondary/30">
                           {m.team_type}
                         </span>
                       </td>
 
-                      <td className="py-4 px-6 text-muted-foreground font-mono text-[11px]">
+                      <td className="py-3 px-5 text-muted-foreground font-mono text-[11px]">
                         {m.study || "—"}
                       </td>
 
-                      <td className="py-4 px-6 text-right">
+                      <td className="py-3 px-5 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => openEditModal(m)}
@@ -216,6 +322,59 @@ export function TeamClient({ initialMembers }: TeamClientProps) {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* ── Pagination Controls ────────────────────────────────────── */}
+        <div className="border-t border-border px-5 py-2.5 bg-secondary/10 flex items-center justify-between shrink-0">
+          <span className="font-mono text-[11px] text-muted-foreground">
+            Page {activePage} of {totalPages}
+          </span>
+
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={activePage <= 1}
+              aria-label="Previous Page"
+              className="px-2.5 py-1 border border-border flex items-center gap-1 text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-[11px] font-mono"
+            >
+              <RiArrowLeftLine size={12} /> Prev
+            </button>
+
+            {getPageNumbers().map((page, idx) =>
+              page === "..." ? (
+                <span
+                  key={`ellipsis-${idx}`}
+                  className="min-w-7 py-1 px-1.5 text-center font-mono text-[11px] text-muted-foreground"
+                >
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={page}
+                  type="button"
+                  onClick={() => setCurrentPage(Number(page))}
+                  className={`min-w-7 py-1 px-2 font-mono text-[11px] tracking-wider transition-colors border ${
+                    activePage === page
+                      ? "bg-primary text-primary-foreground border-primary font-semibold"
+                      : "border-border text-muted-foreground hover:text-foreground hover:bg-secondary/30"
+                  }`}
+                >
+                  {page}
+                </button>
+              )
+            )}
+
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={activePage >= totalPages}
+              aria-label="Next Page"
+              className="px-2.5 py-1 border border-border flex items-center gap-1 text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-[11px] font-mono"
+            >
+              Next <RiArrowRightLine size={12} />
+            </button>
+          </div>
         </div>
       </div>
 

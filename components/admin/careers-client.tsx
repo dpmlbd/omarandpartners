@@ -23,6 +23,9 @@ import {
   RiSearchLine,
   RiCheckLine,
   RiBuildingLine,
+  RiFilterLine,
+  RiArrowLeftLine,
+  RiArrowRightLine,
 } from "@remixicon/react";
 
 interface CareersClientProps {
@@ -43,6 +46,8 @@ export function CareersClient({ initialJobs }: CareersClientProps) {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDivision, setFilterDivision] = useState<string>("all");
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [isPending, startTransition] = useTransition();
 
   // Form states for quick division auto-fill
@@ -190,192 +195,289 @@ export function CareersClient({ initialJobs }: CareersClientProps) {
   const publishedCount = jobs.filter((j) => j.published).length;
   const draftCount = jobs.length - publishedCount;
 
+  const totalPages = Math.max(1, Math.ceil(filteredJobs.length / pageSize));
+  const activePage = Math.min(currentPage, totalPages);
+  const startIndex = (activePage - 1) * pageSize;
+  const paginatedJobs = filteredJobs.slice(startIndex, startIndex + pageSize);
+
+  const getPageNumbers = () => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    if (activePage <= 4) {
+      return [1, 2, 3, 4, 5, "...", totalPages];
+    }
+    if (activePage >= totalPages - 3) {
+      return [1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [1, "...", activePage - 1, activePage, activePage + 1, "...", totalPages];
+  };
+
   return (
-    <div className="flex flex-col gap-6 max-w-7xl mx-auto">
+    <div className="flex-1 min-h-0 flex flex-col w-full">
       {/* ── Header ─────────────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex items-center justify-between shrink-0 mb-3">
         <div>
-          <h1 className="font-heading text-2xl md:text-3xl font-bold uppercase tracking-tight">
+          <h1 className="font-heading text-lg md:text-xl font-bold uppercase tracking-tight">
             Careers &amp; Jobs Management
           </h1>
-          <p className="text-muted-foreground text-xs font-light mt-1">
-            Post and manage job openings across Kolpoporishor, Kolpokowsol, INEX, and Omar &amp; Partners.
-          </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="bg-primary text-primary-foreground px-4 py-2.5 text-xs uppercase tracking-wider font-semibold hover:bg-primary/90 transition-colors inline-flex items-center gap-2 self-start"
+          className="bg-primary text-primary-foreground px-4 py-2 text-[11px] uppercase tracking-wider font-semibold hover:bg-primary/90 transition-colors inline-flex items-center gap-2"
         >
-          <RiAddLine size={16} />
-          Post New Opening
+          <RiAddLine size={14} />
+          <span>Post New Opening</span>
         </button>
       </div>
 
-      {/* ── Metric Cards ───────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="border border-border p-4 bg-card flex flex-col justify-between">
-          <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
-            Total Positions
+      {/* ── Metric Bar (Compact) ────────────────────────────────────── */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3 shrink-0">
+        <div className="border border-border px-3 py-2 bg-card flex items-center justify-between">
+          <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
+            Total
           </span>
-          <span className="font-heading text-2xl font-bold mt-2">{jobs.length}</span>
+          <span className="font-heading text-base font-bold">{jobs.length}</span>
         </div>
-        <div className="border border-border p-4 bg-card flex flex-col justify-between">
-          <span className="font-mono text-[10px] text-emerald-500 uppercase tracking-widest">
-            Active / Published
+        <div className="border border-border px-3 py-2 bg-card flex items-center justify-between">
+          <span className="font-mono text-[10px] text-emerald-500 uppercase tracking-wider">
+            Active
           </span>
-          <span className="font-heading text-2xl font-bold text-emerald-500 mt-2">
+          <span className="font-heading text-base font-bold text-emerald-500">
             {publishedCount}
           </span>
         </div>
-        <div className="border border-border p-4 bg-card flex flex-col justify-between">
-          <span className="font-mono text-[10px] text-amber-500 uppercase tracking-widest">
-            Drafts / Hidden
+        <div className="border border-border px-3 py-2 bg-card flex items-center justify-between">
+          <span className="font-mono text-[10px] text-amber-500 uppercase tracking-wider">
+            Drafts
           </span>
-          <span className="font-heading text-2xl font-bold text-amber-500 mt-2">
+          <span className="font-heading text-base font-bold text-amber-500">
             {draftCount}
           </span>
         </div>
-        <div className="border border-border p-4 bg-card flex flex-col justify-between">
-          <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
-            Ecosystem Divisions
+        <div className="border border-border px-3 py-2 bg-card flex items-center justify-between">
+          <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
+            Divisions
           </span>
-          <span className="font-heading text-2xl font-bold mt-2">4 Active</span>
+          <span className="font-heading text-base font-bold">4</span>
         </div>
       </div>
 
       {/* ── Filters Bar ────────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between border border-border p-3 bg-card">
-        <div className="relative flex-1 max-w-md">
+      <div className="p-3 border border-border bg-card flex flex-wrap items-center gap-3 text-xs shrink-0 mb-3">
+        <div className="relative flex-1 min-w-[200px] max-w-sm">
           <RiSearchLine
-            size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            size={14}
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground"
           />
           <input
             type="text"
             placeholder="Search roles by title, division, or location..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-background border border-border pl-9 pr-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full bg-secondary/30 border border-border pl-8 pr-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
           />
         </div>
 
-        <div className="flex items-center gap-2 overflow-x-auto">
-          {["all", "Kolpoporishor", "Kolpokowsol", "INEX", "Omar & Partners"].map((div) => (
-            <button
-              key={div}
-              onClick={() => setFilterDivision(div)}
-              className={`px-3 py-1.5 text-[11px] uppercase tracking-wider font-medium whitespace-nowrap transition-colors border ${
-                filterDivision === div
-                  ? "bg-foreground text-background border-foreground"
-                  : "bg-background text-muted-foreground border-border hover:text-foreground"
-              }`}
-            >
-              {div === "all" ? "All Divisions" : div}
-            </button>
-          ))}
+        <div className="flex items-center gap-2 text-muted-foreground font-mono uppercase text-[10px]">
+          <RiFilterLine size={14} />
+          <span>Division:</span>
         </div>
+
+        <select
+          value={filterDivision}
+          onChange={(e) => {
+            setFilterDivision(e.target.value);
+            setCurrentPage(1);
+          }}
+          className="bg-secondary/30 border border-border px-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary"
+        >
+          <option value="all">All Divisions</option>
+          <option value="Kolpoporishor">Kolpoporishor</option>
+          <option value="Kolpokowsol">Kolpokowsol</option>
+          <option value="INEX">INEX</option>
+          <option value="Omar & Partners">Omar &amp; Partners</option>
+        </select>
+
+        <div className="flex items-center gap-2">
+          <span className="text-muted-foreground font-mono uppercase text-[10px]">Per Page:</span>
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+              setCurrentPage(1);
+            }}
+            className="bg-secondary/30 border border-border px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary"
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+          </select>
+        </div>
+
+        <span className="ml-auto text-[11px] font-mono text-muted-foreground">
+          {filteredJobs.length === 0 ? 0 : startIndex + 1}–{Math.min(startIndex + pageSize, filteredJobs.length)} of {filteredJobs.length}
+        </span>
       </div>
 
-      {/* ── Jobs List ──────────────────────────────────────────────── */}
-      {filteredJobs.length === 0 ? (
-        <div className="border border-border p-12 text-center bg-card flex flex-col items-center justify-center">
-          <RiBriefcaseLine size={40} className="text-muted-foreground/40 mb-3" />
-          <h3 className="font-heading text-lg uppercase font-semibold">No Job Openings Found</h3>
-          <p className="text-muted-foreground text-xs max-w-sm mt-1">
-            {jobs.length === 0
-              ? "No job openings have been created yet in the database. Click 'Post New Opening' to publish the first role."
-              : "No jobs match your search criteria. Try a different search query or division filter."}
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-3">
-          {filteredJobs.map((job) => (
-            <div
-              key={job.id}
-              className={`border transition-all p-5 bg-card flex flex-col md:flex-row justify-between items-start md:items-center gap-4 ${
-                job.published ? "border-border" : "border-amber-500/30 bg-amber-500/[0.02]"
-              }`}
-            >
-              <div className="flex flex-col gap-1.5 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-primary font-semibold">
-                    {job.division}
-                  </span>
-                  {!job.published && (
-                    <span className="bg-amber-500/10 text-amber-500 border border-amber-500/20 text-[9px] uppercase tracking-widest px-2 py-0.5 font-medium">
-                      Draft
+      {/* ── Jobs List Card ──────────────────────────────────────────── */}
+      <div className="border border-border bg-card flex-1 min-h-0 flex flex-col overflow-hidden shadow-sm">
+        <div className="flex-1 min-h-0 overflow-y-auto p-3 flex flex-col gap-2.5">
+          {filteredJobs.length === 0 ? (
+            <div className="p-12 text-center flex flex-col items-center justify-center my-auto">
+              <RiBriefcaseLine size={36} className="text-muted-foreground/30 mb-2" />
+              <h3 className="font-heading text-base uppercase font-semibold">No Job Openings Found</h3>
+              <p className="text-muted-foreground text-xs max-w-sm mt-1 font-light">
+                {jobs.length === 0
+                  ? "No job openings have been created yet. Click 'Post New Opening' to publish the first role."
+                  : "No jobs match your search criteria. Try a different search query or division filter."}
+              </p>
+            </div>
+          ) : (
+            paginatedJobs.map((job) => (
+              <div
+                key={job.id}
+                className={`border transition-all p-3.5 bg-card/60 hover:bg-secondary/15 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 ${
+                  job.published ? "border-border" : "border-amber-500/30 bg-amber-500/[0.02]"
+                }`}
+              >
+                <div className="flex flex-col gap-1 flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-primary font-semibold">
+                      {job.division}
                     </span>
-                  )}
-                  {job.experience && (
-                    <span className="bg-secondary text-secondary-foreground text-[9px] uppercase tracking-widest px-2 py-0.5 font-medium">
-                      {job.experience}
+                    {!job.published && (
+                      <span className="bg-amber-500/10 text-amber-500 border border-amber-500/20 text-[9px] uppercase tracking-widest px-1.5 py-0.5 font-medium">
+                        Draft
+                      </span>
+                    )}
+                    {job.experience && (
+                      <span className="bg-secondary text-secondary-foreground text-[9px] uppercase tracking-widest px-1.5 py-0.5 font-medium border border-border">
+                        {job.experience}
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="font-heading text-sm md:text-base font-bold uppercase tracking-tight text-foreground truncate">
+                    {job.title}
+                  </h3>
+
+                  <div className="flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <RiMapPinLine size={12} />
+                      {job.location}
                     </span>
-                  )}
+                    <span className="flex items-center gap-1">
+                      <RiTimeLine size={12} />
+                      {job.job_type}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <RiBuildingLine size={12} />
+                      {job.company_name}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-muted-foreground/80 line-clamp-1 mt-0.5 font-light">
+                    {job.description}
+                  </p>
                 </div>
 
-                <h3 className="font-heading text-lg md:text-xl font-bold uppercase tracking-tight text-foreground">
-                  {job.title}
-                </h3>
+                {/* Actions */}
+                <div className="flex items-center gap-1.5 shrink-0 self-end md:self-center border-t md:border-t-0 pt-2 md:pt-0 w-full md:w-auto justify-end border-border">
+                  <button
+                    onClick={() => handleTogglePublish(job)}
+                    disabled={isPending}
+                    title={job.published ? "Click to unpublish" : "Click to publish"}
+                    className={`border text-[10px] transition-colors flex items-center gap-1 px-2.5 py-1 uppercase tracking-wider font-semibold ${
+                      job.published
+                        ? "border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10"
+                        : "border-border text-muted-foreground hover:bg-secondary"
+                    }`}
+                  >
+                    {job.published ? <RiEyeLine size={12} /> : <RiEyeOffLine size={12} />}
+                    <span>{job.published ? "Published" : "Draft"}</span>
+                  </button>
 
-                <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <RiMapPinLine size={13} />
-                    {job.location}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <RiTimeLine size={13} />
-                    {job.job_type}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <RiBuildingLine size={13} />
-                    {job.company_name}
-                  </span>
+                  <button
+                    onClick={() => openEditModal(job)}
+                    disabled={isPending}
+                    className="p-1.5 border border-border hover:bg-secondary text-foreground transition-colors"
+                    title="Edit Opening"
+                  >
+                    <RiEditLine size={14} />
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(job)}
+                    disabled={isPending}
+                    className="p-1.5 border border-border hover:border-destructive/30 hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                    title="Delete Opening"
+                  >
+                    <RiDeleteBinLine size={14} />
+                  </button>
                 </div>
-
-                <p className="text-xs text-muted-foreground/80 line-clamp-2 mt-1 font-light">
-                  {job.description}
-                </p>
               </div>
+            ))
+          )}
+        </div>
 
-              {/* Actions */}
-              <div className="flex items-center gap-2 shrink-0 self-end md:self-center border-t md:border-t-0 pt-3 md:pt-0 w-full md:w-auto justify-end border-border">
+        {/* ── Pagination Controls ────────────────────────────────────── */}
+        <div className="border-t border-border px-5 py-2.5 bg-secondary/10 flex items-center justify-between shrink-0">
+          <span className="font-mono text-[11px] text-muted-foreground">
+            Page {activePage} of {totalPages}
+          </span>
+
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={activePage <= 1}
+              aria-label="Previous Page"
+              className="px-2.5 py-1 border border-border flex items-center gap-1 text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-[11px] font-mono"
+            >
+              <RiArrowLeftLine size={12} /> Prev
+            </button>
+
+            {getPageNumbers().map((page, idx) =>
+              page === "..." ? (
+                <span
+                  key={`ellipsis-${idx}`}
+                  className="min-w-7 py-1 px-1.5 text-center font-mono text-[11px] text-muted-foreground"
+                >
+                  ...
+                </span>
+              ) : (
                 <button
-                  onClick={() => handleTogglePublish(job)}
-                  disabled={isPending}
-                  title={job.published ? "Click to unpublish" : "Click to publish"}
-                  className={`p-2 border text-xs transition-colors flex items-center gap-1.5 px-3 uppercase tracking-wider font-semibold ${
-                    job.published
-                      ? "border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10"
-                      : "border-muted-foreground/30 text-muted-foreground hover:bg-secondary"
+                  key={page}
+                  type="button"
+                  onClick={() => setCurrentPage(Number(page))}
+                  className={`min-w-7 py-1 px-2 font-mono text-[11px] tracking-wider transition-colors border ${
+                    activePage === page
+                      ? "bg-primary text-primary-foreground border-primary font-semibold"
+                      : "border-border text-muted-foreground hover:text-foreground hover:bg-secondary/30"
                   }`}
                 >
-                  {job.published ? <RiEyeLine size={14} /> : <RiEyeOffLine size={14} />}
-                  <span className="text-[10px]">{job.published ? "Published" : "Draft"}</span>
+                  {page}
                 </button>
+              )
+            )}
 
-                <button
-                  onClick={() => openEditModal(job)}
-                  disabled={isPending}
-                  className="p-2 border border-border hover:bg-secondary text-foreground transition-colors"
-                  title="Edit Opening"
-                >
-                  <RiEditLine size={15} />
-                </button>
-
-                <button
-                  onClick={() => handleDelete(job)}
-                  disabled={isPending}
-                  className="p-2 border border-destructive/30 text-destructive hover:bg-destructive/10 transition-colors"
-                  title="Delete Opening"
-                >
-                  <RiDeleteBinLine size={15} />
-                </button>
-              </div>
-            </div>
-          ))}
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={activePage >= totalPages}
+              aria-label="Next Page"
+              className="px-2.5 py-1 border border-border flex items-center gap-1 text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-[11px] font-mono"
+            >
+              Next <RiArrowRightLine size={12} />
+            </button>
+          </div>
         </div>
-      )}
+      </div>
 
       {/* ── Create / Edit Modal ────────────────────────────────────── */}
       {isModalOpen && (
